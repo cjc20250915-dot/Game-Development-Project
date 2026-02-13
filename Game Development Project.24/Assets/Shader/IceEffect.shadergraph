@@ -202,6 +202,9 @@
         },
         {
             "m_Id": "2a5a4f22d2fb47f5bebe0932667d16e8"
+        },
+        {
+            "m_Id": "2c74bf181798437aae4893aec67b8698"
         }
     ],
     "m_StickyNoteDatas": [],
@@ -1314,7 +1317,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "1487fbc2372f4dd7b5251ff9a34657cc",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "2c74bf181798437aae4893aec67b8698"
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -1322,7 +1325,7 @@
         "m_Position": {
             "serializedVersion": "2",
             "x": -680.0,
-            "y": 1574.0,
+            "y": 1573.0,
             "width": 123.0,
             "height": 34.0
         }
@@ -1532,7 +1535,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "1f85962072f346f8aa0cfa40c7194d53",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "2c74bf181798437aae4893aec67b8698"
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -1909,8 +1912,8 @@
     "m_ObjectId": "2a5a4f22d2fb47f5bebe0932667d16e8",
     "m_Title": "Normal",
     "m_Position": {
-        "x": -509.0001220703125,
-        "y": 909.9999389648438
+        "x": -509.0,
+        "y": 910.0
     }
 }
 
@@ -1961,6 +1964,17 @@
     "m_RangeValues": {
         "x": 0.0,
         "y": 1.0
+    }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.GroupData",
+    "m_ObjectId": "2c74bf181798437aae4893aec67b8698",
+    "m_Title": "RimLight",
+    "m_Position": {
+        "x": -705.0,
+        "y": 1410.0
     }
 }
 
@@ -2050,7 +2064,7 @@
     "m_Type": "UnityEditor.ShaderGraph.MultiplyNode",
     "m_ObjectId": "2fc3c153668646d7bf2a6ce2896782cf",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "2c74bf181798437aae4893aec67b8698"
     },
     "m_Name": "Multiply",
     "m_DrawState": {
@@ -2264,7 +2278,7 @@
     "m_Type": "UnityEditor.ShaderGraph.FresnelNode",
     "m_ObjectId": "37334ae95ee542f2b55eb6838b11a348",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "2c74bf181798437aae4893aec67b8698"
     },
     "m_Name": "Fresnel Effect",
     "m_DrawState": {
@@ -2313,10 +2327,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -85.99996948242188,
-            "y": -62.9999885559082,
+            "x": -49.999977111816409,
+            "y": -62.000022888183597,
             "width": 185.99996948242188,
-            "height": 141.99998474121095
+            "height": 142.0
         }
     },
     "m_Slots": [
@@ -2729,7 +2743,7 @@
     "m_Title": "Spike",
     "m_Position": {
         "x": -2005.0,
-        "y": -249.99993896484376
+        "y": -250.0
     }
 }
 
@@ -2845,8 +2859,8 @@
     "m_ObjectId": "53f7235079624153aa42a38130eeee9c",
     "m_Title": "Color",
     "m_Position": {
-        "x": -593.0001831054688,
-        "y": 165.00006103515626
+        "x": -593.0,
+        "y": 165.0
     }
 }
 
@@ -3119,7 +3133,7 @@
     "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
     "m_ObjectId": "5f6e2532ab134e61a273fd10cb7c2d94",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "2c74bf181798437aae4893aec67b8698"
     },
     "m_Name": "Property",
     "m_DrawState": {
@@ -3255,8 +3269,8 @@
     "m_ObjectId": "677a81cba0e343ce99ec480f1e9071ce",
     "m_Title": "Normal",
     "m_Position": {
-        "x": -1786.0001220703125,
-        "y": -601.9999389648438
+        "x": -1786.0,
+        "y": -602.0
     }
 }
 
@@ -3757,9 +3771,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -323.9999694824219,
-            "y": -9.999977111816407,
-            "width": 173.99996948242188,
+            "x": -287.9999694824219,
+            "y": -9.00001335144043,
+            "width": 174.0,
             "height": 33.99999237060547
         }
     },
@@ -5853,7 +5867,7 @@
     "m_Type": "UnityEditor.ShaderGraph.MultiplyNode",
     "m_ObjectId": "f45394c16acf4cbd967babd49e68e677",
     "m_Group": {
-        "m_Id": ""
+        "m_Id": "2c74bf181798437aae4893aec67b8698"
     },
     "m_Name": "Multiply",
     "m_DrawState": {
