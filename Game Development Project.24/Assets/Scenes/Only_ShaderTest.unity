@@ -399,7 +399,7 @@ PrefabInstance:
     - target: {fileID: -5832218441682878519, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3221baa1665c1f5418c59666ebaaaaee, type: 2}
+      objectReference: {fileID: 2100000, guid: 25da924bdd998bc458f16220240c9065, type: 2}
     - target: {fileID: 919132149155446097, guid: c0e8ec4be6a4d554881a5c8bb6d0c0cf, type: 3}
       propertyPath: m_Name
       value: Skeleton
