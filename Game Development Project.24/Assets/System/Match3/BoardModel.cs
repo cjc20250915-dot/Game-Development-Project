@@ -9,6 +9,9 @@ public class BoardModel
 
     // -1 表示空
     private int[,] types;
+    // 生成权重（长度=TypeCount）
+private float[] spawnWeights;
+
 
     public BoardModel(int width, int height, int typeCount)
     {
@@ -16,8 +19,12 @@ public class BoardModel
         Height = height;
         TypeCount = Mathf.Max(1, typeCount);
         types = new int[Width, Height];
+        spawnWeights = new float[TypeCount];
+for (int i = 0; i < TypeCount; i++) spawnWeights[i] = 1f;
+
         ClearAll();
     }
+    
 
     public void ClearAll()
     {
@@ -60,7 +67,8 @@ public class BoardModel
         {
             if (!avoidStartMatches)
             {
-                types[x, y] = Random.Range(0, TypeCount);
+                types[x, y] = GetRandomTypeWeighted();
+
             }
             else
             {
@@ -69,21 +77,82 @@ public class BoardModel
         }
     }
 
-    private int GetRandomTypeAvoidingImmediateMatch(int x, int y)
+    public void SetSpawnWeights(IList<float> weights)
+{
+    if (weights == null || weights.Count == 0)
     {
-        // 简单做法：最多尝试 N 次，挑一个不会立刻形成 “横向/纵向 3连” 的类型
-        const int maxTries = 20;
-
-        for (int i = 0; i < maxTries; i++)
-        {
-            int t = Random.Range(0, TypeCount);
-            if (!WouldMakeImmediateMatch(x, y, t))
-                return t;
-        }
-
-        // 实在找不到就随便给一个（typeCount 很小时可能会发生）
-        return Random.Range(0, TypeCount);
+        // fallback: uniform
+        for (int i = 0; i < TypeCount; i++) spawnWeights[i] = 1f;
+        return;
     }
+
+    // 确保长度
+    if (spawnWeights == null || spawnWeights.Length != TypeCount)
+        spawnWeights = new float[TypeCount];
+
+    float sum = 0f;
+    for (int i = 0; i < TypeCount; i++)
+    {
+        float w = (i < weights.Count) ? Mathf.Max(0f, weights[i]) : 0f;
+        spawnWeights[i] = w;
+        sum += w;
+    }
+
+    // 全 0 的话 fallback
+    if (sum <= 0.0001f)
+    {
+        for (int i = 0; i < TypeCount; i++) spawnWeights[i] = 1f;
+    }
+}
+
+private int GetRandomTypeWeighted()
+{
+    // 确保可用
+    if (spawnWeights == null || spawnWeights.Length != TypeCount)
+    {
+        spawnWeights = new float[TypeCount];
+        for (int i = 0; i < TypeCount; i++) spawnWeights[i] = 1f;
+    }
+
+    float sum = 0f;
+    for (int i = 0; i < TypeCount; i++) sum += Mathf.Max(0f, spawnWeights[i]);
+
+    if (sum <= 0.0001f)
+        return Random.Range(0, TypeCount);
+
+    float r = Random.value * sum;
+    float acc = 0f;
+
+    for (int i = 0; i < TypeCount; i++)
+    {
+        acc += Mathf.Max(0f, spawnWeights[i]);
+        if (r <= acc) return i;
+    }
+
+    return TypeCount - 1;
+}
+
+private int GetRandomTypeAvoidingImmediateMatch(int x, int y)
+{
+    const int maxTries = 20;
+
+    for (int i = 0; i < maxTries; i++)
+    {
+        int t = GetRandomTypeWeighted();
+        if (!WouldMakeImmediateMatch(x, y, t))
+            return t; // ✅ 关键修复：返回这次抽到的安全类型
+    }
+
+    // 兜底：遍历所有类型，找一个不会立刻三连的
+    for (int t = 0; t < TypeCount; t++)
+    {
+        if (!WouldMakeImmediateMatch(x, y, t))
+            return t;
+    }
+
+    return Random.Range(0, TypeCount);
+}
+
 
     private bool WouldMakeImmediateMatch(int x, int y, int t)
     {
@@ -222,7 +291,8 @@ public class BoardModel
         for (int y = 0; y < Height; y++)
         {
             if (types[x, y] == -1)
-                types[x, y] = Random.Range(0, TypeCount);
+                types[x, y] = GetRandomTypeWeighted();
+
         }
     }
 

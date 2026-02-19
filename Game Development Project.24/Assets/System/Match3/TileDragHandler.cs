@@ -11,7 +11,7 @@ public class TileDragHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHan
     private Vector2Int previewTo;
     private bool hasPreview;
     private bool highlighted;
-    private bool didPreview = false;
+
 
 
 
@@ -35,7 +35,7 @@ public class TileDragHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHan
         hasPreview = false;
         highlighted = false;
 board.SetDragging(true);
-    didPreview = false;
+
 
     // ✅ 仅高亮自己（无预览时单独高亮）
     board.HighlightSoloDrag(tile);
@@ -87,7 +87,7 @@ board.SetDragging(true);
             previewTo = to;
             hasPreview = true;
             board.ShowSwapPreview(from, previewTo);
-            didPreview = true;
+      
 board.ShowSwapPreview(from, previewTo);
 
         }

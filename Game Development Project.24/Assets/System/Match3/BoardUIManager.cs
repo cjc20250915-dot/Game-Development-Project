@@ -27,6 +27,10 @@ public class BoardUIManager : MonoBehaviour
     public float dragThreshold = 25f;
     public float previewDuration = 0.08f;
 
+    [Header("Spawn Weights (Type 0..3)")]
+public float[] spawnWeights = new float[4] { 1f, 1f, 1f, 1f };
+
+
     public RectTransform BoardRootRect => boardRoot;
 
     public bool InputLocked { get; private set; } = false;
@@ -49,6 +53,14 @@ public void SetDragging(bool dragging)
     void Start()
     {
         model = new BoardModel(width, height, typeCount);
+        // 确保长度正确（typeCount=4时就是4）
+if (spawnWeights == null || spawnWeights.Length != typeCount)
+{
+    spawnWeights = new float[typeCount];
+    for (int i = 0; i < typeCount; i++) spawnWeights[i] = 1f;
+}
+
+model.SetSpawnWeights(spawnWeights);
         model.FillRandom(avoidStartMatches: true);
         BuildUIFromModel();
     }
