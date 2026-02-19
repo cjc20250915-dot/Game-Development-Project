@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardModel
@@ -118,4 +119,149 @@ public class BoardModel
         }
         return sb.ToString();
     }
+    public HashSet<Vector2Int> FindMatches()
+    {
+        var result = new HashSet<Vector2Int>();
+
+        // 横向扫描
+        for (int y = 0; y < Height; y++)
+        {
+            int runType = types[0, y];
+            int runStartX = 0;
+
+            for (int x = 1; x <= Width; x++)
+            {
+                int t = (x < Width) ? types[x, y] : int.MinValue; // 哨兵：强制结算最后一段
+                bool same = (x < Width && t == runType && t != -1);
+
+                if (same) continue;
+
+                int runLen = x - runStartX;
+                if (runType != -1 && runLen >= 3)
+                {
+                    for (int k = runStartX; k < x; k++)
+                        result.Add(new Vector2Int(k, y));
+                }
+
+                // 开始新段
+                if (x < Width)
+                {
+                    runType = types[x, y];
+                    runStartX = x;
+                }
+            }
+        }
+
+        // 纵向扫描
+        for (int x = 0; x < Width; x++)
+        {
+            int runType = types[x, 0];
+            int runStartY = 0;
+
+            for (int y = 1; y <= Height; y++)
+            {
+                int t = (y < Height) ? types[x, y] : int.MinValue;
+                bool same = (y < Height && t == runType && t != -1);
+
+                if (same) continue;
+
+                int runLen = y - runStartY;
+                if (runType != -1 && runLen >= 3)
+                {
+                    for (int k = runStartY; k < y; k++)
+                        result.Add(new Vector2Int(x, k));
+                }
+
+                if (y < Height)
+                {
+                    runType = types[x, y];
+                    runStartY = y;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    // ====== 新增：消除（把匹配位置设为 -1）======
+    public void ClearMatches(HashSet<Vector2Int> matches)
+    {
+        foreach (var p in matches)
+        {
+            if (!InBounds(p.x, p.y)) continue;
+            types[p.x, p.y] = -1;
+        }
+    }
+
+    // ====== 新增：重力下落（每列向下压实）======
+    public void ApplyGravity()
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            int writeY = Height - 1;
+
+            for (int y = Height - 1; y >= 0; y--)
+            {
+                int t = types[x, y];
+                if (t == -1) continue;
+
+                if (y != writeY)
+                {
+                    types[x, writeY] = t;
+                    types[x, y] = -1;
+                }
+                writeY--;
+            }
+        }
+    }
+
+    // ====== 新增：补齐空位（把 -1 随机填满）======
+    public void FillEmptiesRandom()
+    {
+        for (int x = 0; x < Width; x++)
+        for (int y = 0; y < Height; y++)
+        {
+            if (types[x, y] == -1)
+                types[x, y] = Random.Range(0, TypeCount);
+        }
+    }
+
+    public List<(Vector2Int from, Vector2Int to)> ApplyGravityWithMoves()
+{
+    var moves = new List<(Vector2Int from, Vector2Int to)>();
+
+    for (int x = 0; x < Width; x++)
+    {
+        int writeY = Height - 1;
+
+        for (int y = Height - 1; y >= 0; y--)
+        {
+            int t = types[x, y];
+            if (t == -1) continue;
+
+            if (y != writeY)
+            {
+                types[x, writeY] = t;
+                types[x, y] = -1;
+                moves.Add((new Vector2Int(x, y), new Vector2Int(x, writeY)));
+            }
+            writeY--;
+        }
+    }
+    return moves;
+}
+
+public List<Vector2Int> FillEmptiesRandomWithSpawns()
+{
+    var spawned = new List<Vector2Int>();
+    for (int x = 0; x < Width; x++)
+    for (int y = 0; y < Height; y++)
+    {
+        if (types[x, y] != -1) continue;
+        types[x, y] = Random.Range(0, TypeCount);
+        spawned.Add(new Vector2Int(x, y));
+    }
+    return spawned;
+}
+
 }
