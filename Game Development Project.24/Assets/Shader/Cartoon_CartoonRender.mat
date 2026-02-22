@@ -41,9 +41,11 @@ Material:
     m_Floats:
     - _Contrast: 0.48
     - _Exposure: 1.315
+    - _OutlineWidth: 0.0136
     - _USE_AO: 1
     - _USE_LIGHTMAP_AO: 1
     m_Colors:
+    - _OutlineColor: {r: 0.21698111, g: 0.12998396, b: 0.12998396, a: 1}
     - _Tint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
