@@ -15,7 +15,7 @@ Shader "Cartoon/CartoonRender"
 
         [Header(Outline)]
         _OutlineColor ("Outline Color", Color) = (0,0,0,1)
-         _OutlineWidth ("Outline Width", Range(0.001, 0.05)) = 0.01
+        _OutlineWidth ("Outline Width", Range(0.001, 0.05)) = 0.01
     }
 
     SubShader
@@ -95,7 +95,10 @@ Shader "Cartoon/CartoonRender"
         Pass
         {
             Name "UniversalForward"
-            Tags{ "LightMode"="UniversalForward" }
+            Tags
+            {
+                "LightMode"="UniversalForward"
+            }
 
             Cull Back
             ZWrite On
@@ -219,7 +222,10 @@ Shader "Cartoon/CartoonRender"
         Pass
         {
             Name "ShadowCaster"
-            Tags { "LightMode"="ShadowCaster" }
+            Tags
+            {
+                "LightMode"="ShadowCaster"
+            }
 
             ZWrite On
             ZTest LEqual
