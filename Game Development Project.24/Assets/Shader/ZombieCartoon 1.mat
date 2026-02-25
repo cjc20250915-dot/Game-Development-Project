@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: IceEffectMat 2
+  m_Name: ZombieCartoon 1
   m_Shader: {fileID: 4800000, guid: 5c7ae3f1531c2ef4fad17e33debfafeb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -27,7 +27,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _AOTexture:
-        m_Texture: {fileID: 2800000, guid: 7406c5c8b4bed4942ae64e193adb8209, type: 3}
+        m_Texture: {fileID: 2800000, guid: 70cf1c80000184349813d82b091345c7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e8c97166eec798e48934bc5cc9763293, type: 3}
+        m_Texture: {fileID: 2800000, guid: 87891ca4ea490634d8bb21f989fa33f2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -79,7 +79,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: ed54d2dcbe5bbe048a752b93a8aa7b64, type: 3}
+        m_Texture: {fileID: 2800000, guid: 96839bc2db8a2f14eae787640cd00c37, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalTex:
@@ -139,7 +139,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _Exposure: 1.296
+    - _Exposure: 2
     - _FresnelStrength: 1.65
     - _GlossMapScale: 0
     - _Glossiness: 0

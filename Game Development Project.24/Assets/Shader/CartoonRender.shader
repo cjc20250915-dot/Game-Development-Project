@@ -199,7 +199,7 @@ Shader "Cartoon/CartoonRender"
                 half halfLambert = NoL * 0.5 + 0.5;
                 halfLambert = pow(halfLambert, 2.0);
 
-                half lightStep = smoothstep(0.01, 0.4, halfLambert);
+                half lightStep = smoothstep(0.45, 0.5, halfLambert);
                 lightStep = (lightStep - 0.5) * _Contrast + 0.5;
                 lightStep = saturate(lightStep);
 
