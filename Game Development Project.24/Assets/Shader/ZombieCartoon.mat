@@ -130,7 +130,7 @@ Material:
     - _ClearCoat: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Contrast: 0.65
+    - _Contrast: 0.43
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -156,7 +156,7 @@ Material:
     - _NoiseScale: 100
     - _NormalStrength: 3.02
     - _OcclusionStrength: 1
-    - _OutlineWidth: 0.0318
+    - _OutlineWidth: 0.0073
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0

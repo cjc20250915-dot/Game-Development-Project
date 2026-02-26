@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sofa
+  m_Name: Tree01
   m_Shader: {fileID: 4800000, guid: 5c7ae3f1531c2ef4fad17e33debfafeb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: bdad1be13839a1f4eb7d479ccfb30df6, type: 3}
+        m_Texture: {fileID: 2800000, guid: b2b627a15be001f4bb6ffda113a1d333, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -79,7 +79,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4bc5d2cae86275747b85b91d2d541aff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalTex:
@@ -130,7 +130,7 @@ Material:
     - _ClearCoat: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Contrast: 0.31
+    - _Contrast: 0.43
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -156,7 +156,7 @@ Material:
     - _NoiseScale: 100
     - _NormalStrength: 3.02
     - _OcclusionStrength: 1
-    - _OutlineWidth: 0.0156
+    - _OutlineWidth: 0.05
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
