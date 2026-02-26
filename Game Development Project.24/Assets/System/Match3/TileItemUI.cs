@@ -94,7 +94,9 @@ public void OnPointerEnter(PointerEventData eventData)
     // ✅ 正在拖拽时，忽略悬浮效果
     if (board != null && board.IsDragging) return;
 
-    isHovered = true;
+        if (board != null && board.InputLocked) return;
+
+isHovered = true;
     RefreshVisual();
 }
 
@@ -102,12 +104,22 @@ public void OnPointerExit(PointerEventData eventData)
 {
     if (board != null && board.IsDragging) return;
 
-    isHovered = false;
+        if (board != null && board.InputLocked) return;
+
+isHovered = false;
     RefreshVisual();
 }
 
 
-    // ====== Visual State ======
+        // Force-clear hover state (used when board input is locked)
+    public void ForceClearHover()
+    {
+        if (!isHovered) return;
+        isHovered = false;
+        RefreshVisual();
+    }
+
+// ====== Visual State ======
     private void RefreshVisual()
 {
     bool suppressHover = (board != null && board.IsDragging);

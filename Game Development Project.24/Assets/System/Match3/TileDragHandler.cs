@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TileDragHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class TileDragHandler : MonoBehaviour,
+    IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerUpHandler
 {
     private TileItemUI tile;
     private BoardUIManager board;
@@ -9,17 +10,14 @@ public class TileDragHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHan
     private Vector2 pointerDownLocal;
     private Vector2Int from;
     private Vector2Int previewTo;
+
     private bool hasPreview;
-    private bool highlighted;
-
-
-
+    private bool highlighted; // 是否真正超过阈值开始拖拽（真拖拽）
 
     private void Awake()
     {
         tile = GetComponent<TileItemUI>();
 
-        // 更稳：父级找不到就全场景找
         board = GetComponentInParent<BoardUIManager>();
         if (board == null) board = Object.FindFirstObjectByType<BoardUIManager>();
     }
@@ -28,21 +26,26 @@ public class TileDragHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHan
     {
         if (board == null || tile == null) return;
         if (board.InputLocked) return;
+        if (board.DragLocked) return;
         if (!board.CanStartDrag(tile)) return;
 
-        from = new Vector2Int(tile.X, tile.Y);
+        
+        // Prefer the board's authoritative mapping (prevents rare desync after fast invalid swaps)
+        if (!board.TryGetCoordOfTile(tile, out from))
+            from = new Vector2Int(tile.X, tile.Y);
+        else
+            tile.SetCoord(from.x, from.y);
         previewTo = from;
         hasPreview = false;
         highlighted = false;
-board.SetDragging(true);
 
-
-    // ✅ 仅高亮自己（无预览时单独高亮）
-    board.HighlightSoloDrag(tile);
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             board.BoardRootRect, eventData.position, eventData.pressEventCamera, out pointerDownLocal
         );
+
+        // ❌ 不要在这里 SetDragging(true)，否则“点击一下不拖”也会进入拖拽态
+        // board.SetDragging(true);
     }
 
     public void OnBeginDrag(PointerEventData eventData) { }
@@ -51,21 +54,26 @@ board.SetDragging(true);
     {
         if (board == null || tile == null) return;
         if (board.InputLocked) return;
+        if (board.DragLocked) return;
         if (!board.IsDraggingAllowedFor(tile)) return;
 
-        // ✅ 不再移动 tile 跟随鼠标，只计算方向做预览
         Vector2 local;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             board.BoardRootRect, eventData.position, eventData.pressEventCamera, out local
         );
 
         Vector2 delta = local - pointerDownLocal;
-        if (!highlighted && delta.magnitude >= board.dragThreshold)
-{
-    board.SelectForDrag(tile);   // ✅ 真拖起来才高亮
-    highlighted = true;
-}
 
+        // ✅ 只有超过阈值，才算“真拖拽”，此时才进入 dragging 状态
+        if (!highlighted && delta.magnitude >= board.dragThreshold)
+        {
+            board.SetDragging(true);
+            board.SelectForDrag(tile);
+            highlighted = true;
+        }
+
+        // 还没超过阈值：不要做预览
+        if (!highlighted) return;
 
         Vector2Int to = board.GetDragPreviewTarget(from, delta);
 
@@ -87,9 +95,19 @@ board.SetDragging(true);
             previewTo = to;
             hasPreview = true;
             board.ShowSwapPreview(from, previewTo);
-      
-board.ShowSwapPreview(from, previewTo);
+        }
+    }
 
+    // ✅ 关键：处理“只是点击一下/轻微移动但没达到阈值”的情况
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (board == null || tile == null) return;
+
+        // 没有进入真拖拽：就把按下产生的高亮/状态清理掉，避免卡住
+        if (!highlighted)
+        {
+            board.ClearAllPreviewAndSelection();
+            board.SetDragging(false);
         }
     }
 
@@ -101,25 +119,31 @@ board.ShowSwapPreview(from, previewTo);
         {
             if (hasPreview) board.CancelSwapPreview(from, previewTo);
             board.CancelDragSelectionAndSnapBack(from);
+
             hasPreview = false;
             previewTo = from;
+
+            board.SetDragging(false);
             return;
         }
 
+        // 没有真拖拽（没过阈值）：当作点击结束，清理状态
         if (!highlighted)
-    return;
-
+        {
+            board.ClearAllPreviewAndSelection();
+            board.SetDragging(false);
+            return;
+        }
 
         if (hasPreview && previewTo != from)
         {
-            // 先取消预览，避免和正式交换动画打架
             board.CancelSwapPreview(from, previewTo);
             board.CommitSwapByDrag(from, previewTo);
         }
         else
         {
             board.CancelDragSelectionAndSnapBack(from);
-                    board.ClearAllPreviewAndSelection();
+            board.ClearAllPreviewAndSelection();
         }
 
         hasPreview = false;

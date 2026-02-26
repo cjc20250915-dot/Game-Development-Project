@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class BoardUIManager : MonoBehaviour
 {
@@ -27,14 +29,77 @@ public class BoardUIManager : MonoBehaviour
     public float dragThreshold = 25f;
     public float previewDuration = 0.08f;
 
+    [Header("Input Cooldown")]
+[SerializeField] private float postMoveInputCooldown = 0.3f;
+
+// Compatibility: old code may still check DragLocked.
+// Now we lock ALL input (hover/click/drag) via InputLocked + raycast disabling.
+public bool DragLocked => InputLocked;
+
+private bool pendingCooldownAfterResolve = false;
+
+private ClearedElementTrackerUI_TMP clearedTracker;
+
+public void QueueCooldownAfterResolve()
+{
+    pendingCooldownAfterResolve = true;
+}
+
+private IEnumerator PostResolveCooldownRoutine()
+{
+    // Keep everything locked for a short cooldown after the whole resolve finishes.
+    LockInput();
+    yield return new WaitForSeconds(postMoveInputCooldown);
+    // If player's moves are depleted, switch to enemy turn instead of re-enabling input.
+    if (turn != null && turn.IsPlayerTurn && turn.RemainingMoves <= 0)
+    {
+        // Keep board locked; enemy turn will run.
+        turn.StartEnemyTurn();
+        yield break;
+    }
+    UnlockInput();
+}
+
+// 在“消除/下落/补充/连锁”全部完成后调用
+public void NotifyResolveFinished()
+{
+    if (pendingCooldownAfterResolve)
+    {
+        pendingCooldownAfterResolve = false;
+
+        if (postCooldownCo != null) StopCoroutine(postCooldownCo);
+        postCooldownCo = StartCoroutine(PostResolveCooldownRoutine());
+    }
+    else
+    {
+        // No cooldown queued: unlock immediately.
+        // If player's moves are depleted, switch to enemy turn instead of unlocking.
+        if (turn != null && turn.IsPlayerTurn && turn.RemainingMoves <= 0)
+        {
+            // Keep board locked; enemy turn will manage flow.
+            turn.StartEnemyTurn();
+        }
+        else
+        {
+            UnlockInput();
+        }
+    }
+}
+
     [Header("Spawn Weights (Type 0..3)")]
 public float[] spawnWeights = new float[4] { 1f, 1f, 1f, 1f };
 
 
     public RectTransform BoardRootRect => boardRoot;
 
+    // Disable all UI raycasts on the board while locked (prevents hover/click/drag during animations)
+    private CanvasGroup boardCanvasGroup;
+    private Coroutine postCooldownCo;
+
     public bool InputLocked { get; private set; } = false;
     public bool IsDragging { get; private set; }
+
+    
 
 
 public void SetDragging(bool dragging)
@@ -44,15 +109,29 @@ public void SetDragging(bool dragging)
 
 
 
+    private TurnBattleManager turn;
     private BoardModel model;
     private TileItemUI[,] tiles;
 
+    // ===== Move coroutine guard (avoid multiple MoveTo fighting on same RectTransform) =====
+    private readonly Dictionary<RectTransform, Coroutine> moveCos = new Dictionary<RectTransform, Coroutine>();
     private TileItemUI selected;
     private bool isResolving = false;
 
+    // ===== Remember last committed swap (for swap-back when no match) =====
+    private bool hasLastSwap = false;
+    private Vector2Int lastSwapFrom;
+    private Vector2Int lastSwapTo;
+
+
+    
+
     void Start()
     {
+        clearedTracker = FindFirstObjectByType<ClearedElementTrackerUI_TMP>();
         model = new BoardModel(width, height, typeCount);
+        turn = FindFirstObjectByType<TurnBattleManager>();
+        EnsureBoardCanvasGroup();
         // 确保长度正确（typeCount=4时就是4）
 if (spawnWeights == null || spawnWeights.Length != typeCount)
 {
@@ -118,36 +197,97 @@ public void ClearAllPreviewAndSelection()
 
     public bool InBounds(int x, int y) => x >= 0 && x < width && y >= 0 && y < height;
 
+
+    // ===== Coordinate sanity: find a tile's real grid index (slow but called rarely) =====
+    public bool TryGetCoordOfTile(TileItemUI target, out Vector2Int coord)
+    {
+        coord = default;
+        if (target == null || tiles == null) return false;
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if (tiles[x, y] == target)
+                {
+                    coord = new Vector2Int(x, y);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     // ===== Input lock =====
+    private void EnsureBoardCanvasGroup()
+    {
+        if (boardRoot == null) return;
+        if (boardCanvasGroup == null)
+        {
+            boardCanvasGroup = boardRoot.GetComponent<CanvasGroup>();
+            if (boardCanvasGroup == null) boardCanvasGroup = boardRoot.gameObject.AddComponent<CanvasGroup>();
+        }
+    }
+
     private void LockInput()
     {
         InputLocked = true;
+        EnsureBoardCanvasGroup();
 
-        // ✅ 锁盘时清掉选中与高亮：保证“选择也不可以”
+        // Disable raycasts so mouse movement cannot trigger hover/click/drag during animations/resolves.
+        if (boardCanvasGroup != null)
+        {
+            boardCanvasGroup.interactable = false;
+            boardCanvasGroup.blocksRaycasts = false;
+        }
+
+        // Clear selection & hover visuals to prevent "stuck" highlight while locked.
         if (selected != null)
         {
             selected.SetSelected(false);
             selected = null;
         }
+
+        if (tiles != null)
+        {
+            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+            {
+                var t = tiles[x, y];
+                if (t != null) t.ForceClearHover();
+            }
+        }
     }
 
     private void UnlockInput()
+{
+    InputLocked = false;
+    EnsureBoardCanvasGroup();
+
+    if (boardCanvasGroup != null)
     {
-        InputLocked = false;
+        boardCanvasGroup.interactable = true;
+        boardCanvasGroup.blocksRaycasts = true;
     }
+}
 
-    // ===== Drag allow =====
-    public bool CanStartDrag(TileItemUI tile)
-    {
-        if (InputLocked) return false;
-        if (isResolving) return false;
+// ===== External control (turn system) =====
+public void SetBoardInputEnabled(bool enabled)
+{
+    if (enabled) UnlockInput();
+    else LockInput();
+}
 
-        // 没有 selected：可以拖任意一个
-        if (selected == null) return true;
+// ===== Drag allow =====
+public bool CanStartDrag(TileItemUI tile)
+{
+    if (DragLocked) return false;
+    if (InputLocked) return false;
+    if (isResolving) return false;
 
-        // 有 selected：只允许拖 selected
-        return selected == tile;
-    }
+    if (selected == null) return true;
+    return selected == tile;
+}
 
     public bool IsDraggingAllowedFor(TileItemUI tile) => CanStartDrag(tile);
 
@@ -192,8 +332,8 @@ public void ShowSwapPreview(Vector2Int from, Vector2Int to)
     a.SetSelected(true);
     b.SetSelected(true);
 
-    StartCoroutine(MoveTo(a.Rect, GetCellPos(to.x, to.y), previewDuration));
-    StartCoroutine(MoveTo(b.Rect, GetCellPos(from.x, from.y), previewDuration));
+    StartMove(a.Rect, GetCellPos(to.x, to.y), previewDuration);
+    StartMove(b.Rect, GetCellPos(from.x, from.y), previewDuration);
 }
 
 public void CancelSwapPreview(Vector2Int from, Vector2Int to)
@@ -207,8 +347,8 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
     a.SetSelected(true);
     b.SetSelected(false);
 
-    StartCoroutine(MoveTo(a.Rect, GetCellPos(from.x, from.y), previewDuration));
-    StartCoroutine(MoveTo(b.Rect, GetCellPos(to.x, to.y), previewDuration));
+    StartMove(a.Rect, GetCellPos(from.x, from.y), previewDuration);
+    StartMove(b.Rect, GetCellPos(to.x, to.y), previewDuration);
 }
 
 
@@ -224,7 +364,7 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
 
         var t = tiles[at.x, at.y];
         if (t != null && t.Rect != null)
-            StartCoroutine(MoveTo(t.Rect, GetCellPos(at.x, at.y), previewDuration));
+            StartMove(t.Rect, GetCellPos(at.x, at.y), previewDuration);
     }
 
     // ===== Commit swap (real) =====
@@ -247,6 +387,17 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
             CancelDragSelectionAndSnapBack(from);
             return;
         }
+        // ===== Turn system: consume 1 move per committed swap =====
+        if (turn != null)
+        {
+            // Not player's turn or no moves left -> ignore this swap
+            if (!turn.TryConsumePlayerMove())
+            {
+                CancelDragSelectionAndSnapBack(from);
+                return;
+            }
+        }
+
 
         // ✅ 先取消高亮（交换后进入 resolve）
         if (selected != null)
@@ -259,6 +410,11 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
         int bx = to.x;   int by = to.y;
 
         // 逻辑交换
+        // 记录本次交换（用于无消除时回退）
+        hasLastSwap = true;
+        lastSwapFrom = from;
+        lastSwapTo = to;
+
         model.Swap(ax, ay, bx, by);
 
         // UI 交换：交换引用与坐标
@@ -273,11 +429,39 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
         aTile.SetCoord(bx, by);
 
         // 正式交换动画
-        StartCoroutine(MoveTo(aTile.Rect, GetCellPos(bx, by), moveDuration));
-        StartCoroutine(MoveTo(bTile.Rect, GetCellPos(ax, ay), moveDuration));
+        StartMove(aTile.Rect, GetCellPos(bx, by), moveDuration);
+        StartMove(bTile.Rect, GetCellPos(ax, ay), moveDuration);
 
+        QueueCooldownAfterResolve();   // ✅ 第三步：本次拖拽结束后需要 0.2s 冷却（等resolve完再开始）
         StartCoroutine(ResolveBoardCoroutine());
     }
+    // ===== Move helper (cancel previous move on same RectTransform) =====
+    private void StartMove(RectTransform rect, Vector2 target, float duration)
+    {
+        if (rect == null) return;
+
+        if (moveCos.TryGetValue(rect, out var co) && co != null)
+            StopCoroutine(co);
+
+        moveCos[rect] = StartCoroutine(MoveTo(rect, target, duration));
+    }
+
+    // ===== Snap all tiles to their grid positions (safety) =====
+    private void SnapAllTilesToGrid()
+    {
+        if (tiles == null) return;
+
+        for (int y = 0; y < height; y++)
+        for (int x = 0; x < width; x++)
+        {
+            var t = tiles[x, y];
+            if (t == null || t.Rect == null) continue;
+            t.SetCoord(x, y);
+            t.Rect.anchoredPosition = GetCellPos(x, y);
+        }
+    }
+
+
 
     // ===== Safe MoveTo (avoid destroyed rect) =====
     private IEnumerator MoveTo(RectTransform rect, Vector2 target, float duration)
@@ -309,12 +493,60 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
         // 等交换动画结束
         yield return new WaitForSeconds(moveDuration);
 
+        // ===== 如果本次交换没有产生任何消除：回退交换 =====
+        var firstMatches = model.FindMatches();
+        if (firstMatches.Count == 0 && hasLastSwap)
+        {
+            Vector2Int f = lastSwapFrom;
+            Vector2Int t = lastSwapTo;
+
+            // 回退逻辑
+            model.Swap(f.x, f.y, t.x, t.y);
+
+            // 回退 UI 数组与坐标
+            var aTile = tiles[f.x, f.y];
+            var bTile = tiles[t.x, t.y];
+            if (aTile != null && bTile != null)
+            {
+                tiles[f.x, f.y] = bTile;
+                tiles[t.x, t.y] = aTile;
+
+                bTile.SetCoord(f.x, f.y);
+                aTile.SetCoord(t.x, t.y);
+
+                // 回退动画
+                if (aTile.Rect != null) StartMove(aTile.Rect, GetCellPos(t.x, t.y), moveDuration);
+                if (bTile.Rect != null) StartMove(bTile.Rect, GetCellPos(f.x, f.y), moveDuration);
+                yield return new WaitForSeconds(moveDuration);
+            }
+
+            SnapAllTilesToGrid();
+
+            hasLastSwap = false;
+            isResolving = false;
+            NotifyResolveFinished();
+            yield break;
+        }
+
+        hasLastSwap = false;
+
+
         while (true)
         {
             HashSet<Vector2Int> matches = model.FindMatches();
             if (matches.Count == 0) break;
 
-            // 1) 消除：逻辑置空 + UI Destroy
+            // 1) 消除：先统计类型，再逻辑置空 + UI Destroy
+            if (clearedTracker != null)
+            {
+                foreach (var p in matches)
+                {
+                    // 注意：必须在 ClearMatches 之前读取类型（ClearMatches 会把 type 置为 -1）
+                    int type = model.GetTypeAt(p.x, p.y);
+                    clearedTracker.Add(type, 1);
+                }
+            }
+
             model.ClearMatches(matches);
 
             foreach (var p in matches)
@@ -339,7 +571,7 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
                     if (moving != null)
                     {
                         moving.SetCoord(m.to.x, m.to.y);
-                        StartCoroutine(MoveTo(moving.Rect, GetCellPos(m.to.x, m.to.y), moveDuration));
+                        StartMove(moving.Rect, GetCellPos(m.to.x, m.to.y), moveDuration);
                     }
                 }
                 yield return new WaitForSeconds(moveDuration);
@@ -360,13 +592,15 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
                     tiles[p.x, p.y] = newTile;
 
                     newTile.Rect.anchoredPosition = GetCellPos(p.x, -2);
-                    StartCoroutine(MoveTo(newTile.Rect, GetCellPos(p.x, p.y), moveDuration));
+                    StartMove(newTile.Rect, GetCellPos(p.x, p.y), moveDuration);
                 }
                 yield return new WaitForSeconds(moveDuration);
             }
         }
 
+        SnapAllTilesToGrid();
+
         isResolving = false;
-        UnlockInput();
+        NotifyResolveFinished();   // ✅ 第四步：resolve全部结束 -> 如果之前排队了冷却，这里开始0.2s冷却
     }
 }
