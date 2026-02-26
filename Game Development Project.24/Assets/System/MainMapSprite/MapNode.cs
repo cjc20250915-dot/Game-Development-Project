@@ -3,23 +3,27 @@ using UnityEngine;
 
 public class MapNode : MonoBehaviour
 {
-    [Header("可前往的节点（手动拖拽）")]
+    [Header("可前往的节点")]
     public List<MapNode> connectedNodes = new List<MapNode>();
 
-    [Header("是否已经访问")]
+    [Header("是否访问过")]
     public bool visited = false;
 
-    [Header("Gizmos 设置")]
+    [Header("要跳转的场景（留空则不跳转）")]
+    public string sceneToLoad;
+
+    [Header("是否进入就触发")]
+    public bool autoLoadScene = true;
+
+    [Header("Gizmos")]
     public Color lineColor = Color.white;
     public float sphereSize = 0.3f;
 
     void OnDrawGizmos()
     {
-        // 画自己
         Gizmos.color = visited ? Color.green : Color.yellow;
         Gizmos.DrawSphere(transform.position, sphereSize);
 
-        // 画连线
         Gizmos.color = lineColor;
 
         foreach (var node in connectedNodes)

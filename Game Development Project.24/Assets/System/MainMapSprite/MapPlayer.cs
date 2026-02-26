@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapPlayer : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class MapPlayer : MonoBehaviour
         StartCoroutine(JumpToNode(targetNode));
     }
 
+
     IEnumerator JumpToNode(MapNode target)
     {
         isMoving = true;
@@ -84,8 +86,19 @@ public class MapPlayer : MonoBehaviour
         currentNode = target;
         currentNode.visited = true;
 
-        isMoving = false;
-
         Debug.Log("到达节点：" + target.name);
+
+        TryLoadScene(currentNode);
+
+        isMoving = false;
+    }
+
+    void TryLoadScene(MapNode node)
+    {
+        if (node.autoLoadScene && !string.IsNullOrEmpty(node.sceneToLoad))
+        {
+            Debug.Log("加载场景: " + node.sceneToLoad);
+            SceneManager.LoadScene(node.sceneToLoad);
+        }
     }
 }
