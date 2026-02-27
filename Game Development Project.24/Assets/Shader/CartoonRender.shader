@@ -15,7 +15,7 @@ Shader "Cartoon/CartoonRender"
 
         [Header(Outline)]
         _OutlineColor ("Outline Color", Color) = (0,0,0,1)
-        _OutlineWidth ("Outline Width", Range(0.001, 0.05)) = 0.01
+        _OutlineWidth ("Outline Width", Range(0.001, 0.15)) = 0.01
     }
 
     SubShader
