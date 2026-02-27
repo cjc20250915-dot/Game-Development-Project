@@ -1857,8 +1857,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionMat: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
-  transitionTime: 1
-  minWaitTime: 2
+  transitionTime: 1.5
+  minWaitTime: 3
 --- !u!222 &6877423784701866030
 CanvasRenderer:
   m_ObjectHideFlags: 0
