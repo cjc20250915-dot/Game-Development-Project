@@ -21,7 +21,7 @@ public class TransitionController : MonoBehaviour
     {
         yield return StartCoroutine(AnimateCircle(-0.2f, 2f));
 
-        yield return new WaitForSeconds(minWaitTime);
+        yield return new WaitForSecondsRealtime(minWaitTime);
 
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         while (!op.isDone)
@@ -35,7 +35,7 @@ public class TransitionController : MonoBehaviour
         float t = 0;
         while (t < transitionTime)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             float value = Mathf.Lerp(from, to, t / transitionTime);
             transitionMat.SetFloat("_CircleRate", value);
             yield return null;

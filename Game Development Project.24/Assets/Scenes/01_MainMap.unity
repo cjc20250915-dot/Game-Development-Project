@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionMat: {fileID: 2100000, guid: 5641273e64dc02644ad3b1c6cfa798fb, type: 2}
   transitionTime: 1.5
-  minWaitTime: 3
+  minWaitTime: 2
 --- !u!4 &609636470
 Transform:
   m_ObjectHideFlags: 0
