@@ -100,8 +100,11 @@ public class TurnBattleManager : MonoBehaviour
     /// <summary>由 BoardUIManager 在 resolve 完全结束时调用</summary>
     public void OnBoardResolveFinished()
     {
-        // 玩家回合且步数用尽 -> 切敌人回合
+        // 玩家回合且步数用尽：保持当前回合不变，只禁用棋盘输入（不再自动切换到敌人回合）
         if (IsPlayerTurn && remainingMoves <= 0)
-            StartEnemyTurn();
+        {
+            if (board != null) board.SetBoardInputEnabled(false);
+            Debug.Log("[Turn] Moves depleted. Board input disabled (no auto turn switch). ");
+        }
     }
 }
