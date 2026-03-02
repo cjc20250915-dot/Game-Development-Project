@@ -56,8 +56,8 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.7549019, b: 0, a: 1}
   usePrefabColorAsNormal: 1
   normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 0.85, g: 0.9, b: 1, a: 1}
-  hoverScale: 1.08
+  hoverColor: {r: 0.6839622, g: 0.79208046, b: 1, a: 1}
+  hoverScale: 1.15
   hoverAnimTime: 0.08
 --- !u!114 &2520067681495506841
 MonoBehaviour:

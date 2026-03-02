@@ -50,11 +50,10 @@ private IEnumerator PostResolveCooldownRoutine()
     // Keep everything locked for a short cooldown after the whole resolve finishes.
     LockInput();
     yield return new WaitForSeconds(postMoveInputCooldown);
-    // If player's moves are depleted, switch to enemy turn instead of re-enabling input.
+    // If player's moves are depleted, keep the board locked.
     if (turn != null && turn.IsPlayerTurn && turn.RemainingMoves <= 0)
     {
-        // Keep board locked; enemy turn will run.
-        turn.StartEnemyTurn();
+        // Keep board locked (no auto turn switch).
         yield break;
     }
     UnlockInput();
@@ -73,17 +72,16 @@ public void NotifyResolveFinished()
     else
     {
         // No cooldown queued: unlock immediately.
-        // If player's moves are depleted, switch to enemy turn instead of unlocking.
+        // If player's moves are depleted, keep the board locked (no auto turn switch).
         if (turn != null && turn.IsPlayerTurn && turn.RemainingMoves <= 0)
         {
-            // Keep board locked; enemy turn will manage flow.
-            turn.StartEnemyTurn();
+            // Keep board locked.
         }
         else
         {
             UnlockInput();
         }
-    }
+}
 }
 
     [Header("Spawn Weights (Type 0..3)")]
@@ -118,10 +116,7 @@ public void SetDragging(bool dragging)
     private TileItemUI selected;
     private bool isResolving = false;
 
-    // ===== Remember last committed swap (for swap-back when no match) =====
-    private bool hasLastSwap = false;
-    private Vector2Int lastSwapFrom;
-    private Vector2Int lastSwapTo;
+
 
 
     
@@ -409,11 +404,6 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
         int ax = from.x; int ay = from.y;
         int bx = to.x;   int by = to.y;
 
-        // 逻辑交换
-        // 记录本次交换（用于无消除时回退）
-        hasLastSwap = true;
-        lastSwapFrom = from;
-        lastSwapTo = to;
 
         model.Swap(ax, ay, bx, by);
 
@@ -495,40 +485,7 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
 
         // ===== 如果本次交换没有产生任何消除：回退交换 =====
         var firstMatches = model.FindMatches();
-        if (firstMatches.Count == 0 && hasLastSwap)
-        {
-            Vector2Int f = lastSwapFrom;
-            Vector2Int t = lastSwapTo;
 
-            // 回退逻辑
-            model.Swap(f.x, f.y, t.x, t.y);
-
-            // 回退 UI 数组与坐标
-            var aTile = tiles[f.x, f.y];
-            var bTile = tiles[t.x, t.y];
-            if (aTile != null && bTile != null)
-            {
-                tiles[f.x, f.y] = bTile;
-                tiles[t.x, t.y] = aTile;
-
-                bTile.SetCoord(f.x, f.y);
-                aTile.SetCoord(t.x, t.y);
-
-                // 回退动画
-                if (aTile.Rect != null) StartMove(aTile.Rect, GetCellPos(t.x, t.y), moveDuration);
-                if (bTile.Rect != null) StartMove(bTile.Rect, GetCellPos(f.x, f.y), moveDuration);
-                yield return new WaitForSeconds(moveDuration);
-            }
-
-            SnapAllTilesToGrid();
-
-            hasLastSwap = false;
-            isResolving = false;
-            NotifyResolveFinished();
-            yield break;
-        }
-
-        hasLastSwap = false;
 
 
         while (true)
