@@ -8,22 +8,19 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Bush_1_Material
-  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ALPHATEST_ON
-  - _DISABLE_SSR_TRANSPARENT
-  - _DOUBLESIDED_ON
-  - _MATERIAL_FEATURE_TRANSMISSION
-  - _NORMALMAP_TANGENT_SPACE
+  - _ALPHAPREMULTIPLY_ON
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
-  m_CustomRenderQueue: 2475
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: TransparentCutout
+    RenderType: Transparent
   disabledShaderPasses:
   - DistortionVectors
   - TransparentBackfaceDebugDisplay
@@ -33,10 +30,16 @@ Material:
   - TransparentBackface
   - RayTracingPrepass
   - ForwardEmissiveForDeferred
+  - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AOTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -51,6 +54,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _BaseColorMapT2DA:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: ee850a98bc0565a4ab6417e7fd11dcac, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -332,6 +339,7 @@ Material:
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
     - _AlbedoAffectEmissive: 0
+    - _AlphaClip: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 1
     - _AlphaCutoffPostpass: 0.5
@@ -349,11 +357,17 @@ Material:
     - _BaseMapEncoding: 0
     - _BillboardMode: 0
     - _BillboardShadowMode: 0
+    - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
     - _CoatCoverage: 1
     - _CoatIOR: 0.5
     - _CoatMask: 0
+    - _Contrast: 0.1
+    - _Cull: 2
     - _CullMode: 0
     - _CullModeForward: 0
     - _CullModeNormalFlip: 1
@@ -361,6 +375,7 @@ Material:
     - _DebugTreeOcclusion: 0
     - _DepthOffset: 0
     - _DepthOffsetEnable: 0
+    - _DetailAlbedoMapScale: 1
     - _DetailAlbedoScale: 1
     - _DetailMode: 0
     - _DetailNormalMapScale: 1
@@ -390,8 +405,9 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 1
     - _Drag: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _DstBlend2: 0
+    - _DstBlendAlpha: 10
     - _EmissiveColorMode: 1
     - _EmissiveExposureWeight: 1
     - _EmissiveIntensity: 1
@@ -406,6 +422,8 @@ Material:
     - _EnableSpecularOcclusion: 0
     - _EnableWind: 0
     - _EnergyConservingSpecularColor: 1
+    - _EnvironmentReflections: 1
+    - _Exposure: 2
     - _ForceForwardEmissive: 0
     - _FullDetailNormalBlendThreshold: 1
     - _FullDetailNormalBlendWidth: 0.05
@@ -435,7 +453,7 @@ Material:
     - _Metallic: 0
     - _MetallicRemapMax: 0
     - _MetallicRemapMin: 0
-    - _Mode: 3
+    - _Mode: 0
     - _MotionVectorScale: 1
     - _MotionVectorsWorldspaceScaled: 0
     - _NormalMapSpace: 0
@@ -444,6 +462,7 @@ Material:
     - _ObjectSpaceUVMappingEmissive: 0
     - _OcclusionStrength: 0
     - _OpaqueCullMode: 2
+    - _OutlineWidth: 0.001
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
     - _PPDMinSamples: 5
@@ -452,7 +471,9 @@ Material:
     - _Parallax: 0.02
     - _PerPixelSorting: 0
     - _PreRefractionPass: 0
+    - _QueueOffset: 0
     - _RayTracing: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionMode: 0
@@ -472,6 +493,7 @@ Material:
     - _SpecularHighlights: 1
     - _SpecularOcclusionMode: 1
     - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
     - _StencilRef: 0
     - _StencilRefDepth: 8
     - _StencilRefDistortionVec: 4
@@ -488,6 +510,7 @@ Material:
     - _SubsurfaceRadius: 1
     - _SupportDBuffer: 0
     - _SupportDecals: 1
+    - _Surface: 1
     - _SurfaceType: 0
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
@@ -514,6 +537,7 @@ Material:
     - _TreeDO2: 5
     - _TreeDOBias: 0
     - _TreeDOBias2: 0
+    - _USE_AO: 1
     - _UVBase: 0
     - _UVDetail: 0
     - _UVEmissive: 0
@@ -542,18 +566,19 @@ Material:
     - _WindRangeLvl1: 0.5
     - _WindRangeLvlB: 5
     - _WindRangeRadius: 2.5
+    - _WorkflowMode: 1
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 3
     - _ZTestMode: 8
     - _ZTestModeDistortion: 8
     - _ZTestTransparent: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
     - _BackfaceBaseColorScale: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+    - _BaseColor: {r: 0.286381, g: 0.5031446, b: 0.32579258, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColorRandomize: {r: 0, g: 0, b: 0, a: 0.05}
-    - _Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+    - _Color: {r: 0.28638095, g: 0.50314456, b: 0.32579255, a: 1}
     - _DiffusionProfileAsset: {r: -8.695931e+30, g: -5.0949594e+31, b: -0.010710085, a: -0.0000000055696536}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
@@ -562,12 +587,14 @@ Material:
     - _ImposterOffset: {r: 0.5, g: 0, b: 0, a: 0}
     - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
+    - _OutlineColor: {r: 0.2206201, g: 0.72327036, b: 0.2668234, a: 1}
     - _PeeledBarkColor: {r: 1, g: 1, b: 1, a: 1}
     - _PeeledBarkColorAlt: {r: 0.9, g: 0.9, b: 1, a: 1}
     - _PeeledBarkUVRangeScale: {r: 0, g: 1, b: 2, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
@@ -590,6 +617,19 @@ MonoBehaviour:
   hdPluginSubTargetMaterialVersions:
     m_Keys: []
     m_Values: 
+--- !u!114 &5886885203781565241
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 10
 --- !u!114 &7246747209450697341
 MonoBehaviour:
   m_ObjectHideFlags: 11
