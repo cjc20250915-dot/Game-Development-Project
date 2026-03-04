@@ -1,6 +1,5 @@
-using System.Collections;
+using System;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class TurnBattleManager : MonoBehaviour
@@ -9,82 +8,144 @@ public class TurnBattleManager : MonoBehaviour
 
     [Header("Turn Settings")]
     public int movesPerTurn = 5;
-    public float enemyTurnDelay = 0.3f;
-    public float enemyActionTime = 0.8f;
 
-    [Header("UI")]
-    public TMP_Text movesText;              
-    public GameObject enemyActingUI;    // “敌人在行动”面板/组件
+    [Header("UI (Display)")]
+    public TMP_Text movesText;
+
+
+    [Header("UI Lock (Disable a specific UI subtree)")]
+    [Tooltip("敌人回合时要禁用操作的UI根节点（它及子物体都会被禁用Raycast/交互）。不要把全局UI都放这里面。")]
+    public GameObject uiRootToDisableOnEnemyTurn;
 
     [Header("Runtime (Read Only)")]
     [SerializeField] private Turn currentTurn = Turn.Player;
     [SerializeField] private int remainingMoves;
 
     private BoardUIManager board;
+    private CanvasGroup uiLockGroup;
 
     public bool IsPlayerTurn => currentTurn == Turn.Player;
     public int RemainingMoves => remainingMoves;
 
+    // ===== Turn events (你要的“分出来的回合相关事件”) =====
+    public event Action OnPlayerTurnBegan;
+    public event Action OnPlayerTurnEnded;
+    public event Action OnEnemyTurnBegan;
+    public event Action OnEnemyTurnEnded;
+
+    // 敌人AI开始行动：空钩子（敌人AI在别处订阅/调用）
+    public event Action OnEnemyAIRequested;
+
     private void Awake()
     {
         board = FindFirstObjectByType<BoardUIManager>();
+
+        // 为需要禁用的UI根节点准备 CanvasGroup（用于只禁用这一块UI的交互，不影响其他UI）
+        if (uiRootToDisableOnEnemyTurn != null)
+        {
+            uiLockGroup = uiRootToDisableOnEnemyTurn.GetComponent<CanvasGroup>();
+            if (uiLockGroup == null) uiLockGroup = uiRootToDisableOnEnemyTurn.AddComponent<CanvasGroup>();
+        }
     }
 
     private void Start()
     {
-        StartPlayerTurn();
+        // 你也可以不自动开始，按你的流程在外部调用 BeginPlayerTurn()
+        BeginPlayerTurn();
     }
 
     private void RefreshUI()
     {
         if (movesText != null)
-            movesText.text = $"Moves: {remainingMoves}"; // 你想中文就改成 “步数：{remainingMoves}”
+            movesText.text = $"Moves: {remainingMoves}";
 
-        if (enemyActingUI != null)
-            enemyActingUI.SetActive(currentTurn == Turn.Enemy);
     }
 
-    public void StartPlayerTurn()
+    public void OnEndTurnButtonClicked()
+{
+    if (!IsPlayerTurn) return;
+
+    // 结束回合：直接切到敌人回合
+    BeginEnemyTurn();
+}
+public void TestReturnToPlayerTurn()
+{
+    if (!IsPlayerTurn)
+    {
+        BeginPlayerTurn();
+    }
+}
+
+    // ===== Core: only per-turn enter/exit (不负责“何时切换”，只负责“进入某回合时做什么”) =====
+
+    public void BeginPlayerTurn()
     {
         currentTurn = Turn.Player;
-        remainingMoves = Mathf.Max(1, movesPerTurn);
+        remainingMoves = Mathf.Max(0, movesPerTurn);
 
-        // 玩家回合：允许操作
+        // 玩家回合：允许棋盘操作
         if (board != null) board.SetBoardInputEnabled(true);
 
+        // 玩家回合：恢复那一部分UI的操作
+        SetLockedUIInteractable(true);
+
         RefreshUI();
-        Debug.Log($"[Turn] Player turn start. Moves={remainingMoves}");
+        OnPlayerTurnBegan?.Invoke();
+
+        Debug.Log($"[Turn] Player turn began. Moves={remainingMoves}");
     }
 
-    public void StartEnemyTurn()
+    public void EndPlayerTurn()
     {
-        if (currentTurn == Turn.Enemy) return;
+        if (currentTurn != Turn.Player) return;
 
+        OnPlayerTurnEnded?.Invoke();
+        Debug.Log("[Turn] Player turn ended.");
+    }
+
+    public void BeginEnemyTurn()
+    {
         currentTurn = Turn.Enemy;
 
-        // 敌人回合：禁用操作 + 显示UI
+        // 敌人回合：禁用棋盘操作
         if (board != null) board.SetBoardInputEnabled(false);
 
+        // 敌人回合：禁用你指定的那一块UI（只影响该根节点及子节点）
+        SetLockedUIInteractable(false);
+
         RefreshUI();
-        Debug.Log("[Turn] Enemy turn start.");
+        OnEnemyTurnBegan?.Invoke();
 
-        StartCoroutine(EnemyTurnRoutine());
+        Debug.Log("[Turn] Enemy turn began.");
+
+        // 敌人AI开始行动（空逻辑钩子，AI在别处订阅这个事件）
+        RequestEnemyAIStart();
     }
 
-    private IEnumerator EnemyTurnRoutine()
+    public void EndEnemyTurn()
     {
-        yield return new WaitForSeconds(enemyTurnDelay);
+        if (currentTurn != Turn.Enemy) return;
 
-        // TODO: 敌人行动逻辑（先Debug）
-        Debug.Log("[Enemy] Acting... (TODO)");
-
-        yield return new WaitForSeconds(enemyActionTime);
-
-        Debug.Log("[Turn] Enemy turn end.");
-        StartPlayerTurn();
+        OnEnemyTurnEnded?.Invoke();
+        Debug.Log("[Turn] Enemy turn ended.");
     }
 
-    /// <summary>每次玩家确认一次交换就消耗一步</summary>
+    private void RequestEnemyAIStart()
+    {
+        // 这里不写AI，只抛事件/钩子
+        Debug.Log("[Enemy] AI requested. (Implement AI elsewhere)");
+        OnEnemyAIRequested?.Invoke();
+    }
+
+    private void SetLockedUIInteractable(bool enabled)
+    {
+        if (uiLockGroup == null) return;
+        uiLockGroup.interactable = enabled;
+        uiLockGroup.blocksRaycasts = enabled;
+        // 注意：不改 alpha，不影响显示；只禁用交互
+    }
+
+    /// <summary>每次玩家确认一次交换就消耗一步（你现在的“交换也消耗步数”逻辑会用到）</summary>
     public bool TryConsumePlayerMove()
     {
         if (!IsPlayerTurn) return false;
@@ -97,14 +158,18 @@ public class TurnBattleManager : MonoBehaviour
         return true;
     }
 
-    /// <summary>由 BoardUIManager 在 resolve 完全结束时调用</summary>
+    /// <summary>
+    /// 由 BoardUIManager 在 resolve 完全结束时调用
+    /// 现在不再自动切敌人回合（你说“中间切换等下再写”）
+    /// </summary>
     public void OnBoardResolveFinished()
     {
-        // 玩家回合且步数用尽：保持当前回合不变，只禁用棋盘输入（不再自动切换到敌人回合）
+        // 这里只做“状态通知/检查”，不做切换
         if (IsPlayerTurn && remainingMoves <= 0)
         {
+            // 你之前的需求：步数耗尽后禁用棋盘（不切回合）
             if (board != null) board.SetBoardInputEnabled(false);
-            Debug.Log("[Turn] Moves depleted. Board input disabled (no auto turn switch). ");
+            Debug.Log("[Turn] Player moves depleted. Board input disabled. (No auto switch)");
         }
     }
 }
