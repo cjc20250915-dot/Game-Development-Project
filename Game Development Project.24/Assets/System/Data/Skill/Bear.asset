@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bear
   m_EditorClassIdentifier: 
   skillName: "\u718A\u722A"
-  description: 
+  description: "\u6D88\u80174\u70B9\u661F\u661F\u4EE5\u968F\u673A\u5BF9\u4E00\u540D\u654C\u4EBA\u9020\u62104\u70B9\u4F24\u5BB3"
   dealsDamage: 1
   damageAmount: 4
   randomTarget: 1

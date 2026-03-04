@@ -12,6 +12,9 @@ public class TurnBattleManager : MonoBehaviour
     [Header("UI (Display)")]
     public TMP_Text movesText;
 
+    [Header("Ally Slots")]
+public AllySlotBoard allySlots;
+
 
     [Header("UI Lock (Disable a specific UI subtree)")]
     [Tooltip("敌人回合时要禁用操作的UI根节点（它及子物体都会被禁用Raycast/交互）。不要把全局UI都放这里面。")]
@@ -39,6 +42,8 @@ public class TurnBattleManager : MonoBehaviour
     private void Awake()
     {
         board = FindFirstObjectByType<BoardUIManager>();
+        if (allySlots == null)
+    allySlots = FindFirstObjectByType<AllySlotBoard>();
 
         // 为需要禁用的UI根节点准备 CanvasGroup（用于只禁用这一块UI的交互，不影响其他UI）
         if (uiRootToDisableOnEnemyTurn != null)
@@ -81,7 +86,8 @@ public void TestReturnToPlayerTurn()
     public void BeginPlayerTurn()
     {
         currentTurn = Turn.Player;
-        remainingMoves = Mathf.Max(0, movesPerTurn);
+        int fromAllies = (allySlots != null) ? allySlots.TotalStepsPerTurn : 0;
+remainingMoves = Mathf.Max(1, fromAllies);
 
         // 玩家回合：允许棋盘操作
         if (board != null) board.SetBoardInputEnabled(true);

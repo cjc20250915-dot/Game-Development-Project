@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cowboy
   m_EditorClassIdentifier: 
   skillName: "\u5C04\u51FB"
-  description: 
+  description: "\u6D88\u80174\u70B9\u53C9\u53C9\u4EE5\u5BF9\u4E00\u540D\u654C\u4EBA\u9020\u62105\u70B9\u4F24\u5BB3"
   dealsDamage: 1
   damageAmount: 5
   randomTarget: 0
