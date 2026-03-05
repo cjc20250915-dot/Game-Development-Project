@@ -25,6 +25,12 @@ public class EnemyUnit : MonoBehaviour
     public int speed = 1;           // 速度（以后做行动顺序/先手用）
     public int actionsPerTurn = 1;  // 每回合行动次数
 
+    [Header("AI Action Probability")]
+[Range(0f,1f)] public float probAttack = 0.7f;
+[Range(0f,1f)] public float probSkill = 0.2f;
+[Range(0f,1f)] public float probDefend = 0.1f;
+
+
     [Header("Skills")]
     public List<SkillData> skills = new List<SkillData>(); // 技能列表（与友方一样用 SkillData）
 

@@ -15,10 +15,6 @@ public class EnemyAIController : MonoBehaviour
     [Header("Turn Order")]
     public bool higherSpeedFirst = true;
 
-    [Header("Action Probabilities (0~1)")]
-    [Range(0f, 1f)] public float probAttack = 0.70f;
-    [Range(0f, 1f)] public float probSkill  = 0.20f;
-    [Range(0f, 1f)] public float probDefend = 0.10f;
 
     [Header("Timing")]
     public float thinkDelay = 0.25f;
@@ -71,7 +67,7 @@ public class EnemyAIController : MonoBehaviour
 
                 yield return new WaitForSeconds(thinkDelay);
 
-                var action = RollAction();
+                var action = RollAction(enemy);
                 yield return ExecuteAction(enemy, action);
 
                 // 如果友方都死了可以提前结束（可选）
@@ -82,30 +78,32 @@ public class EnemyAIController : MonoBehaviour
             yield return new WaitForSeconds(betweenEnemiesDelay);
         }
 
-        // 敌人行动结束：这里先不自动切回合（你说切换回合稍后再写）
-        // 你可以在这里触发一个事件，或者之后直接调用 turn.EndEnemyTurn/BeginPlayerTurn
         Debug.Log("[EnemyAI] Enemy actions finished.");
+
+// 所有敌人都行动完 → 结束敌方回合 → 进入玩家回合
+turn.EndEnemyTurn();
+turn.BeginPlayerTurn();
     }
 
     // ===== Action Roll =====
 
-    private EnemyActionType RollAction()
-    {
-        // 归一化，防止总和不是1
-        float a = Mathf.Max(0f, probAttack);
-        float s = Mathf.Max(0f, probSkill);
-        float d = Mathf.Max(0f, probDefend);
+private EnemyActionType RollAction(EnemyUnit enemy)
+{
+    // 归一化，防止总和不是1
+    float a = Mathf.Max(0f, enemy.probAttack);
+    float s = Mathf.Max(0f, enemy.probSkill);
+    float d = Mathf.Max(0f, enemy.probDefend);
 
-        float sum = a + s + d;
-        if (sum <= 0.0001f) return EnemyActionType.Attack; // 兜底
+    float sum = a + s + d;
+    if (sum <= 0.0001f) return EnemyActionType.Attack; // 兜底
 
-        a /= sum; s /= sum; d /= sum;
+    a /= sum; s /= sum; d /= sum;
 
-        float r = Random.value;
-        if (r < a) return EnemyActionType.Attack;
-        if (r < a + s) return EnemyActionType.Skill;
-        return EnemyActionType.Defend;
-    }
+    float r = Random.value;
+    if (r < a) return EnemyActionType.Attack;
+    if (r < a + s) return EnemyActionType.Skill;
+    return EnemyActionType.Defend;
+}
 
     // ===== Execute =====
 
