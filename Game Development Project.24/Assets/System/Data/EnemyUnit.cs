@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyUnit : MonoBehaviour
@@ -18,6 +19,14 @@ public class EnemyUnit : MonoBehaviour
     /// 当敌人死亡时触发
     /// </summary>
     public event Action OnDead;
+
+    [Header("Combat Stats")]
+    public int attackPower = 5;     // 攻击力
+    public int speed = 1;           // 速度（以后做行动顺序/先手用）
+    public int actionsPerTurn = 1;  // 每回合行动次数
+
+    [Header("Skills")]
+    public List<SkillData> skills = new List<SkillData>(); // 技能列表（与友方一样用 SkillData）
 
     private void Awake()
     {
