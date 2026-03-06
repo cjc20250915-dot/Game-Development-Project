@@ -10,6 +10,7 @@ public class EnemyAIController : MonoBehaviour
     [Header("Refs")]
     public TurnBattleManager turn;
     public AllySlotBoard allySlots;
+    public EnemySlotBoard enemySlots;
     public List<EnemyUnit> enemies = new List<EnemyUnit>();
 
     [Header("Turn Order")]
@@ -22,6 +23,7 @@ public class EnemyAIController : MonoBehaviour
 
     private void Awake()
     {
+        if (enemySlots == null) enemySlots = FindFirstObjectByType<EnemySlotBoard>();
         if (turn == null) turn = FindFirstObjectByType<TurnBattleManager>();
         if (allySlots == null) allySlots = FindFirstObjectByType<AllySlotBoard>();
     }
@@ -40,6 +42,12 @@ public class EnemyAIController : MonoBehaviour
 
     private void HandleEnemyAIRequested()
     {
+        enemies.Clear();
+if (enemySlots != null)
+{
+    foreach (var e in enemySlots.Enemies)
+        if (e != null && !e.IsDead) enemies.Add(e);
+}
         StopAllCoroutines();
         StartCoroutine(EnemyTurnRoutine());
     }
@@ -127,36 +135,24 @@ private EnemyActionType RollAction(EnemyUnit enemy)
         }
     }
 
-    private void DoAttack(EnemyUnit enemy)
+private void DoAttack(EnemyUnit enemy)
+{
+    AllyUnit target = PickRandomAliveAlly();
+
+    if (target == null)
     {
-        AllyUnit target = PickRandomAliveAlly();
-        if (target == null)
-        {
-            Debug.Log("[EnemyAI] No alive ally to attack.");
-            return;
-        }
-
-        int dmg = Mathf.Max(0, enemy.attackPower);
-
-        // 这里假设 AllyUnit 有 TakeDamage(int)（如果你还没写，我下一步给你补）
-        // 先用 SendMessage 兜底：没有方法也不会崩（但会慢一点）
-        if (target.TryGetComponent(out MonoBehaviour _))
-        {
-            // 优先直接调用（如果你 AllyUnit 有 TakeDamage）
-            var method = target.GetType().GetMethod("TakeDamage");
-            if (method != null)
-            {
-                method.Invoke(target, new object[] { dmg });
-            }
-            else
-            {
-                // 兜底：如果你还没实现 TakeDamage，就先打印
-                Debug.Log($"[EnemyAI] {enemy.name} ATTACKS {target.name} for {dmg} (Ally TakeDamage not found yet).");
-            }
-        }
-
-        Debug.Log($"[EnemyAI] {enemy.name} ATTACK -> {target.name} dmg={dmg}");
+        Debug.Log("[EnemyAI] 没有可攻击的目标");
+        return;
     }
+
+    int damage = Mathf.Max(0, enemy.attackPower);
+
+    // 攻击播报
+    Debug.Log($"{enemy.name} 攻击了 {target.name}，造成了 {damage} 点伤害");
+
+    // 扣血
+    target.TakeDamage(damage);
+}
 
     // ===== Helpers =====
 

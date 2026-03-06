@@ -50,6 +50,8 @@ public class AllyUnit : MonoBehaviour
 
         OnHPChanged?.Invoke(currentHP, maxHP);
 
+        Debug.Log($"{name} 收到了 {damage} 点伤害，剩余 {currentHP} 血量");
+
         if (currentHP == 0)
             Die();
     }
