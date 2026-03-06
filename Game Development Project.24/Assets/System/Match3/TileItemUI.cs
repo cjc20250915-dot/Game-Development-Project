@@ -14,6 +14,7 @@ public class TileItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     [Header("Hover (Preview) Effect")]
     [SerializeField] private Color hoverColor = new Color(0.85f, 0.9f, 1f, 1f); // 悬浮变色（可调）
+    [SerializeField] private Color dimColor = new Color(0.6f, 0.6f, 0.6f, 1f);
     [SerializeField] private float hoverScale = 1.08f;                         // 悬浮放大倍数（可调）
     [SerializeField] private float hoverAnimTime = 0.08f;                      // 动画时间（可调）
 
@@ -27,6 +28,7 @@ public class TileItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private bool isHovered = false;
     private bool isSelected = false;
+    private bool isDimmed = false;
 
     private Vector3 baseScale;
     private Coroutine scaleCo;
@@ -56,6 +58,12 @@ if (board == null) board = UnityEngine.Object.FindFirstObjectByType<BoardUIManag
 
 
     }
+
+    public void SetDim(bool value)
+{
+    isDimmed = value;
+    RefreshVisual();
+}
 
     public void Init(int x, int y, Action<TileItemUI> clickCallback)
     {
@@ -126,12 +134,22 @@ isHovered = false;
 
     if (icon != null)
     {
-        if (isSelected)
-            icon.color = selectedColor;
-        else if (!suppressHover && isHovered)
-            icon.color = hoverColor;
-        else
-            icon.color = normalColor;
+if (isSelected)
+{
+    icon.color = selectedColor;
+}
+else if (isDimmed)
+{
+    icon.color = dimColor;
+}
+else if (!suppressHover && isHovered)
+{
+    icon.color = hoverColor;
+}
+else
+{
+    icon.color = normalColor;
+}
     }
 
     float targetScale = (!isSelected && isHovered && !suppressHover) ? hoverScale : 1f;

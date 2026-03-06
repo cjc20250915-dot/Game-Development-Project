@@ -168,12 +168,13 @@ public void HighlightSoloDrag(TileItemUI tile)
 {
     if (InputLocked || tile == null) return;
 
-    // 先清掉旧的 selected
     if (selected != null && selected != tile)
         selected.SetSelected(false);
 
     selected = tile;
     selected.SetSelected(true);
+
+    UpdateAllTileDimState(selected);
 }
 public void ClearAllPreviewAndSelection()
 {
@@ -182,6 +183,8 @@ public void ClearAllPreviewAndSelection()
         selected.SetSelected(false);
         selected = null;
     }
+
+    ClearAllTileDimState();
 }
 
     public Vector2 GetCellPos(int x, int y)
@@ -212,6 +215,44 @@ public void ClearAllPreviewAndSelection()
         }
         return false;
     }
+
+    private void UpdateAllTileDimState(TileItemUI selectedTile, TileItemUI previewTile = null)
+{
+    if (tiles == null) return;
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            TileItemUI tile = tiles[x, y];
+            if (tile == null) continue;
+
+            bool shouldDim = false;
+
+            if (selectedTile != null)
+            {
+                shouldDim = (tile != selectedTile && tile != previewTile);
+            }
+
+            tile.SetDim(shouldDim);
+        }
+    }
+}
+
+private void ClearAllTileDimState()
+{
+    if (tiles == null) return;
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            TileItemUI tile = tiles[x, y];
+            if (tile != null)
+                tile.SetDim(false);
+        }
+    }
+}
 
 
     // ===== Input lock =====
@@ -244,15 +285,17 @@ public void ClearAllPreviewAndSelection()
             selected = null;
         }
 
-        if (tiles != null)
-        {
-            for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-            {
-                var t = tiles[x, y];
-                if (t != null) t.ForceClearHover();
-            }
-        }
+if (tiles != null)
+{
+    for (int x = 0; x < width; x++)
+    for (int y = 0; y < height; y++)
+    {
+        var t = tiles[x, y];
+        if (t != null) t.ForceClearHover();
+    }
+}
+
+ClearAllTileDimState();
     }
 
     private void UnlockInput()
@@ -287,17 +330,18 @@ public bool CanStartDrag(TileItemUI tile)
 
     public bool IsDraggingAllowedFor(TileItemUI tile) => CanStartDrag(tile);
 
-    // 拖动开始：设置 selected 并高亮
-    public void SelectForDrag(TileItemUI tile)
-    {
-        if (InputLocked) return;
+public void SelectForDrag(TileItemUI tile)
+{
+    if (InputLocked) return;
 
-        if (selected != null && selected != tile)
-            selected.SetSelected(false);
+    if (selected != null && selected != tile)
+        selected.SetSelected(false);
 
-        selected = tile;
-        selected.SetSelected(true);
-    }
+    selected = tile;
+    selected.SetSelected(true);
+
+    UpdateAllTileDimState(selected);
+}
 
     // ===== Drag direction -> preview target =====
     public Vector2Int GetDragPreviewTarget(Vector2Int from, Vector2 delta)
@@ -324,9 +368,10 @@ public void ShowSwapPreview(Vector2Int from, Vector2Int to)
     var b = tiles[to.x, to.y];
     if (a == null || b == null || a.Rect == null || b.Rect == null) return;
 
-    // ✅ 预览高亮：两边都亮
     a.SetSelected(true);
     b.SetSelected(true);
+
+    UpdateAllTileDimState(a, b);
 
     StartMove(a.Rect, GetCellPos(to.x, to.y), previewDuration);
     StartMove(b.Rect, GetCellPos(from.x, from.y), previewDuration);
@@ -338,10 +383,10 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
     var b = tiles[to.x, to.y];
     if (a == null || b == null) return;
 
-    // ✅ 取消预览：只保留被拖拽的那一个高亮（from 位置的 tile）
-    // 注意：此时 tiles[from] 仍然是拖拽的 tile（我们预览不改数组）
     a.SetSelected(true);
     b.SetSelected(false);
+
+    UpdateAllTileDimState(a);
 
     StartMove(a.Rect, GetCellPos(from.x, from.y), previewDuration);
     StartMove(b.Rect, GetCellPos(to.x, to.y), previewDuration);
@@ -350,18 +395,20 @@ public void CancelSwapPreview(Vector2Int from, Vector2Int to)
 
 
     // 无效拖拽：取消选中并复位（其实本来也没乱跑）
-    public void CancelDragSelectionAndSnapBack(Vector2Int at)
+public void CancelDragSelectionAndSnapBack(Vector2Int at)
+{
+    if (selected != null)
     {
-        if (selected != null)
-        {
-            selected.SetSelected(false);
-            selected = null;
-        }
-
-        var t = tiles[at.x, at.y];
-        if (t != null && t.Rect != null)
-            StartMove(t.Rect, GetCellPos(at.x, at.y), previewDuration);
+        selected.SetSelected(false);
+        selected = null;
     }
+
+    ClearAllTileDimState();
+
+    var t = tiles[at.x, at.y];
+    if (t != null && t.Rect != null)
+        StartMove(t.Rect, GetCellPos(at.x, at.y), previewDuration);
+}
 
     // ===== Commit swap (real) =====
     public void CommitSwapByDrag(Vector2Int from, Vector2Int to)
