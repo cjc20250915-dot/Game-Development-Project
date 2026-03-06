@@ -20,6 +20,7 @@ public class BoardUIManager : MonoBehaviour
     public Vector2 cellSize = new Vector2(100, 100);
     public Vector2 spacing = new Vector2(10, 10);
     public Vector2 origin = new Vector2(0, 0);
+    
 
     [Header("Animation")]
     public float moveDuration = 0.18f;
