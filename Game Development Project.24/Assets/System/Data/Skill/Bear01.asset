@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b1d58871696bfe43bd36cb5a8f0e316, type: 3}
-  m_Name: Bear
+  m_Name: Bear01
   m_EditorClassIdentifier: 
   skillName: "\u718A\u722A"
-  description: "\u6D88\u80174\u70B9\u661F\u661F\u4EE5\u968F\u673A\u5BF9\u4E00\u540D\u654C\u4EBA\u9020\u62104\u70B9\u4F24\u5BB3"
+  description: "\u6D88\u80174\u70B9\u6C14\u7403\u4EE5\u968F\u673A\u5BF9\u4E00\u540D\u654C\u4EBA\u9020\u62104\u70B9\u4F24\u5BB3"
   dealsDamage: 1
   damageAmount: 4
+  dealsSelfDamage: 1
+  selfDamageAmount: 1
   randomTarget: 1
+  isAOE: 0
   costs:
-  - type: 0
+  - type: 2
     amount: 4

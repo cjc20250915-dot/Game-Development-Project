@@ -23,6 +23,7 @@ public class NotebookPageSwitcher : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float moveDuration = 0.6f;
     [SerializeField] private float fadeDuration = 0.25f;
+    [SerializeField] private float fadeInDelay = 0.15f;
 
     [Header("Ease")]
     [SerializeField] private Ease moveEase = Ease.InOutSine;
@@ -236,28 +237,36 @@ private void FadeGroupArray(CanvasGroup[] groups, bool show)
         CanvasGroup cg = groups[i];
         if (cg == null) continue;
 
-        // 先停止旧动画，避免冲突
         cg.DOKill();
 
         if (show)
         {
+            // 需要淡入 → 先停顿再淡入
             cg.gameObject.SetActive(true);
             cg.interactable = false;
             cg.blocksRaycasts = false;
 
-            cg.DOFade(1f, fadeDuration)
-              .SetEase(Ease.InOutSine)
-              .OnComplete(() =>
-              {
-                  if (cg != null)
-                  {
-                      cg.interactable = true;
-                      cg.blocksRaycasts = true;
-                  }
-              });
+            Sequence s = DOTween.Sequence();
+
+            s.AppendInterval(fadeInDelay);
+
+            s.Append(
+                cg.DOFade(1f, fadeDuration)
+                  .SetEase(Ease.InOutSine)
+            );
+
+            s.OnComplete(() =>
+            {
+                if (cg != null)
+                {
+                    cg.interactable = true;
+                    cg.blocksRaycasts = true;
+                }
+            });
         }
         else
         {
+            // 淡出 → 不停顿
             cg.interactable = false;
             cg.blocksRaycasts = false;
 

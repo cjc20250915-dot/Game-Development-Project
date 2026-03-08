@@ -185,6 +185,7 @@ MonoBehaviour:
   bottomSortingOrder: 10
   moveDuration: 0.6
   fadeDuration: 0.35
+  fadeInDelay: 0.4
   moveEase: 4
   rotateEase: 4
   switchButton: {fileID: 1374274841}
