@@ -39,6 +39,7 @@ public class EnemySlotBoard : MonoBehaviour
     private void Start()
     {
         SpawnAllEnemiesForBattle();
+
     }
 
     public void SpawnAllEnemiesForBattle()
