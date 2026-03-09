@@ -28,12 +28,9 @@ public class MapNode : MonoBehaviour
 
         if (nodeData != null && !string.IsNullOrEmpty(nodeData.sceneName))
         {
-            Debug.Log("进入节点：" + nodeData.nodeName);
+            GameRunManager.Instance.currentNode = nodeData;
 
-            if (autoLoadScene)
-            {
-                SceneManager.LoadScene(nodeData.sceneName);
-            }
+            SceneManager.LoadScene(nodeData.sceneName);
         }
     }
 

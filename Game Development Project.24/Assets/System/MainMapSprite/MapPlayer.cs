@@ -18,14 +18,7 @@ public class MapPlayer : MonoBehaviour
     private bool isMoving = false;
     private Vector3 targetPosition;
 
-    void Start()
-    {
-        if (currentNode != null)
-        {
-            transform.position = currentNode.transform.position;
-            currentNode.visited = true;
-        }
-    }
+
 
     void Update()
     {
