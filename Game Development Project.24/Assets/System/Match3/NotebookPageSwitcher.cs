@@ -241,8 +241,9 @@ private void FadeGroupArray(CanvasGroup[] groups, bool show)
 
         if (show)
         {
-            // 需要淡入 → 先停顿再淡入
+            // 淡入：先延迟
             cg.gameObject.SetActive(true);
+
             cg.interactable = false;
             cg.blocksRaycasts = false;
 
@@ -252,7 +253,7 @@ private void FadeGroupArray(CanvasGroup[] groups, bool show)
 
             s.Append(
                 cg.DOFade(1f, fadeDuration)
-                  .SetEase(Ease.InOutSine)
+                .SetEase(Ease.InOutSine)
             );
 
             s.OnComplete(() =>
@@ -266,19 +267,12 @@ private void FadeGroupArray(CanvasGroup[] groups, bool show)
         }
         else
         {
-            // 淡出 → 不停顿
+            // 淡出：但不关闭UI
             cg.interactable = false;
             cg.blocksRaycasts = false;
 
             cg.DOFade(0f, fadeDuration)
-              .SetEase(Ease.InOutSine)
-              .OnComplete(() =>
-              {
-                  if (cg != null)
-                  {
-                      cg.gameObject.SetActive(false);
-                  }
-              });
+              .SetEase(Ease.InOutSine);
         }
     }
 }
