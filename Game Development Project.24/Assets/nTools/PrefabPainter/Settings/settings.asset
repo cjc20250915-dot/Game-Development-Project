@@ -2687,7 +2687,7 @@ MonoBehaviour:
     - name: Grass_1_Prefap
       settings:
         brushRadius: 7.67
-        brushSpacing: 0.48
+        brushSpacing: 0.01
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -2996,7 +2996,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Grass_2_Prefap
@@ -4571,7 +4571,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Reed_1_Prefap
