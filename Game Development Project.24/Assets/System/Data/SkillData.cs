@@ -10,15 +10,26 @@ public class SkillData : ScriptableObject
     [TextArea]
     public string description;
 
-    [Header("Damage")]
-    [Tooltip("是否造成伤害")]
+    [Header("Damage Settings")]
+    [Tooltip("技能是否对敌人造成伤害")]
     public bool dealsDamage = true;
 
-    [Tooltip("技能伤害量（如果不造成伤害，可忽略）")]
+    [Tooltip("技能对敌人造成的伤害量")]
     public int damageAmount = 5;
 
-    [Tooltip("是否随机选定目标（例如随机敌人）")]
+    [Header("Self Damage")]
+    [Tooltip("技能是否对自己造成伤害")]
+    public bool dealsSelfDamage = false;
+
+    [Tooltip("技能对自己造成的伤害量")]
+    public int selfDamageAmount = 0;
+
+    [Header("Target Settings")]
+    [Tooltip("是否随机选定目标")]
     public bool randomTarget = true;
+
+    [Tooltip("是否为AOE技能（攻击所有敌人）")]
+    public bool isAOE = false;
 
     [Header("Element Cost (use int type)")]
     [Tooltip("技能释放所需消耗的元素及数量")]
