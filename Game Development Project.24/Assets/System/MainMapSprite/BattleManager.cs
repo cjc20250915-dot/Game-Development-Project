@@ -1,41 +1,80 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
-    public Transform[] spawnPoints;
+    public static BattleManager Instance;
+
+    [Header("References")]
+    public EnemySlotBoard enemyBoard;
+
+    private List<EnemyUnit> enemies = new List<EnemyUnit>();
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
-        NodeData node = GameRunManager.Instance.currentNode;
+        StartBattle();
+    }
 
-        if (node == null)
+    void StartBattle()
+    {
+        if (enemyBoard == null)
         {
-            Debug.LogWarning("没有节点数据");
+            Debug.LogError("EnemySlotBoard not assigned!");
             return;
         }
 
-        SpawnEnemies(node);
+        enemies = new List<EnemyUnit>(enemyBoard.Enemies);
+
+        Debug.Log("Battle Started. Enemy count: " + enemies.Count);
     }
 
-    void SpawnEnemies(NodeData node)
+    public List<EnemyUnit> GetAliveEnemies()
     {
-        int spawnIndex = 0;
+        List<EnemyUnit> alive = new List<EnemyUnit>();
 
-        foreach (var wave in node.enemyWaves)
+        foreach (var e in enemies)
         {
-            for (int i = 0; i < wave.count; i++)
+            if (e != null && !e.IsDead)
             {
-                if (spawnIndex >= spawnPoints.Length)
-                    spawnIndex = 0;
-
-                Instantiate(
-                    wave.enemyPrefab,
-                    spawnPoints[spawnIndex].position,
-                    Quaternion.identity
-                );
-
-                spawnIndex++;
+                alive.Add(e);
             }
         }
+
+        return alive;
+    }
+
+    public bool AreAllEnemiesDead()
+    {
+        foreach (var e in enemies)
+        {
+            if (e != null && !e.IsDead)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void Update()
+    {
+        if (AreAllEnemiesDead())
+        {
+            Debug.Log("Battle Win!");
+
+            // 战斗结束
+            EndBattle();
+        }
+    }
+
+    void EndBattle()
+    {
+        // 这里以后可以加奖励 / 返回地图
+        Debug.Log("Battle Finished");
     }
 }
