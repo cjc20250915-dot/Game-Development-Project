@@ -1,17 +1,22 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MapPlayer : MonoBehaviour
 {
-    [Header("起始节点")]
+    [Header("当前节点")]
     public MapNode currentNode;
 
-    [Header("跳跃设置")]
+    [Header("移动速度")]
+    public float moveSpeed = 5f;
+
+    [Header("跳跃高度")]
     public float jumpHeight = 1.5f;
+
+    [Header("跳跃时间")]
     public float jumpDuration = 0.4f;
 
     private bool isMoving = false;
+    private Vector3 targetPosition;
 
     void Start()
     {
@@ -26,53 +31,42 @@ public class MapPlayer : MonoBehaviour
     {
         if (isMoving) return;
 
-        HandleInput();
+        HandleMouseClick();
     }
 
-    void HandleInput()
+    void HandleMouseClick()
     {
-        if (currentNode == null) return;
+        if (!Input.GetMouseButtonDown(0)) return;
 
-        var connections = currentNode.connectedNodes;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (connections.Count == 0) return;
-
-        // 按数字键选择分支
-        for (int i = 0; i < connections.Count; i++)
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                MoveToNode(connections[i]);
-                break;
-            }
+            targetPosition = hit.point;
+
+            StartCoroutine(MoveToPosition(targetPosition));
         }
     }
 
-    void MoveToNode(MapNode targetNode)
-    {
-        if (targetNode == null) return;
-
-        StartCoroutine(JumpToNode(targetNode));
-    }
-
-
-    IEnumerator JumpToNode(MapNode target)
+    IEnumerator MoveToPosition(Vector3 target)
     {
         isMoving = true;
 
         Vector3 start = transform.position;
-        Vector3 end = target.transform.position;
+
+        float distance = Vector3.Distance(start, target);
+        float duration = distance / moveSpeed;
 
         float time = 0;
 
-        while (time < jumpDuration)
+        while (time < duration)
         {
             time += Time.deltaTime;
-            float t = time / jumpDuration;
 
-            Vector3 pos = Vector3.Lerp(start, end, t);
+            float t = time / duration;
 
-            // 抛物线高度
+            Vector3 pos = Vector3.Lerp(start, target, t);
+
             float height = Mathf.Sin(t * Mathf.PI) * jumpHeight;
             pos.y += height;
 
@@ -81,24 +75,23 @@ public class MapPlayer : MonoBehaviour
             yield return null;
         }
 
-        transform.position = end;
-
-        currentNode = target;
-        currentNode.visited = true;
-
-        Debug.Log("到达节点：" + target.name);
-
-        TryLoadScene(currentNode);
+        transform.position = target;
 
         isMoving = false;
     }
 
-    void TryLoadScene(MapNode node)
+    void OnTriggerEnter(Collider other)
     {
-        if (node.autoLoadScene && !string.IsNullOrEmpty(node.sceneToLoad))
-        {
-            Debug.Log("加载场景: " + node.sceneToLoad);
-            SceneManager.LoadScene(node.sceneToLoad);
-        }
+        MapNode node = other.GetComponent<MapNode>();
+
+        if (node == null) return;
+
+        if (node.visited) return;
+
+        currentNode = node;
+
+        Debug.Log("到达节点：" + node.name);
+
+        node.TriggerNode();
     }
 }

@@ -406,6 +406,52 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 20
   m_TargetDisplay: 0
+--- !u!1 &933519951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 933519952}
+  - component: {fileID: 933519953}
+  m_Layer: 0
+  m_Name: GameRunManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &933519952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933519951}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.410817, y: -10.798619, z: 3.1831248}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &933519953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933519951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ae9e656be5c1fa4da1df3a78337355d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentNode: {fileID: 0}
+  playerGold: 0
 --- !u!1 &961739749
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +624,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -614,8 +660,8 @@ MonoBehaviour:
   connectedNodes:
   - {fileID: 1139331476}
   - {fileID: 1519237384}
+  nodeData: {fileID: 11400000, guid: 238a64356fa35b843a452f04cc6efa1d, type: 2}
   visited: 0
-  sceneToLoad: Game Development Project
   autoLoadScene: 1
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
@@ -707,7 +753,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -742,8 +788,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectedNodes:
   - {fileID: 1759350495}
+  nodeData: {fileID: 0}
   visited: 0
-  sceneToLoad: 
   autoLoadScene: 1
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
@@ -914,7 +960,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -949,8 +995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectedNodes:
   - {fileID: 981761887}
+  nodeData: {fileID: 11400000, guid: 4473333a82e52114f84d876e8bc2ec4d, type: 2}
   visited: 0
-  sceneToLoad: 
   autoLoadScene: 1
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
@@ -1020,6 +1066,7 @@ GameObject:
   - component: {fileID: 1353520277}
   - component: {fileID: 1353520276}
   - component: {fileID: 1353520280}
+  - component: {fileID: 1353520281}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1132,8 +1179,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentNode: {fileID: 1314344114}
+  moveSpeed: 5
   jumpHeight: 1.5
   jumpDuration: 0.4
+--- !u!54 &1353520281
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353520275}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1519237381
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,7 +1244,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1204,8 +1279,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectedNodes:
   - {fileID: 1759350495}
+  nodeData: {fileID: 0}
   visited: 0
-  sceneToLoad: 
   autoLoadScene: 1
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
@@ -1543,8 +1618,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedNodes: []
+  nodeData: {fileID: 0}
   visited: 0
-  sceneToLoad: 
   autoLoadScene: 1
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
@@ -1563,7 +1638,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1811,3 +1886,4 @@ SceneRoots:
   - {fileID: 1272022722}
   - {fileID: 2069543806}
   - {fileID: 609636470}
+  - {fileID: 933519952}
