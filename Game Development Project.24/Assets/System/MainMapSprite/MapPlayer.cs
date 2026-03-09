@@ -78,7 +78,7 @@ public class MapPlayer : MonoBehaviour
         MapNode node = other.GetComponent<MapNode>();
 
         if (node == null) return;
-
+        if (!node.isUnlocked) return;
         if (node.visited) return;
 
         currentNode = node;

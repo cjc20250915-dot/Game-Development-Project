@@ -662,7 +662,11 @@ MonoBehaviour:
   - {fileID: 1519237384}
   nodeData: {fileID: 11400000, guid: 238a64356fa35b843a452f04cc6efa1d, type: 2}
   visited: 0
+  isUnlocked: 0
   autoLoadScene: 1
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  unlockedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
 --- !u!33 &981761888
@@ -790,7 +794,11 @@ MonoBehaviour:
   - {fileID: 1759350495}
   nodeData: {fileID: 0}
   visited: 0
+  isUnlocked: 0
   autoLoadScene: 1
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  unlockedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
 --- !u!23 &1139331477
@@ -997,7 +1005,11 @@ MonoBehaviour:
   - {fileID: 981761887}
   nodeData: {fileID: 11400000, guid: 4473333a82e52114f84d876e8bc2ec4d, type: 2}
   visited: 0
+  isUnlocked: 1
   autoLoadScene: 1
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  unlockedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
 --- !u!33 &1314344115
@@ -1281,7 +1293,11 @@ MonoBehaviour:
   - {fileID: 1759350495}
   nodeData: {fileID: 0}
   visited: 0
+  isUnlocked: 0
   autoLoadScene: 1
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  unlockedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
 --- !u!23 &1519237385
@@ -1620,7 +1636,11 @@ MonoBehaviour:
   connectedNodes: []
   nodeData: {fileID: 0}
   visited: 0
+  isUnlocked: 0
   autoLoadScene: 1
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  unlockedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
 --- !u!135 &1759350496
