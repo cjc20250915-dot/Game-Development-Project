@@ -17,20 +17,37 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
-        StartBattle();
+        SetupBattleFromNodeData();
     }
 
-    void StartBattle()
+    void SetupBattleFromNodeData()
     {
         if (enemyBoard == null)
         {
-            Debug.LogError("EnemySlotBoard not assigned!");
+            Debug.LogError("BattleManager: enemyBoard 没有赋值。");
             return;
         }
 
+        if (GameRunManager.Instance == null)
+        {
+            Debug.LogError("BattleManager: GameRunManager 不存在。");
+            return;
+        }
+
+        NodeData currentNode = GameRunManager.Instance.currentNode;
+
+        if (currentNode == null)
+        {
+            Debug.LogError("BattleManager: currentNode 为空。");
+            return;
+        }
+
+        enemyBoard.ApplyNodeData(currentNode);
+        enemyBoard.SpawnAllEnemiesForBattle();
+
         enemies = new List<EnemyUnit>(enemyBoard.Enemies);
 
-        Debug.Log("Battle Started. Enemy count: " + enemies.Count);
+        Debug.Log("Battle Started. Node = " + currentNode.nodeName + " Enemy Count = " + enemies.Count);
     }
 
     public List<EnemyUnit> GetAliveEnemies()
@@ -63,18 +80,16 @@ public class BattleManager : MonoBehaviour
 
     void Update()
     {
-        if (AreAllEnemiesDead())
+        if (enemies.Count > 0 && AreAllEnemiesDead())
         {
             Debug.Log("Battle Win!");
-
-            // 战斗结束
             EndBattle();
         }
     }
 
     void EndBattle()
     {
-        // 这里以后可以加奖励 / 返回地图
         Debug.Log("Battle Finished");
+        // 这里以后可以加奖励、返回地图等逻辑
     }
 }

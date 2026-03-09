@@ -8,11 +8,12 @@ public class EnemySlotBoard : MonoBehaviour
     public class SlotSpawnInfo
     {
         [Header("Spawn Source")]
-        public GameObject enemyPrefab;       // 槽位要生成的敌人prefab（需要带 EnemyUnit）
+        public GameObject enemyPrefab;
+
         public bool spawnOnBattleStart = true;
 
         [Header("Placement Anchor")]
-        public Transform anchor;             // 场景站位点（建议空物体）
+        public Transform anchor;
 
         [Header("Local Pose (relative to anchor)")]
         public Vector3 localPosition = Vector3.zero;
@@ -29,17 +30,64 @@ public class EnemySlotBoard : MonoBehaviour
     [Header("Runtime (Read Only)")]
     [SerializeField] private List<EnemyUnit> spawnedEnemies = new List<EnemyUnit>();
 
-    // 保存实例引用，方便清理
     private GameObject inst1, inst2, inst3, inst4;
 
     public IReadOnlyList<EnemyUnit> Enemies => spawnedEnemies;
 
     public event Action OnEnemiesChanged;
 
-    private void Start()
-    {
-        SpawnAllEnemiesForBattle();
+    // 不再自动生成，交给 BattleManager 控制
+    // private void Start()
+    // {
+    //     SpawnAllEnemiesForBattle();
+    // }
 
+    public void ApplyNodeData(NodeData nodeData)
+    {
+        ClearAll();
+
+        // 先清空所有槽位的预制体
+        slot1.enemyPrefab = null;
+        slot2.enemyPrefab = null;
+        slot3.enemyPrefab = null;
+        slot4.enemyPrefab = null;
+
+        slot1.spawnOnBattleStart = false;
+        slot2.spawnOnBattleStart = false;
+        slot3.spawnOnBattleStart = false;
+        slot4.spawnOnBattleStart = false;
+
+        if (nodeData == null || nodeData.enemyWaves == null)
+        {
+            Debug.LogWarning("[EnemySlotBoard] NodeData 或 enemyWaves 为空。");
+            return;
+        }
+
+        // 把 NodeData.enemyWaves 按顺序映射到 4 个槽位
+        // 注意：这里的逻辑是“一个 wave 占一个槽位”
+        for (int i = 0; i < nodeData.enemyWaves.Count && i < 4; i++)
+        {
+            EnemyWave wave = nodeData.enemyWaves[i];
+            if (wave == null || wave.enemyPrefab == null || wave.count <= 0) continue;
+
+            SlotSpawnInfo slot = GetSlotByIndex(i);
+            if (slot == null) continue;
+
+            slot.enemyPrefab = wave.enemyPrefab;
+            slot.spawnOnBattleStart = true;
+        }
+    }
+
+    private SlotSpawnInfo GetSlotByIndex(int index)
+    {
+        switch (index)
+        {
+            case 0: return slot1;
+            case 1: return slot2;
+            case 2: return slot3;
+            case 3: return slot4;
+            default: return null;
+        }
     }
 
     public void SpawnAllEnemiesForBattle()
@@ -76,19 +124,15 @@ public class EnemySlotBoard : MonoBehaviour
             return;
         }
 
-        // 清掉旧实例
         ClearSlot(ref instance);
 
-        // 生成
-        instance = Instantiate(info.enemyPrefab, info.anchor, worldPositionStays: false);
+        instance = Instantiate(info.enemyPrefab, info.anchor, false);
 
-        // 设置相对位姿
         Transform t = instance.transform;
         t.localPosition = info.localPosition;
         t.localRotation = Quaternion.Euler(info.localEulerAngles);
         t.localScale = info.localScale;
 
-        // 获取 EnemyUnit
         EnemyUnit unit = instance.GetComponentInChildren<EnemyUnit>();
         if (unit == null)
         {
@@ -98,14 +142,11 @@ public class EnemySlotBoard : MonoBehaviour
 
         spawnedEnemies.Add(unit);
 
-        // 死亡后更新列表（不销毁模型，先只从“存活名单”意义上更新）
         unit.OnDead += () => HandleEnemyDead(unit);
     }
 
     private void HandleEnemyDead(EnemyUnit dead)
     {
-        // 这里不 Destroy，保持你之后可以播死亡动画
-        // 只是通知“敌人列表状态改变”
         OnEnemiesChanged?.Invoke();
     }
 

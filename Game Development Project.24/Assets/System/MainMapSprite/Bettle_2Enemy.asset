@@ -17,5 +17,7 @@ MonoBehaviour:
   sceneName: Game Development Project
   enemyWaves:
   - enemyPrefab: {fileID: 5992146104891761328, guid: 4c6f4e489e4f20d46978233fdc429f82, type: 3}
-    count: 2
+    count: 1
+  - enemyPrefab: {fileID: 5992146104891761328, guid: 4c6f4e489e4f20d46978233fdc429f82, type: 3}
+    count: 1
   goldReward: 0
