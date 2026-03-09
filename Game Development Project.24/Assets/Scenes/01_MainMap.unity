@@ -464,6 +464,7 @@ GameObject:
   - component: {fileID: 961739752}
   - component: {fileID: 961739751}
   - component: {fileID: 961739750}
+  - component: {fileID: 961739754}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -583,12 +584,28 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3955075, y: -0, z: -0, w: 0.9184628}
-  m_LocalPosition: {x: 1.39, y: 13.09, z: -12.27}
+  m_LocalPosition: {x: 1, y: 14, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1353520279}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 46.595, y: 0, z: 0}
+--- !u!114 &961739754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961739749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8295ea0f9c6c44ba8966aad010a702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1353520279}
+  offset: {x: 1, y: 14, z: -12}
+  followSpeed: 8
+  followY: 0
 --- !u!1 &981761884
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +1000,7 @@ Transform:
   m_GameObject: {fileID: 1314344111}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.7, y: 1.26, z: 0}
+  m_LocalPosition: {x: 5.55, y: 1.26, z: 0}
   m_LocalScale: {x: 1.9841, y: 1.9841, z: 1.9841}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1171,11 +1188,10 @@ Transform:
   m_GameObject: {fileID: 1353520275}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.66, z: -6}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 961739753}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1353520280
@@ -1193,7 +1209,12 @@ MonoBehaviour:
   currentNode: {fileID: 1314344114}
   moveSpeed: 5
   jumpHeight: 1.5
-  jumpDuration: 0.4
+  extraGroundOffset: 0.05
+  squashAmount: 0.7
+  stretchAmount: 1.2
+  audioSource: {fileID: 0}
+  jumpSound: {fileID: 0}
+  landSound: {fileID: 0}
 --- !u!54 &1353520281
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1204,7 +1225,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1214,10 +1235,10 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
+  m_ImplicitCom: 0
+  m_ImplicitTensor: 0
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -1744,6 +1765,7 @@ GameObject:
   - component: {fileID: 1818798994}
   - component: {fileID: 1818798993}
   - component: {fileID: 1818798992}
+  - component: {fileID: 1818798996}
   m_Layer: 0
   m_Name: BaseGround
   m_TagString: Untagged
@@ -1840,6 +1862,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1818798996
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818798991}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &2069543804
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,6 +1945,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 203844589}
   - {fileID: 1818798995}
+  - {fileID: 961739753}
   - {fileID: 1353520279}
   - {fileID: 1314344113}
   - {fileID: 981761886}
