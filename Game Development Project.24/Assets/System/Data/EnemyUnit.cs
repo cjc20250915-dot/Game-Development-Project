@@ -12,7 +12,7 @@ public class EnemyUnit : MonoBehaviour
     public bool IsDead => currentHP <= 0;
 
     [Header("Death")]
-    [SerializeField] private float deathDelay = 0.5f;
+    [SerializeField] private float deathDelay = 0.4f;
 
     /// <summary>
     /// 当血量变化时触发（用于刷新血条UI）

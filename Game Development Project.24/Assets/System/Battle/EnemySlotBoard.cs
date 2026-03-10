@@ -113,6 +113,26 @@ public class EnemySlotBoard : MonoBehaviour
         OnEnemiesChanged?.Invoke();
     }
 
+public List<EnemyUnit> GetFrontRowAliveEnemies()
+{
+    List<EnemyUnit> result = new List<EnemyUnit>();
+
+    AddAliveEnemyFromInstance(inst1, result);
+    AddAliveEnemyFromInstance(inst2, result);
+
+    return result;
+}
+
+private void AddAliveEnemyFromInstance(GameObject instance, List<EnemyUnit> result)
+{
+    if (instance == null) return;
+
+    EnemyUnit unit = instance.GetComponentInChildren<EnemyUnit>();
+    if (unit == null) return;
+    if (unit.IsDead) return;
+
+    result.Add(unit);
+}
     private void SpawnIntoSlot(int index, SlotSpawnInfo info, ref GameObject instance)
     {
         if (!info.spawnOnBattleStart) return;

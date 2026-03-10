@@ -3445,7 +3445,7 @@ Transform:
   m_GameObject: {fileID: 961739749}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3955075, y: -0, z: -0, w: 0.9184628}
-  m_LocalPosition: {x: 1, y: 14, z: -12}
+  m_LocalPosition: {x: 1, y: 15.57, z: -13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3464,7 +3464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1353520279}
-  offset: {x: 1, y: 14, z: -12}
+  offset: {x: 1, y: 15, z: -13}
   followSpeed: 8
   followY: 0
 --- !u!4 &962450449 stripped
