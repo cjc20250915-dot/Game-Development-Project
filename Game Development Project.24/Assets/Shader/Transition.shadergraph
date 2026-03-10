@@ -80,9 +80,12 @@
         },
         {
             "m_Id": "a9b45c07065c44479e4fddce2ad2998b"
+<<<<<<< Updated upstream
         },
         {
             "m_Id": "2b9ca72093c84443b64288bc6f2ab4d8"
+=======
+>>>>>>> Stashed changes
         }
     ],
     "m_GroupDatas": [],
@@ -113,7 +116,11 @@
                 "m_Node": {
                     "m_Id": "8f56229f03244fd8b81e46914916d2fe"
                 },
+<<<<<<< Updated upstream
                 "m_SlotId": 0
+=======
+                "m_SlotId": 1
+>>>>>>> Stashed changes
             }
         },
         {
@@ -267,7 +274,11 @@
                 "m_Node": {
                     "m_Id": "8f56229f03244fd8b81e46914916d2fe"
                 },
+<<<<<<< Updated upstream
                 "m_SlotId": 1
+=======
+                "m_SlotId": 0
+>>>>>>> Stashed changes
             }
         },
         {
@@ -301,8 +312,13 @@
     ],
     "m_VertexContext": {
         "m_Position": {
+<<<<<<< Updated upstream
             "x": -192.00010681152345,
             "y": 14.000017166137696
+=======
+            "x": -124.9998779296875,
+            "y": 14.999993324279786
+>>>>>>> Stashed changes
         },
         "m_Blocks": [
             {
@@ -318,15 +334,23 @@
     },
     "m_FragmentContext": {
         "m_Position": {
+<<<<<<< Updated upstream
             "x": -192.00010681152345,
             "y": 214.00003051757813
+=======
+            "x": -124.9998779296875,
+            "y": 215.0
+>>>>>>> Stashed changes
         },
         "m_Blocks": [
             {
                 "m_Id": "fbcc8c008e74423ca211e3e12dff9043"
+<<<<<<< Updated upstream
             },
             {
                 "m_Id": "2b9ca72093c84443b64288bc6f2ab4d8"
+=======
+>>>>>>> Stashed changes
             }
         ]
     },
@@ -424,6 +448,7 @@
 
 {
     "m_SGVersion": 0,
+<<<<<<< Updated upstream
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "08de8b197aa24aeb9a7638d4e16389a2",
     "m_Id": 0,
@@ -439,6 +464,8 @@
 
 {
     "m_SGVersion": 0,
+=======
+>>>>>>> Stashed changes
     "m_Type": "UnityEditor.ShaderGraph.UVMaterialSlot",
     "m_ObjectId": "0a90ac8d4a05419c85324c568d61db6f",
     "m_Id": 0,
@@ -624,13 +651,21 @@
         "m_Id": "bc48e00d0c0a4c6995e183f3cd9f3f6d"
     },
     "m_AllowMaterialOverride": false,
+<<<<<<< Updated upstream
     "m_SurfaceType": 1,
+=======
+    "m_SurfaceType": 0,
+>>>>>>> Stashed changes
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
     "m_RenderFace": 2,
     "m_AlphaClip": false,
+<<<<<<< Updated upstream
     "m_CastShadows": false,
+=======
+    "m_CastShadows": true,
+>>>>>>> Stashed changes
     "m_ReceiveShadows": true,
     "m_DisableTint": false,
     "m_AdditionalMotionVectorMode": 0,
@@ -652,8 +687,13 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -924.9998779296875,
             "y": 596.9999389648438,
+=======
+            "x": -1092.0,
+            "y": 534.9999389648438,
+>>>>>>> Stashed changes
             "width": 128.99993896484376,
             "height": 34.0
         }
@@ -678,6 +718,7 @@
 
 {
     "m_SGVersion": 0,
+<<<<<<< Updated upstream
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "2b9ca72093c84443b64288bc6f2ab4d8",
     "m_Group": {
@@ -712,6 +753,8 @@
 
 {
     "m_SGVersion": 0,
+=======
+>>>>>>> Stashed changes
     "m_Type": "UnityEditor.ShaderGraph.SceneColorNode",
     "m_ObjectId": "2ccb577f3dda4b1fb3b8612c481f823d",
     "m_Group": {
@@ -722,10 +765,17 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -692.0000610351563,
             "y": 176.99996948242188,
             "width": 138.00006103515626,
             "height": 76.99998474121094
+=======
+            "x": -778.0001831054688,
+            "y": 238.00003051757813,
+            "width": 138.0001220703125,
+            "height": 77.00003051757813
+>>>>>>> Stashed changes
         }
     },
     "m_Slots": [
@@ -812,10 +862,17 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1654.0,
             "y": 406.9999694824219,
             "width": 114.0,
             "height": 34.000030517578128
+=======
+            "x": -2060.0,
+            "y": 401.9999694824219,
+            "width": 114.0,
+            "height": 33.999969482421878
+>>>>>>> Stashed changes
         }
     },
     "m_Slots": [
@@ -897,10 +954,17 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -881.0,
             "y": 177.99998474121095,
             "width": 145.0,
             "height": 127.99995422363281
+=======
+            "x": -995.9999389648438,
+            "y": 239.99998474121095,
+            "width": 145.0,
+            "height": 128.00001525878907
+>>>>>>> Stashed changes
         }
     },
     "m_Slots": [
@@ -931,10 +995,17 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1441.0,
             "y": 317.0,
             "width": 164.0,
             "height": 175.99993896484376
+=======
+            "x": -1847.0,
+            "y": 311.9999694824219,
+            "width": 164.0,
+            "height": 176.00003051757813
+>>>>>>> Stashed changes
         }
     },
     "m_Slots": [
@@ -1194,9 +1265,15 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1126.0,
             "y": 468.9999694824219,
             "width": 208.00006103515626,
+=======
+            "x": -1532.0,
+            "y": 463.9999694824219,
+            "width": 208.0,
+>>>>>>> Stashed changes
             "height": 301.9999694824219
         }
     },
@@ -1469,8 +1546,13 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1497.0,
             "y": 491.0000305175781,
+=======
+            "x": -1903.0,
+            "y": 485.9999084472656,
+>>>>>>> Stashed changes
             "width": 208.0,
             "height": 301.9999694824219
         }
@@ -1605,8 +1687,13 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1269.0,
             "y": 318.0,
+=======
+            "x": -1675.0,
+            "y": 312.9999694824219,
+>>>>>>> Stashed changes
             "width": 119.0,
             "height": 148.99996948242188
         }
@@ -1652,10 +1739,17 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1813.0,
             "y": 490.9999694824219,
             "width": 208.0,
             "height": 277.9999694824219
+=======
+            "x": -2275.0,
+            "y": 485.0,
+            "width": 208.0,
+            "height": 277.99993896484377
+>>>>>>> Stashed changes
         }
     },
     "m_Slots": [
@@ -2159,10 +2253,17 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -2036.0,
             "y": 492.9999694824219,
             "width": 208.0,
             "height": 326.0000305175781
+=======
+            "x": -2498.0,
+            "y": 486.99993896484377,
+            "width": 208.0,
+            "height": 326.00006103515627
+>>>>>>> Stashed changes
         }
     },
     "m_Slots": [
@@ -2271,8 +2372,13 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
+<<<<<<< Updated upstream
             "x": -1605.0,
             "y": 589.0,
+=======
+            "x": -2047.0,
+            "y": 552.0,
+>>>>>>> Stashed changes
             "width": 107.0,
             "height": 33.99993896484375
         }

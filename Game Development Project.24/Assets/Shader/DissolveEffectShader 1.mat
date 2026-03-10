@@ -67,6 +67,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+<<<<<<< Updated upstream:Game Development Project.24/Assets/Shader/DissolveEffectShader 1.mat
     - _DISSOLVE: 0
     - _DissolveEdgeWidth: 0.04
     - _EmissionStrength: 0
@@ -85,5 +86,21 @@ Material:
     - _FresnelColor: {r: 0, g: 0, b: 0, a: 0}
     - _MainTexColor: {r: 1, g: 1, b: 1, a: 0}
     - _NoiseColor: {r: 0.4811321, g: 0.17021182, b: 0.21953382, a: 0}
+=======
+    - _IceLength: 1
+    - _IceRange: 60.7
+    - _IceScale: 24.3
+    - _IceSlider: 1
+    - _NormalStrength: 3.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _RimScale: 1.68
+    - _RimStrength: 2
+    m_Colors:
+    - _DownForward: {r: 0, g: -1, b: 0, a: 0}
+    - _RimColor: {r: 0.34442854, g: 0.8490566, b: 0.79078, a: 0}
+    - _SmoothnessRange: {r: 0, g: 0.3, b: 0, a: 0}
+    - _Vector3: {r: 0, g: -0.3, b: 0, a: 0}
+>>>>>>> Stashed changes:Game Development Project.24/Assets/Shader/IceEffectMat 2.mat
   m_BuildTextureStacks: []
   m_AllowLocking: 1
