@@ -142,13 +142,31 @@ public class EnemySlotBoard : MonoBehaviour
 
         spawnedEnemies.Add(unit);
 
-        unit.OnDead += () => HandleEnemyDead(unit);
+        GameObject spawnedRoot = instance;
+unit.OnDead += () => HandleEnemyDead(unit, spawnedRoot);
     }
 
-    private void HandleEnemyDead(EnemyUnit dead)
+private void HandleEnemyDead(EnemyUnit dead, GameObject rootInstance)
+{
+    if (dead != null)
     {
-        OnEnemiesChanged?.Invoke();
+        spawnedEnemies.Remove(dead);
     }
+
+    // 清掉对应槽位记录
+    if (inst1 == rootInstance) inst1 = null;
+    if (inst2 == rootInstance) inst2 = null;
+    if (inst3 == rootInstance) inst3 = null;
+    if (inst4 == rootInstance) inst4 = null;
+
+    // 销毁场上的敌人3D物体
+    if (rootInstance != null)
+    {
+        Destroy(rootInstance);
+    }
+
+    OnEnemiesChanged?.Invoke();
+}
 
     private void ClearSlot(ref GameObject instance)
     {

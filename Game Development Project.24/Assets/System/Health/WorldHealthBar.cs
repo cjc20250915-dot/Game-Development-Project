@@ -15,21 +15,32 @@ public class WorldHealthBar : MonoBehaviour
         hpUI = GetComponent<HealthBarUI>();
     }
 
-    private void LateUpdate()
+void LateUpdate()
+{
+    if (target == null)
     {
-        if (target == null || cam == null) return;
-
-        Vector3 worldPos = target.position + offset;
-        Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
-
-        bool visible = screenPos.z > 0f;
-        gameObject.SetActive(visible);
-
-        if (visible)
-        {
-            transform.position = screenPos;
-        }
+        Destroy(gameObject);
+        return;
     }
+
+    if (cam == null)
+    {
+        cam = Camera.main;
+        if (cam == null) return;
+    }
+
+    Vector3 worldPos = target.position + offset;
+    Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
+
+    if (screenPos.z <= 0f)
+    {
+        gameObject.SetActive(false);
+        return;
+    }
+
+    gameObject.SetActive(true);
+    transform.position = screenPos;
+}
 
     public void BindTarget(EnemyUnit enemy, Transform followTarget = null)
     {
