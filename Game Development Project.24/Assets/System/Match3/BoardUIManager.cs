@@ -40,12 +40,70 @@ public bool DragLocked => InputLocked;
 private bool pendingCooldownAfterResolve = false;
 
 private ClearedElementTrackerUI_TMP clearedTracker;
+[SerializeField] private MatchEffectExecutor matchEffectExecutor;
 
 public void QueueCooldownAfterResolve()
 {
     pendingCooldownAfterResolve = true;
 }
 
+private List<List<Vector2Int>> SplitMatchesIntoGroups(HashSet<Vector2Int> matches)
+{
+    List<List<Vector2Int>> groups = new List<List<Vector2Int>>();
+    HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+
+    foreach (var start in matches)
+    {
+        if (visited.Contains(start))
+            continue;
+
+        int startType = model.GetTypeAt(start.x, start.y);
+        List<Vector2Int> group = new List<Vector2Int>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+
+        queue.Enqueue(start);
+        visited.Add(start);
+
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            group.Add(current);
+
+            Vector2Int[] dirs = new Vector2Int[]
+            {
+                new Vector2Int(1, 0),
+                new Vector2Int(-1, 0),
+                new Vector2Int(0, 1),
+                new Vector2Int(0, -1)
+            };
+
+            foreach (var dir in dirs)
+            {
+                Vector2Int next = current + dir;
+
+                if (!matches.Contains(next))
+                    continue;
+
+                if (visited.Contains(next))
+                    continue;
+
+                if (!InBounds(next.x, next.y))
+                    continue;
+
+                int nextType = model.GetTypeAt(next.x, next.y);
+                if (nextType != startType)
+                    continue;
+
+                visited.Add(next);
+                queue.Enqueue(next);
+            }
+        }
+
+        groups.Add(group);
+    }
+
+    return groups;
+}
 private IEnumerator PostResolveCooldownRoutine()
 {
     // Keep everything locked for a short cooldown after the whole resolve finishes.
@@ -541,16 +599,29 @@ public void CancelDragSelectionAndSnapBack(Vector2Int at)
             HashSet<Vector2Int> matches = model.FindMatches();
             if (matches.Count == 0) break;
 
-            // 1) 消除：先统计类型，再逻辑置空 + UI Destroy
-            if (clearedTracker != null)
-            {
-                foreach (var p in matches)
-                {
-                    // 注意：必须在 ClearMatches 之前读取类型（ClearMatches 会把 type 置为 -1）
-                    int type = model.GetTypeAt(p.x, p.y);
-                    clearedTracker.Add(type, 1);
-                }
-            }
+var matchGroups = SplitMatchesIntoGroups(matches);
+
+foreach (var group in matchGroups)
+{
+    if (group == null || group.Count == 0)
+        continue;
+
+    int type = model.GetTypeAt(group[0].x, group[0].y);
+    int matchCount = group.Count;
+
+    // 原有计数/资源逻辑
+    if (clearedTracker != null)
+    {
+        int reward = Mathf.Max(1, matchCount - 2);
+        clearedTracker.Add(type, reward);
+    }
+
+    // 新的消除效果逻辑
+    if (matchEffectExecutor != null)
+    {
+        matchEffectExecutor.ExecuteEffect(type, matchCount);
+    }
+}
 
             model.ClearMatches(matches);
 

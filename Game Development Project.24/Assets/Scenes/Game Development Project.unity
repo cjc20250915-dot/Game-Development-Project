@@ -722,9 +722,13 @@ PrefabInstance:
       value: ItemCount (3)
       objectReference: {fileID: 0}
     - target: {fileID: 4604426686402877704, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4604426686402877704, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 2cb389da3924d9b4a8d1925985ae6ebf, type: 3}
+      objectReference: {fileID: 21300000, guid: 3c7a0c5cce98d794fa30cd98aa20407f, type: 3}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -841,7 +845,7 @@ PrefabInstance:
     - target: {fileID: 4604426686402877704, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 424f9ed395cbc164d9ea42e6783aa7f6, type: 3}
+      objectReference: {fileID: 21300000, guid: 575f0768799e8504a929d65ae3bc2c28, type: 3}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1140,11 +1144,11 @@ MonoBehaviour:
   boardRoot: {fileID: 1619254149}
   tilePrefab: {fileID: 3135089867165554300, guid: 18d18e7c0248e8c49a9e4b57bda79024, type: 3}
   typeSprites:
-  - {fileID: 21300000, guid: ac29c1a93e7ce7d47a448d58752c04c2, type: 3}
-  - {fileID: 21300000, guid: 424f9ed395cbc164d9ea42e6783aa7f6, type: 3}
-  - {fileID: 21300000, guid: 3c7a0c5cce98d794fa30cd98aa20407f, type: 3}
   - {fileID: 21300000, guid: 2cb389da3924d9b4a8d1925985ae6ebf, type: 3}
   - {fileID: 21300000, guid: 575f0768799e8504a929d65ae3bc2c28, type: 3}
+  - {fileID: 21300000, guid: ac29c1a93e7ce7d47a448d58752c04c2, type: 3}
+  - {fileID: 21300000, guid: 3c7a0c5cce98d794fa30cd98aa20407f, type: 3}
+  - {fileID: 21300000, guid: 424f9ed395cbc164d9ea42e6783aa7f6, type: 3}
   cellSize: {x: 60, y: 60}
   spacing: {x: 40, y: 45}
   origin: {x: 0, y: 0}
@@ -1153,12 +1157,13 @@ MonoBehaviour:
   dragThreshold: 25
   previewDuration: 0.08
   postMoveInputCooldown: 0.2
+  matchEffectExecutor: {fileID: 1915873647}
   spawnWeights:
   - 1
   - 1
-  - 1
-  - 1
-  - 0.2
+  - 0.8
+  - 0.5
+  - 0.3
 --- !u!1 &424270053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,6 +1554,7 @@ MonoBehaviour:
   uiRootToDisableOnEnemyTurn: {fileID: 33246382}
   currentTurn: 0
   remainingMoves: 0
+  moveCapThisTurn: 0
 --- !u!114 &778505757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2228,7 +2234,7 @@ PrefabInstance:
     - target: {fileID: 4604426686402877704, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 3c7a0c5cce98d794fa30cd98aa20407f, type: 3}
+      objectReference: {fileID: 21300000, guid: ac29c1a93e7ce7d47a448d58752c04c2, type: 3}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2651,7 +2657,7 @@ PrefabInstance:
     - target: {fileID: 4604426686402877704, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: ac29c1a93e7ce7d47a448d58752c04c2, type: 3}
+      objectReference: {fileID: 21300000, guid: 2cb389da3924d9b4a8d1925985ae6ebf, type: 3}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3784,6 +3790,7 @@ GameObject:
   - component: {fileID: 1915873645}
   - component: {fileID: 1915873644}
   - component: {fileID: 1915873646}
+  - component: {fileID: 1915873647}
   m_Layer: 0
   m_Name: Battle Manager
   m_TagString: Untagged
@@ -3835,6 +3842,22 @@ MonoBehaviour:
   targetCanvas: {fileID: 248014572}
   worldHealthBarPrefab: {fileID: 5919320448072105870, guid: 3b1e2607a5aaef246a139e86f5ef0f97, type: 3}
   defaultOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &1915873647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915873643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5edcdfb91da1c604f94f31e34d4e60a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectDatabase: {fileID: 11400000, guid: be57bd51acb36974ab9cd20fa2b1de96, type: 2}
+  allySlotBoard: {fileID: 724882914}
+  enemySlotBoard: {fileID: 1387914938}
+  turnBattleManager: {fileID: 778505756}
 --- !u!1 &1935260344
 GameObject:
   m_ObjectHideFlags: 0
@@ -4094,7 +4117,7 @@ PrefabInstance:
     - target: {fileID: 4604426686402877704, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: f17215db0638a0944ae774ad4f93932c, type: 3}
+      objectReference: {fileID: 21300000, guid: 424f9ed395cbc164d9ea42e6783aa7f6, type: 3}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

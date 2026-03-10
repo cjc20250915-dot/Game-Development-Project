@@ -23,6 +23,7 @@ public AllySlotBoard allySlots;
     [Header("Runtime (Read Only)")]
     [SerializeField] private Turn currentTurn = Turn.Player;
     [SerializeField] private int remainingMoves;
+    [SerializeField] private int moveCapThisTurn;
 
     private BoardUIManager board;
     private CanvasGroup uiLockGroup;
@@ -35,6 +36,8 @@ public AllySlotBoard allySlots;
     public event Action OnPlayerTurnEnded;
     public event Action OnEnemyTurnBegan;
     public event Action OnEnemyTurnEnded;
+
+    public int MoveCapThisTurn => moveCapThisTurn;
 
     // 敌人AI开始行动：空钩子（敌人AI在别处订阅/调用）
     public event Action OnEnemyAIRequested;
@@ -83,23 +86,27 @@ public void TestReturnToPlayerTurn()
 
     // ===== Core: only per-turn enter/exit (不负责“何时切换”，只负责“进入某回合时做什么”) =====
 
-    public void BeginPlayerTurn()
-    {
-        currentTurn = Turn.Player;
-        int fromAllies = (allySlots != null) ? allySlots.TotalStepsPerTurn : 0;
-remainingMoves = Mathf.Max(1, fromAllies);
+  public void BeginPlayerTurn()
+{
+    currentTurn = Turn.Player;
 
-        // 玩家回合：允许棋盘操作
-        if (board != null) board.SetBoardInputEnabled(true);
+    int fromAllies = (allySlots != null) ? allySlots.TotalStepsPerTurn : 0;
+    remainingMoves = Mathf.Max(1, fromAllies);
 
-        // 玩家回合：恢复那一部分UI的操作
-        SetLockedUIInteractable(true);
+    // 本回合开始时记录“本回合步数上限”
+    moveCapThisTurn = remainingMoves;
 
-        RefreshUI();
-        OnPlayerTurnBegan?.Invoke();
+    // 玩家回合：允许棋盘操作
+    if (board != null) board.SetBoardInputEnabled(true);
 
-        Debug.Log($"[Turn] Player turn began. Moves={remainingMoves}");
-    }
+    // 玩家回合：恢复那一部分UI的操作
+    SetLockedUIInteractable(true);
+
+    RefreshUI();
+    OnPlayerTurnBegan?.Invoke();
+
+    Debug.Log($"[Turn] Player turn began. Moves={remainingMoves}, Cap={moveCapThisTurn}");
+}
 
     public void EndPlayerTurn()
     {
@@ -163,6 +170,20 @@ remainingMoves = Mathf.Max(1, fromAllies);
         Debug.Log($"[Turn] Player used 1 move. Remaining={remainingMoves}");
         return true;
     }
+
+    public void RestoreMoves(int amount)
+{
+    if (amount <= 0) return;
+
+    remainingMoves += amount;
+
+    if (remainingMoves > moveCapThisTurn)
+        remainingMoves = moveCapThisTurn;
+
+    RefreshUI();
+
+    Debug.Log($"[Turn] Restored {amount} move(s). Remaining={remainingMoves}/{moveCapThisTurn}");
+}
 
     /// <summary>
     /// 由 BoardUIManager 在 resolve 完全结束时调用

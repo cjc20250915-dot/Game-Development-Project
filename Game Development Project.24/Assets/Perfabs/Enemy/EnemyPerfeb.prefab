@@ -157,6 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 30
   currentHP: 30
+  deathDelay: 1
   attackPower: 5
   speed: 1
   actionsPerTurn: 1
