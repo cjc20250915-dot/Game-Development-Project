@@ -1,35 +1,41 @@
 using UnityEngine;
 
+[RequireComponent(typeof(HealthBarUI))]
 public class WorldHealthBar : MonoBehaviour
 {
-    public Transform target;
-    public Vector3 offset = new Vector3(0, 2, 0);
+    [SerializeField] private Transform target;
+    [SerializeField] private Vector3 offset = new Vector3(0f, 2f, 0f);
 
-    Camera cam;
+    private Camera cam;
+    private HealthBarUI hpUI;
 
-    void Start()
+    private void Awake()
     {
         cam = Camera.main;
-
-        //在这里绑定 EnemyUnit
-        if (target != null)
-        {
-            EnemyUnit enemy = target.GetComponentInChildren<EnemyUnit>();
-
-            if (enemy != null)
-            {
-                GetComponent<HealthBarUI>().BindEnemy(enemy);
-            }
-        }
+        hpUI = GetComponent<HealthBarUI>();
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        if (target == null) return;
+        if (target == null || cam == null) return;
 
         Vector3 worldPos = target.position + offset;
         Vector3 screenPos = cam.WorldToScreenPoint(worldPos);
 
-        transform.position = screenPos;
+        bool visible = screenPos.z > 0f;
+        gameObject.SetActive(visible);
+
+        if (visible)
+        {
+            transform.position = screenPos;
+        }
+    }
+
+    public void BindTarget(EnemyUnit enemy, Transform followTarget = null)
+    {
+        if (enemy == null) return;
+
+        target = followTarget != null ? followTarget : enemy.transform;
+        hpUI.BindEnemy(enemy);
     }
 }
