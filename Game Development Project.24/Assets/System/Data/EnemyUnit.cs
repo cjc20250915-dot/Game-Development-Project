@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ public class EnemyUnit : MonoBehaviour
     public int currentHP;
 
     public bool IsDead => currentHP <= 0;
+
+    [Header("Death")]
+    [SerializeField] private float deathDelay = 0.5f;
 
     /// <summary>
     /// 当血量变化时触发（用于刷新血条UI）
@@ -21,18 +25,19 @@ public class EnemyUnit : MonoBehaviour
     public event Action OnDead;
 
     [Header("Combat Stats")]
-    public int attackPower = 5;     // 攻击力
-    public int speed = 1;           // 速度（以后做行动顺序/先手用）
-    public int actionsPerTurn = 1;  // 每回合行动次数
+    public int attackPower = 5;
+    public int speed = 1;
+    public int actionsPerTurn = 1;
 
     [Header("AI Action Probability")]
-[Range(0f,1f)] public float probAttack = 0.7f;
-[Range(0f,1f)] public float probSkill = 0.2f;
-[Range(0f,1f)] public float probDefend = 0.1f;
-
+    [Range(0f, 1f)] public float probAttack = 0.7f;
+    [Range(0f, 1f)] public float probSkill = 0.2f;
+    [Range(0f, 1f)] public float probDefend = 0.1f;
 
     [Header("Skills")]
-    public List<SkillData> skills = new List<SkillData>(); // 技能列表（与友方一样用 SkillData）
+    public List<SkillData> skills = new List<SkillData>();
+
+    private bool deathStarted = false;
 
     private void Awake()
     {
@@ -51,7 +56,7 @@ public class EnemyUnit : MonoBehaviour
 
         if (currentHP <= 0)
         {
-            Die();
+            StartCoroutine(DieAfterDelay());
         }
     }
 
@@ -63,6 +68,16 @@ public class EnemyUnit : MonoBehaviour
         currentHP = Mathf.Min(maxHP, currentHP);
 
         OnHPChanged?.Invoke(currentHP, maxHP);
+    }
+
+    private IEnumerator DieAfterDelay()
+    {
+        if (deathStarted) yield break;
+        deathStarted = true;
+
+        yield return new WaitForSeconds(deathDelay);
+
+        Die();
     }
 
     private void Die()

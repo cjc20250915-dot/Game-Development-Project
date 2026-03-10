@@ -787,7 +787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -14
+      value: -3.9000244
       objectReference: {fileID: 0}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -904,7 +904,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -14
+      value: -3.9
       objectReference: {fileID: 0}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1622,14 +1622,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.7971698, b: 0.80709374, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 24f3aa945ac302f47992297e753ffe24, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7483148ebd990804da98499b16b427f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2534,7 +2534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 879.1, y: 476.4}
+  m_AnchoredPosition: {x: 797, y: 497}
   m_SizeDelta: {x: 103.6198, y: 25.9049}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1221927831
@@ -2584,8 +2584,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4157,7 +4157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 147
+      value: 171.3
       objectReference: {fileID: 0}
     - target: {fileID: 8503030141707417264, guid: 1f39124e9b1ab0340bc4a4020497ac30, type: 3}
       propertyPath: m_AnchoredPosition.y
