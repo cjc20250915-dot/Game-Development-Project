@@ -15,11 +15,7 @@ Shader "Cartoon/CartoonRender"
 
         [Header(Outline)]
         _OutlineColor ("Outline Color", Color) = (0,0,0,1)
-<<<<<<< Updated upstream
         _OutlineWidth ("Outline Width", Range(0.001, 0.15)) = 0.01
-=======
-        _OutlineWidth ("Outline Width", Range(0.001, 0.05)) = 0.01
->>>>>>> Stashed changes
     }
 
     SubShader
@@ -203,13 +199,9 @@ Shader "Cartoon/CartoonRender"
                 half halfLambert = NoL * 0.5 + 0.5;
                 halfLambert = pow(halfLambert, 2.0);
 
-<<<<<<< Updated upstream
                 half lightStep1 = step(0.5, halfLambert);
                 half lightStep2 = step(0.75, halfLambert);
                 half lightStep = lightStep1 * 0.7 + lightStep2 * 0.3;
-=======
-                half lightStep = smoothstep(0.01, 0.4, halfLambert);
->>>>>>> Stashed changes
                 lightStep = (lightStep - 0.5) * _Contrast + 0.5;
                 lightStep = saturate(lightStep);
 
