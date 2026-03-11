@@ -5207,7 +5207,7 @@ MonoBehaviour:
     - name: grass
       settings:
         brushRadius: 1.4
-        brushSpacing: 0.01
+        brushSpacing: 0.07
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -5516,13 +5516,13 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: grass B
       settings:
         brushRadius: 1
-        brushSpacing: 0.01
+        brushSpacing: 0.5
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
