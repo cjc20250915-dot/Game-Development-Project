@@ -334,7 +334,7 @@
     "hlslDeclarationOverride": 2,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"c500c919242a739408387716cfc12347\",\"type\":3}}",
+        "m_SerializedTexture": "{\"texture\":{\"fileID\":2800000,\"guid\":\"3a5909b690563af41920e8fdf2d3146f\",\"type\":3}}",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -396,7 +396,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Width",
     "m_StageCapability": 3,
-    "m_Value": 2.0,
+    "m_Value": 5.0,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }
@@ -508,9 +508,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1162.666748046875,
-            "y": -634.6666259765625,
-            "width": 139.3333740234375,
+            "x": -1162.0,
+            "y": -636.6666870117188,
+            "width": 139.9998779296875,
             "height": 36.0
         }
     },
@@ -1081,7 +1081,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Height",
     "m_StageCapability": 3,
-    "m_Value": 2.0,
+    "m_Value": 5.0,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }
@@ -1346,7 +1346,7 @@
         "tex2d"
     ],
     "m_Precision": 0,
-    "m_PreviewExpanded": false,
+    "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -1754,7 +1754,7 @@
         "animation"
     ],
     "m_Precision": 0,
-    "m_PreviewExpanded": true,
+    "m_PreviewExpanded": false,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
