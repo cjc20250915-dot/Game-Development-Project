@@ -156,7 +156,6 @@ RectTransform:
   - {fileID: 1561925552}
   - {fileID: 1174971517}
   - {fileID: 1374274840}
-  - {fileID: 618743777}
   m_Father: {fileID: 248014573}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -198,54 +197,6 @@ MonoBehaviour:
   sharedFadeGroups:
   - {fileID: 377198331}
   sharedHideDuration: 0.35
---- !u!1 &56232831
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 56232833}
-  - component: {fileID: 56232832}
-  m_Layer: 0
-  m_Name: TransitionRoot 02
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &56232832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 56232831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eca2f7b40d6a0884c8ecac0da83aca30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transitionMat: {fileID: 2100000, guid: 4aef38c5c869e29499bafb1ef207a377, type: 2}
-  transitionTime: 2
-  minWaitTime: 2
---- !u!4 &56232833
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 56232831}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 626.1677, y: 629.961, z: -1829.1642}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2086066115}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &180647969
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,6 +523,7 @@ RectTransform:
   - {fileID: 397405546}
   - {fileID: 33246383}
   - {fileID: 2028366491}
+  - {fileID: 618743777}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1909,7 +1861,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 33246383}
+    m_TransformParent: {fileID: 248014573}
     m_Modifications:
     - target: {fileID: 569444136915052271, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1974,7 +1926,7 @@ PrefabInstance:
     - target: {fileID: 7889679911153570011, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 56232832}
+      objectReference: {fileID: 2086066116}
     - target: {fileID: 7889679911153570011, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LoadSceneWithTransition
@@ -2061,11 +2013,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9114709518105419040, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 960
       objectReference: {fileID: 0}
     - target: {fileID: 9114709518105419040, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 50
+      value: 540
       objectReference: {fileID: 0}
     - target: {fileID: 9114709518105419040, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4454,7 +4406,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1395021923}
-  m_Father: {fileID: 56232833}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4473,9 +4425,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca2f7b40d6a0884c8ecac0da83aca30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionMat: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
-  transitionTime: 1
-  minWaitTime: 2
+  transitionMat: {fileID: 2100000, guid: 4aef38c5c869e29499bafb1ef207a377, type: 2}
+  transitionTime: 2
+  minWaitTime: 1
 --- !u!114 &2086066117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4544,7 +4496,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 573792288}
-  - {fileID: 56232833}
+  - {fileID: 2086066115}
   - {fileID: 1511350943}
   - {fileID: 288686363}
   - {fileID: 483204142}
