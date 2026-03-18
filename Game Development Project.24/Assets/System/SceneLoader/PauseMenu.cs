@@ -1,37 +1,35 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
-
     private bool isPaused = false;
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) 
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePopup();
         }
     }
 
-    void TogglePopup() 
+    void TogglePopup()
     {
         isPaused = !isPaused;
         pauseMenuUI.SetActive(isPaused);
-
-        Time.timeScale = isPaused ? 0 : 1; // Pause or resume the game
+        Time.timeScale = isPaused ? 0 : 1;
     }
 
-    public void OnClickYes() 
+    public void OnClickYes()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("00_MainMenu"); // Load the main menu scene
+        pauseMenuUI.SetActive(false);
+        SceneManager.LoadScene("00_MainMenu");
     }
 
-    public void OnClickNo() 
+    public void OnClickNo()
     {
-        TogglePopup(); // Close the pause menu
+        TogglePopup();
     }
 }
