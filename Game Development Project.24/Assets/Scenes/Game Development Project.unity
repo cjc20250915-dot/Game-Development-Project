@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionMat: {fileID: 2100000, guid: 4aef38c5c869e29499bafb1ef207a377, type: 2}
-  transitionTime: 1.5
+  transitionTime: 2
   minWaitTime: 2
 --- !u!4 &56232833
 Transform:
@@ -4534,12 +4534,12 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 573792288}
+  - {fileID: 56232833}
   - {fileID: 1511350943}
   - {fileID: 288686363}
   - {fileID: 483204142}
   - {fileID: 901271236}
   - {fileID: 248014573}
-  - {fileID: 56232833}
   - {fileID: 1546856502}
   - {fileID: 724882915}
   - {fileID: 1387914937}

@@ -2031,7 +2031,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionMat: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
-  transitionTime: 1.5
+  transitionTime: 2
   minWaitTime: 2
 --- !u!222 &6877423784701866030
 CanvasRenderer:
@@ -2096,8 +2096,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1825635089}
+  - {fileID: 4730859976735774224}
   - {fileID: 548050362}
   - {fileID: 595803098}
   - {fileID: 1738543528}
-  - {fileID: 4730859976735774224}
   - {fileID: 418191032}
