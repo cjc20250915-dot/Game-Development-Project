@@ -1690,7 +1690,7 @@ GameObject:
   - component: {fileID: 1708906135142880996}
   - component: {fileID: 2835366408029245176}
   m_Layer: 5
-  m_Name: Image Canvas
+  m_Name: CanvasTransition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1788,6 +1788,7 @@ MonoBehaviour:
   transitionMat: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
   transitionTime: 2
   minWaitTime: 1
+  destroyDelayAfterLoad: 2
 --- !u!223 &3280647203347324574
 Canvas:
   m_ObjectHideFlags: 0
