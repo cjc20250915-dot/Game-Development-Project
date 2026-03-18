@@ -6404,7 +6404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2407856164548711847, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4115416873736276088, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6551,6 +6551,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
+--- !u!1 &1635836630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2171805443325546260, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
+  m_PrefabInstance: {fileID: 1635836629}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1644486182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8402,7 +8407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7604c6301e3c88a4dbea411d2134af2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 2141049948}
+  pauseMenuUI: {fileID: 1635836630}
 --- !u!4 &2069543806
 Transform:
   m_ObjectHideFlags: 0
@@ -8737,11 +8742,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48d69ae6a13c34e42a13869614ce2245, type: 3}
---- !u!1 &2141049948 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2407856164548711847, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
-  m_PrefabInstance: {fileID: 1635836629}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2143050668 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 4ee86526713a5224f907685d24db5c10, type: 3}
