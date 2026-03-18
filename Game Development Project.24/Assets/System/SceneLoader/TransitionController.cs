@@ -7,32 +7,52 @@ public class TransitionController : MonoBehaviour
     public Material transitionMat;
     public float transitionTime = 1f;
     public float minWaitTime = 1.5f;
+    public float destroyDelayAfterLoad = 2f;
+
+    private bool isTransitioning = false;
+
     void Awake()
     {
+        // 强制恢复鼠标与时间状态，避免从暂停菜单切场景后鼠标失效
+        Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         DontDestroyOnLoad(gameObject);
     }
 
     public void LoadSceneWithTransition(string sceneName)
     {
-        StartCoroutine(Transition(sceneName));
+        if (!isTransitioning)
+        {
+            StartCoroutine(Transition(sceneName));
+        }
     }
 
-    IEnumerator Transition(string sceneName)
-    {
-        yield return StartCoroutine(AnimateCircle(-0.2f, 2f));
+IEnumerator Transition(string sceneName)
+{
+    isTransitioning = true;
 
-        yield return new WaitForSecondsRealtime(minWaitTime);
+    // 禁用鼠标（转场开始）
+    Cursor.visible = false;
+    Cursor.lockState = CursorLockMode.Locked;
 
-        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
-        while (!op.isDone)
-            yield return null;
+    yield return StartCoroutine(AnimateCircle(-0.2f, 2f));
 
-        yield return StartCoroutine(AnimateCircle(2f, -0.2f));
-    }
+    yield return new WaitForSecondsRealtime(minWaitTime);
 
+    AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+    while (!op.isDone)
+        yield return null;
+
+    yield return StartCoroutine(AnimateCircle(2f, -0.2f));
+
+    Destroy(gameObject, destroyDelayAfterLoad);
+}
     IEnumerator AnimateCircle(float from, float to)
     {
-        float t = 0;
+        float t = 0f;
+
         while (t < transitionTime)
         {
             t += Time.unscaledDeltaTime;
@@ -40,5 +60,7 @@ public class TransitionController : MonoBehaviour
             transitionMat.SetFloat("_CircleRate", value);
             yield return null;
         }
+
+        transitionMat.SetFloat("_CircleRate", to);
     }
 }
