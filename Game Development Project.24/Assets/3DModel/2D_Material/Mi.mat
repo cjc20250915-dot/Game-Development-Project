@@ -15,13 +15,13 @@ Material:
   - _USE_AO
   m_InvalidKeywords:
   - _EMISSION
-  - _USE_LIGHTMAP_AO
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fd52c9bddf64ddb46be8b46e4e1c274f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -174,8 +174,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.08176088, g: 0.070190944, b: 0.070190944, a: 1}
+    - _Color: {r: 0.081760846, g: 0.070190914, b: 0.070190914, a: 1}
     - _DownForward: {r: 0, g: -1, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 0}
     - _FresnelColor: {r: 1, g: 1, b: 1, a: 0}
@@ -185,7 +185,7 @@ Material:
     - _RimColor: {r: 0.41233534, g: 0.7661265, b: 0.7735849, a: 0}
     - _SmoothnessRange: {r: 0, g: 0.3, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 0.82546765, g: 0.8301887, b: 0.49341395, a: 1}
     - _Vector3: {r: 0, g: -0.3, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
