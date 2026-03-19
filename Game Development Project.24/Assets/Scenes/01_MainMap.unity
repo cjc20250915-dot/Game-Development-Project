@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 2bd8959f5fbd3644aa33af1a155fc147, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -3560,11 +3560,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1fd58eb39d88f2c45a6aca03e0c98dae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.68
+      value: 26.59
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1fd58eb39d88f2c45a6aca03e0c98dae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.8
+      value: -15.04
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1fd58eb39d88f2c45a6aca03e0c98dae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3618,7 +3618,7 @@ GameObject:
   - component: {fileID: 654668416}
   - component: {fileID: 654668415}
   m_Layer: 5
-  m_Name: Image Canvas
+  m_Name: CanvasTransition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3656,7 +3656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca2f7b40d6a0884c8ecac0da83aca30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionMat: {fileID: 2100000, guid: 5641273e64dc02644ad3b1c6cfa798fb, type: 2}
+  transitionMat: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
   transitionTime: 2
   minWaitTime: 1
   destroyDelayAfterLoad: 2
@@ -3721,7 +3721,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 20
   m_TargetDisplay: 0
 --- !u!1001 &660307458
 PrefabInstance:
@@ -6288,6 +6288,7 @@ MonoBehaviour:
   visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
+  transitionController: {fileID: 654668415}
 --- !u!33 &981761888
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6492,11 +6493,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2e61ed46ed8ea5141a5b92b6a5cfdd91, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.630001
+      value: 27.54
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2e61ed46ed8ea5141a5b92b6a5cfdd91, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.79
+      value: -20.029999
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2e61ed46ed8ea5141a5b92b6a5cfdd91, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7284,6 +7285,7 @@ MonoBehaviour:
   visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
+  transitionController: {fileID: 654668415}
 --- !u!23 &1139331477
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8588,6 +8590,7 @@ MonoBehaviour:
   visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
+  transitionController: {fileID: 654668415}
 --- !u!33 &1314344115
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9890,6 +9893,7 @@ MonoBehaviour:
   visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
+  transitionController: {fileID: 654668415}
 --- !u!23 &1519237385
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11002,7 +11006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 5641273e64dc02644ad3b1c6cfa798fb, type: 2}
+  m_Material: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -11267,6 +11271,7 @@ MonoBehaviour:
   visitedColor: {r: 0, g: 1, b: 0, a: 1}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
+  transitionController: {fileID: 654668415}
 --- !u!135 &1759350496
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11374,11 +11379,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: eaf15c8e74d748c418680a3525ebea17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15.27
+      value: 23.18
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: eaf15c8e74d748c418680a3525ebea17, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.09
+      value: -23.33
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: eaf15c8e74d748c418680a3525ebea17, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12708,11 +12713,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c6823744a4e039f46b2ec861ebc5ca98, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.96
+      value: 26.869999
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c6823744a4e039f46b2ec861ebc5ca98, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.67
+      value: -16.91
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c6823744a4e039f46b2ec861ebc5ca98, type: 3}
       propertyPath: m_LocalRotation.w

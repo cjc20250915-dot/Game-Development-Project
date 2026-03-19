@@ -2,21 +2,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class MapNode : MonoBehaviour
 {
-    [Header("¿ÉÁ¬½Ó½Úµã£¨µ±Ç°½Úµã´¥·¢ºó£¬»á½âËøÕâÐ©½Úµã£©")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµã£¨ï¿½ï¿½Ç°ï¿½Úµã´¥ï¿½ï¿½ï¿½ó£¬»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½Úµã£©")]
     public List<MapNode> connectedNodes = new List<MapNode>();
 
-    [Header("½ÚµãÊý¾Ý")]
+    [Header("ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½")]
     public NodeData nodeData;
 
-    [Header("ÊÇ·ñ·ÃÎÊ¹ý / ÊÇ·ñÒÑ´¥·¢¹ý")]
+    [Header("ï¿½Ç·ï¿½ï¿½ï¿½Ê¹ï¿½ / ï¿½Ç·ï¿½ï¿½Ñ´ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public bool visited = false;
 
-    [Header("µ±Ç°ÊÇ·ñ½âËø")]
+    [Header("ï¿½ï¿½Ç°ï¿½Ç·ï¿½ï¿½ï¿½ï¿½")]
     public bool isUnlocked = false;
 
-    [Header("ÊÇ·ñ½øÈë×Ô¶¯¼ÓÔØ")]
+    [Header("ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public bool autoLoadScene = true;
 
     [Header("Gizmos")]
@@ -26,26 +27,28 @@ public class MapNode : MonoBehaviour
     public Color lineColor = Color.white;
     public float sphereSize = 0.3f;
 
+    public TransitionController transitionController;
+
     public void TriggerNode()
     {
-        // Ã»½âËø£¬²»ÄÜ´¥·¢
+        // Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½
         if (!isUnlocked)
         {
-            Debug.Log($"{name} »¹Ã»ÓÐ½âËø£¬²»ÄÜ´¥·¢¡£");
+            Debug.Log($"{name} ï¿½ï¿½Ã»ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü´ï¿½ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
-        // ÒÑ¾­´¥·¢¹ý£¬²»ÄÜÔÙ´Î´¥·¢
+        // ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´Î´ï¿½ï¿½ï¿½
         if (visited)
         {
-            Debug.Log($"{name} ÒÑ¾­´¥·¢¹ý£¬²»ÄÜÔÙ´Î´¥·¢¡£");
+            Debug.Log($"{name} ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´Î´ï¿½ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
         visited = true;
         isUnlocked = false;
 
-        // ½âËøºóÐø½Úµã
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
         UnlockConnectedNodes();
 
         if (nodeData != null && !string.IsNullOrEmpty(nodeData.sceneName))
@@ -55,12 +58,20 @@ public class MapNode : MonoBehaviour
                 GameRunManager.Instance.currentNode = nodeData;
             }
 
-            Debug.Log("½øÈë½Úµã£º" + nodeData.nodeName);
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½Úµã£º" + nodeData.nodeName);
 
-            if (autoLoadScene)
-            {
-                SceneManager.LoadScene(nodeData.sceneName);
-            }
+           if (autoLoadScene)
+{
+    if (transitionController != null)
+    {
+        transitionController.LoadSceneWithTransition(nodeData.sceneName);
+    }
+    else
+    {
+        Debug.LogWarning("TransitionController æœªè®¾ç½®ï¼Œä½¿ç”¨é»˜è®¤è·³è½¬");
+        SceneManager.LoadScene(nodeData.sceneName);
+    }
+}
         }
     }
 
@@ -71,7 +82,7 @@ public class MapNode : MonoBehaviour
             if (node != null && !node.visited)
             {
                 node.isUnlocked = true;
-                Debug.Log("½âËø½Úµã£º" + node.name);
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½Úµã£º" + node.name);
             }
         }
     }
