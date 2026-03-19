@@ -2168,7 +2168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eca2f7b40d6a0884c8ecac0da83aca30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionMat: {fileID: 2100000, guid: 5641273e64dc02644ad3b1c6cfa798fb, type: 2}
+  transitionMat: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
   transitionTime: 2
   minWaitTime: 1
   destroyDelayAfterLoad: 2
@@ -6681,7 +6681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 5641273e64dc02644ad3b1c6cfa798fb, type: 2}
+  m_Material: {fileID: 2100000, guid: 6eabefb1a3ec6114b9c413ae3a8b2ebf, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
