@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Clay
   m_Shader: {fileID: 4800000, guid: 5c7ae3f1531c2ef4fad17e33debfafeb, type: 3}
-  m_Parent: {fileID: 2100000, guid: 0ba2058ebc3f2374c8b9d679a844913b, type: 2}
+  m_Parent: {fileID: 2100000, guid: b767ff5aefefe144899425dd302c8113, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _USE_AO
