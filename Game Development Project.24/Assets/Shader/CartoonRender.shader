@@ -23,7 +23,7 @@ Shader "Cartoon/CartoonRender"
         Tags
         {
             "RenderType"="Opaque"
-            "RenderPipeline"="UniversalRenderPipeline"
+            "RenderPipeline"="UniversalPipeline"
         }
 
         Pass
