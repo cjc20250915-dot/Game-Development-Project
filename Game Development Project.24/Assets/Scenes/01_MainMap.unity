@@ -3095,7 +3095,6 @@ GameObject:
   - component: {fileID: 532548658}
   - component: {fileID: 532548657}
   - component: {fileID: 532548656}
-  - component: {fileID: 532548661}
   m_Layer: 0
   m_Name: Node_F
   m_TagString: Untagged
@@ -3215,21 +3214,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &532548661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 532548655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc93d230f92fdf34fa8c72e75611b989, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSceneName: 
-  targetSpawnID: 
-  autoTrigger: 1
 --- !u!1001 &564567290
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9084,10 +9068,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 1314344114}
   moveSpeed: 5
+  maxMoveDistance: 3
   jumpHeight: 1.5
   extraGroundOffset: 0.05
   squashAmount: 0.7
   stretchAmount: 1.2
+  validClickIndicatorPrefab: {fileID: 0}
+  invalidClickIndicatorPrefab: {fileID: 0}
+  invalidIndicatorLifeTime: 0.5
+  indicatorGroundOffset: 0.02
   audioSource: {fileID: 0}
   jumpSound: {fileID: 0}
   landSound: {fileID: 0}

@@ -3,34 +3,45 @@ using UnityEngine;
 
 public class MapPlayer : MonoBehaviour
 {
-    [Header("当前节点")]
+    //"当前节点"
     public MapNode currentNode;
 
-    [Header("移动速度")]
+    //移动速度
     public float moveSpeed = 5f;
 
-    [Header("跳跃高度")]
+    //最大点击距离
+    public float maxMoveDistance = 3f;
+
+    //跳跃高度
     public float jumpHeight = 1.5f;
 
-    [Header("额外离地偏移")]
+    //额外离地偏移
     public float extraGroundOffset = 0.05f;
 
-    [Header("跳跃形变")]
+    //跳跃形变
     public float squashAmount = 0.7f;
     public float stretchAmount = 1.2f;
 
-    private Vector3 originalScale;
+    //点击提示
+    public GameObject validClickIndicatorPrefab;
+    public GameObject invalidClickIndicatorPrefab;
+    public float invalidIndicatorLifeTime = 0.5f;
+    public float indicatorGroundOffset = 0.02f;
 
-    [Header("音效")]
+    //音效
     public AudioSource audioSource;
     public AudioClip jumpSound;
     public AudioClip landSound;
 
+    private Vector3 originalScale;
     private bool isMoving = false;
     private Vector3 targetPosition;
 
     private Rigidbody rb;
     private CapsuleCollider capsule;
+
+    // 当前有效目标提示
+    private GameObject activeValidIndicator;
 
     void Start()
     {
@@ -49,7 +60,7 @@ public class MapPlayer : MonoBehaviour
         {
             Vector3 startPos = currentNode.transform.position;
             startPos.y += GetGroundOffset();
-            //transform.position = startPos;
+            // transform.position = startPos;
         }
     }
 
@@ -63,13 +74,27 @@ public class MapPlayer : MonoBehaviour
     void HandleMouseClick()
     {
         if (!Input.GetMouseButtonDown(0)) return;
+        if (Camera.main == null) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            targetPosition = hit.point;
-            targetPosition.y += GetGroundOffset();
+            Vector3 clickedPos = hit.point;
+            clickedPos.y += GetGroundOffset();
+
+            float distance = Vector3.Distance(transform.position, clickedPos);
+
+            // 超出最大距离：显示无效提示，不移动
+            if (distance > maxMoveDistance)
+            {
+                ShowInvalidIndicator(hit.point);
+                return;
+            }
+
+            // 在范围内：显示有效提示，并开始移动
+            targetPosition = clickedPos;
+            ShowValidIndicator(hit.point);
 
             StartCoroutine(MoveToPosition(targetPosition));
         }
@@ -85,6 +110,33 @@ public class MapPlayer : MonoBehaviour
         return 1f;
     }
 
+    void ShowValidIndicator(Vector3 worldPos)
+    {
+        if (validClickIndicatorPrefab == null) return;
+
+        // 如果上一个有效提示还在，先删掉
+        if (activeValidIndicator != null)
+        {
+            Destroy(activeValidIndicator);
+        }
+
+        Vector3 spawnPos = worldPos;
+        spawnPos.y += indicatorGroundOffset;
+
+        activeValidIndicator = Instantiate(validClickIndicatorPrefab, spawnPos, Quaternion.identity);
+    }
+
+    void ShowInvalidIndicator(Vector3 worldPos)
+    {
+        if (invalidClickIndicatorPrefab == null) return;
+
+        Vector3 spawnPos = worldPos;
+        spawnPos.y += indicatorGroundOffset;
+
+        GameObject fx = Instantiate(invalidClickIndicatorPrefab, spawnPos, Quaternion.identity);
+        Destroy(fx, invalidIndicatorLifeTime);
+    }
+
     IEnumerator MoveToPosition(Vector3 target)
     {
         isMoving = true;
@@ -92,10 +144,10 @@ public class MapPlayer : MonoBehaviour
         Vector3 start = transform.position;
         float distance = Vector3.Distance(start, target);
 
-        float duration = distance / moveSpeed;
+        // 给时长做一个限制，避免过慢或过快
+        float duration = Mathf.Clamp(distance / moveSpeed, 0.2f, 0.45f);
         float time = 0f;
 
-        // 起跳音效
         if (audioSource && jumpSound)
             audioSource.PlayOneShot(jumpSound);
 
@@ -110,8 +162,6 @@ public class MapPlayer : MonoBehaviour
             pos.y += height;
 
             transform.position = pos;
-
-            // -------- Squash & Stretch --------
 
             float stretch = Mathf.Sin(t * Mathf.PI);
 
@@ -128,13 +178,17 @@ public class MapPlayer : MonoBehaviour
         }
 
         transform.position = target;
-
-        // 恢复原始形状
         transform.localScale = originalScale;
 
-        // 落地音效
         if (audioSource && landSound)
             audioSource.PlayOneShot(landSound);
+
+        // 到达后移除有效提示
+        if (activeValidIndicator != null)
+        {
+            Destroy(activeValidIndicator);
+            activeValidIndicator = null;
+        }
 
         isMoving = false;
     }
@@ -149,5 +203,11 @@ public class MapPlayer : MonoBehaviour
 
         currentNode = node;
         node.TriggerNode();
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, maxMoveDistance);
     }
 }
