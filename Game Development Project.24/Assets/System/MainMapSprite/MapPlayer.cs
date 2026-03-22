@@ -1,34 +1,34 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 public class MapPlayer : MonoBehaviour
 {
-    //"µ±Ç°½Úµã"
+    //[Header("å½“å‰èŠ‚ç‚¹")]
     public MapNode currentNode;
 
-    //ÒÆ¶¯ËÙ¶È
+    //[Header("ç§»åŠ¨é€Ÿåº¦")]
     public float moveSpeed = 5f;
 
-    //×î´óµã»÷¾àÀë
+    //[Header("æœ€å¤§ç‚¹å‡»è·ç¦»")]
     public float maxMoveDistance = 3f;
 
-    //ÌøÔ¾¸ß¶È
+    //[Header("è·³è·ƒé«˜åº¦")]
     public float jumpHeight = 1.5f;
 
-    //¶îÍâÀëµØÆ«ÒÆ
+    //[Header("é¢å¤–ç¦»åœ°åç§»")]
     public float extraGroundOffset = 0.05f;
 
-    //ÌøÔ¾ĞÎ±ä
+    //[Header("è·³è·ƒå½¢å˜")]
     public float squashAmount = 0.7f;
     public float stretchAmount = 1.2f;
 
-    //µã»÷ÌáÊ¾
+    //[Header("ç‚¹å‡»æç¤º")]
     public GameObject validClickIndicatorPrefab;
     public GameObject invalidClickIndicatorPrefab;
     public float invalidIndicatorLifeTime = 0.5f;
     public float indicatorGroundOffset = 0.02f;
 
-    //ÒôĞ§
+    //[Header("éŸ³æ•ˆ")]
     public AudioSource audioSource;
     public AudioClip jumpSound;
     public AudioClip landSound;
@@ -40,7 +40,6 @@ public class MapPlayer : MonoBehaviour
     private Rigidbody rb;
     private CapsuleCollider capsule;
 
-    // µ±Ç°ÓĞĞ§Ä¿±êÌáÊ¾
     private GameObject activeValidIndicator;
 
     void Start()
@@ -85,14 +84,14 @@ public class MapPlayer : MonoBehaviour
 
             float distance = Vector3.Distance(transform.position, clickedPos);
 
-            // ³¬³ö×î´ó¾àÀë£ºÏÔÊ¾ÎŞĞ§ÌáÊ¾£¬²»ÒÆ¶¯
+            // è¶…å‡ºèŒƒå›´ï¼šåªæç¤ºï¼Œä¸ç§»åŠ¨
             if (distance > maxMoveDistance)
             {
                 ShowInvalidIndicator(hit.point);
                 return;
             }
 
-            // ÔÚ·¶Î§ÄÚ£ºÏÔÊ¾ÓĞĞ§ÌáÊ¾£¬²¢¿ªÊ¼ÒÆ¶¯
+            // åœ¨èŒƒå›´å†…ï¼šç§»åŠ¨
             targetPosition = clickedPos;
             ShowValidIndicator(hit.point);
 
@@ -114,7 +113,6 @@ public class MapPlayer : MonoBehaviour
     {
         if (validClickIndicatorPrefab == null) return;
 
-        // Èç¹ûÉÏÒ»¸öÓĞĞ§ÌáÊ¾»¹ÔÚ£¬ÏÈÉ¾µô
         if (activeValidIndicator != null)
         {
             Destroy(activeValidIndicator);
@@ -144,7 +142,7 @@ public class MapPlayer : MonoBehaviour
         Vector3 start = transform.position;
         float distance = Vector3.Distance(start, target);
 
-        // ¸øÊ±³¤×öÒ»¸öÏŞÖÆ£¬±ÜÃâ¹ıÂı»ò¹ı¿ì
+        // é™åˆ¶æ—¶é•¿ï¼Œé¿å…åŠ¨ç”»å¿½å¿«å¿½æ…¢
         float duration = Mathf.Clamp(distance / moveSpeed, 0.2f, 0.45f);
         float time = 0f;
 
@@ -183,7 +181,7 @@ public class MapPlayer : MonoBehaviour
         if (audioSource && landSound)
             audioSource.PlayOneShot(landSound);
 
-        // µ½´ïºóÒÆ³ıÓĞĞ§ÌáÊ¾
+        // åˆ°è¾¾ååˆ é™¤æç¤º
         if (activeValidIndicator != null)
         {
             Destroy(activeValidIndicator);

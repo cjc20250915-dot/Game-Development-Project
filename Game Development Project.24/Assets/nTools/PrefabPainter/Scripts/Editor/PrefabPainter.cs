@@ -997,6 +997,8 @@ namespace nTools.PrefabPainter
             }
         }
         PaintTool _CurrentTool = PaintTool.None;
+
+        
         PaintTool m_CurrentTool
         {
             get { return _CurrentTool; }
@@ -3218,8 +3220,7 @@ namespace nTools.PrefabPainter
                 m_Grid.visualOrigin = visualRaycast.point;
         }
 
-
-
+        
         void OnToolEnabled(PaintTool tool)
         {
             GameObject[] sceneObjects;
