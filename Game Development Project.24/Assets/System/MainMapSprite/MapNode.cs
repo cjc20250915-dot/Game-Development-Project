@@ -5,22 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class MapNode : MonoBehaviour
 {
-    [Header("�����ӽڵ㣨��ǰ�ڵ㴥���󣬻������Щ�ڵ㣩")]
+    
     public List<MapNode> connectedNodes = new List<MapNode>();
 
-    [Header("�ڵ�����")]
+    
     public NodeData nodeData;
 
-    [Header("�Ƿ���ʹ� / �Ƿ��Ѵ�����")]
+    
     public bool visited = false;
 
-    [Header("��ǰ�Ƿ����")]
+    
     public bool isUnlocked = false;
 
-    [Header("�Ƿ�����Զ�����")]
+    
     public bool autoLoadScene = true;
 
-    [Header("Gizmos")]
+    
     public Color lockedColor = Color.gray;
     public Color unlockedColor = Color.yellow;
     public Color visitedColor = Color.green;
