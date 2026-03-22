@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aeb7a1992700d1e478ff3ee53ea25406, type: 3}
-  m_Name: Battle_1Enemy
+  m_Name: Bettle_4Enemy
   m_EditorClassIdentifier: 
   nodeName: 
   nodeType: 0
   sceneName: Game Development Project
   enemyWaves:
-  - enemyPrefab: {fileID: 5992146104891761328, guid: 3e16748d7ef17ae4fb5454e147847217, type: 3}
-    count: 1
-  - enemyPrefab: {fileID: 5992146104891761328, guid: 1ae05663ad5fc88449b0bc45e2c108a6, type: 3}
+  - enemyPrefab: {fileID: 5992146104891761328, guid: 4c6f4e489e4f20d46978233fdc429f82, type: 3}
     count: 1
   goldReward: 0
