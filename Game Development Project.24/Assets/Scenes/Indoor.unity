@@ -11145,7 +11145,7 @@ Transform:
   m_GameObject: {fileID: 1337058564}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3955075, y: -0, z: -0, w: 0.9184628}
-  m_LocalPosition: {x: -10.89, y: 28.7, z: 12.54}
+  m_LocalPosition: {x: -5.63, y: 28.7, z: -25.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13529,10 +13529,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
   moveSpeed: 5
+  maxMoveDistance: 3
   jumpHeight: 1.5
   extraGroundOffset: 0.05
   squashAmount: 0.7
   stretchAmount: 1.2
+  validClickIndicatorPrefab: {fileID: 0}
+  invalidClickIndicatorPrefab: {fileID: 0}
+  invalidIndicatorLifeTime: 0.5
+  indicatorGroundOffset: 0.02
   audioSource: {fileID: 0}
   jumpSound: {fileID: 0}
   landSound: {fileID: 0}
