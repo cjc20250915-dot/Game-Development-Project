@@ -20,4 +20,5 @@ MonoBehaviour:
     count: 1
   - enemyPrefab: {fileID: 5992146104891761328, guid: 1ae05663ad5fc88449b0bc45e2c108a6, type: 3}
     count: 1
-  goldReward: 0
+  nextNodeIds:
+  - Node_B

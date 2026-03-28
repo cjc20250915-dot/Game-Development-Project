@@ -4,27 +4,27 @@ using UnityEngine.SceneManagement;
 
 public class MapNode : MonoBehaviour
 {
-    //[Header("仅用于场景中画连接线")]
-    public List<MapNode> connectedNodes = new List<MapNode>();
+    [Header("仅用于场景中拖拽后继节点")]
+    public List<MapNode> nextNodes = new List<MapNode>();
 
-    //[Header("节点数据")]
+    [Header("节点数据")]
     public NodeData nodeData;
 
-    //[Header("运行时状态")]
+    [Header("运行时状态")]
     public bool visited = false;
     public bool isUnlocked = false;
 
-    //[Header("是否自动切场景")]
+    [Header("是否自动切场景")]
     public bool autoLoadScene = true;
 
-    //[Header("显示")]
+    [Header("显示")]
     public Color lockedColor = Color.gray;
     public Color unlockedColor = Color.yellow;
     public Color visitedColor = Color.green;
     public Color lineColor = Color.white;
     public float sphereSize = 0.3f;
 
-    //[Header("过渡控制器，可为空")]
+    [Header("过渡控制器，可为空")]
     public TransitionController transitionController;
 
     private void Start()
@@ -73,8 +73,8 @@ public class MapNode : MonoBehaviour
             return;
         }
 
-        // 这里只记录当前进入的是哪个节点
-        GameRunManager.Instance.EnterNode(nodeData);
+        // 把当前节点和它的后继节点一起记录到管理器
+        GameRunManager.Instance.EnterNode(this);
 
         Debug.Log("进入节点：" + nodeData.nodeName);
 
@@ -103,7 +103,7 @@ public class MapNode : MonoBehaviour
         Gizmos.DrawSphere(transform.position, sphereSize);
 
         Gizmos.color = lineColor;
-        foreach (var node in connectedNodes)
+        foreach (var node in nextNodes)
         {
             if (node != null)
             {

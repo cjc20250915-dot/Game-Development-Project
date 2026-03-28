@@ -1,18 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameRunManager : MonoBehaviour
 {
     public static GameRunManager Instance;
 
-    //[Header("当前正在挑战的节点")]
+    [Header("当前正在挑战的节点数据")]
     public NodeData currentNode;
 
-    //[Header("初始解锁节点ID")]
+    [Header("初始解锁节点ID")]
     public string firstUnlockedNodeId = "Node1";
+
+    [Header("战斗统计")]
+    public int winCount = 0;
+    public int loseCount = 0;
 
     private HashSet<string> completedNodeIds = new HashSet<string>();
     private HashSet<string> unlockedNodeIds = new HashSet<string>();
+
+    // 当前节点完成后要解锁的后继节点ID
+    private List<string> pendingNextNodeIds = new List<string>();
 
     private void Awake()
     {
@@ -25,6 +33,8 @@ public class GameRunManager : MonoBehaviour
             {
                 unlockedNodeIds.Add(firstUnlockedNodeId);
             }
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -32,15 +42,77 @@ public class GameRunManager : MonoBehaviour
         }
     }
 
-    public void EnterNode(NodeData node)
+    private void OnDestroy()
     {
-        if (node == null) return;
-
-        currentNode = node;
-        Debug.Log("进入节点（仅记录，不推进进度）：" + node.nodeName);
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
-    public void CompleteCurrentNode()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RefreshAllMapNodesInScene();
+    }
+
+    public void RefreshAllMapNodesInScene()
+    {
+        MapNode[] nodes = FindObjectsByType<MapNode>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        );
+
+        foreach (MapNode node in nodes)
+        {
+            node.RefreshState();
+        }
+
+        if (nodes.Length > 0)
+        {
+            Debug.Log($"场景 {SceneManager.GetActiveScene().name} 中地图节点状态已刷新，数量：{nodes.Length}");
+        }
+    }
+
+    public void EnterNode(MapNode mapNode)
+    {
+        if (mapNode == null || mapNode.nodeData == null)
+        {
+            Debug.LogWarning("EnterNode 失败：mapNode 或 nodeData 为空");
+            return;
+        }
+
+        currentNode = mapNode.nodeData;
+        pendingNextNodeIds.Clear();
+
+        foreach (MapNode nextNode in mapNode.nextNodes)
+        {
+            if (nextNode == null || nextNode.nodeData == null) continue;
+
+            string nextId = nextNode.nodeData.nodeName;
+            if (!string.IsNullOrEmpty(nextId))
+            {
+                pendingNextNodeIds.Add(nextId);
+            }
+        }
+
+        Debug.Log("进入节点（仅记录，不推进进度）：" + currentNode.nodeName);
+    }
+
+    public void CompleteCurrentNodeAsWin()
+    {
+        winCount++;
+        Debug.Log("战斗胜利，当前胜利次数：" + winCount);
+        CompleteCurrentNode();
+    }
+
+    public void CompleteCurrentNodeAsLose()
+    {
+        loseCount++;
+        Debug.Log("战斗失败，当前失败次数：" + loseCount);
+        CompleteCurrentNode();
+    }
+
+    private void CompleteCurrentNode()
     {
         if (currentNode == null)
         {
@@ -59,29 +131,21 @@ public class GameRunManager : MonoBehaviour
         completedNodeIds.Add(currentId);
         unlockedNodeIds.Remove(currentId);
 
-        if (currentNode.nextNodeIds != null)
+        foreach (string nextId in pendingNextNodeIds)
         {
-            foreach (string nextId in currentNode.nextNodeIds)
-            {
-                if (string.IsNullOrEmpty(nextId)) continue;
+            if (string.IsNullOrEmpty(nextId)) continue;
 
-                if (!completedNodeIds.Contains(nextId))
-                {
-                    unlockedNodeIds.Add(nextId);
-                    Debug.Log("解锁节点：" + nextId);
-                }
+            if (!completedNodeIds.Contains(nextId))
+            {
+                unlockedNodeIds.Add(nextId);
+                Debug.Log("解锁节点：" + nextId);
             }
         }
 
         Debug.Log("完成节点：" + currentId);
-    }
 
-    public void QuitCurrentBattleWithoutProgress()
-    {
-        if (currentNode != null)
-        {
-            Debug.Log("中途退出战斗，不增加进度：" + currentNode.nodeName);
-        }
+        pendingNextNodeIds.Clear();
+        currentNode = null;
     }
 
     public bool IsNodeCompleted(string nodeId)
@@ -100,13 +164,18 @@ public class GameRunManager : MonoBehaviour
     {
         completedNodeIds.Clear();
         unlockedNodeIds.Clear();
+        pendingNextNodeIds.Clear();
         currentNode = null;
+
+        winCount = 0;
+        loseCount = 0;
 
         if (!string.IsNullOrEmpty(firstUnlockedNodeId))
         {
             unlockedNodeIds.Add(firstUnlockedNodeId);
         }
 
+        RefreshAllMapNodesInScene();
         Debug.Log("进度已重置");
     }
 }

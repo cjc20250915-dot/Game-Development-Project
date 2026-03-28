@@ -6096,7 +6096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
-  firstUnlockedNodeId: Node1
+  firstUnlockedNodeId: Node_A
 --- !u!1 &938566397
 GameObject:
   m_ObjectHideFlags: 0
