@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 24dd5fd5-f90c-4437-9de5-f6f5d89ba56c 1
+  m_Name: 24dd5fd5-f90c-4437-9de5-f6f5d89ba56c 1 Variant 5
   m_Shader: {fileID: 4800000, guid: 5c7ae3f1531c2ef4fad17e33debfafeb, type: 3}
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 2100000, guid: 31fbb8fac49527044a7006108e41d324, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _USE_AO
@@ -23,27 +23,9 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _AOTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 4ec1a20e41b2b634d8023fa9e9e53a35, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Ints: []
-    m_Floats:
-    - _Contrast: 1
-    - _Exposure: 1
-    - _OutlineWidth: 0.01
-    - _USE_AO: 1
-    m_Colors:
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    m_Floats: []
+    m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
