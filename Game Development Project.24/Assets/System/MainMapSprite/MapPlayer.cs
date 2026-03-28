@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MapPlayer : MonoBehaviour
 {
-    //[Header("当前节点")]
     public MapNode currentNode;
 
     //[Header("移动速度")]
@@ -39,10 +38,9 @@ public class MapPlayer : MonoBehaviour
 
     private Rigidbody rb;
     private CapsuleCollider capsule;
-
     private GameObject activeValidIndicator;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         capsule = GetComponent<CapsuleCollider>();
@@ -54,23 +52,15 @@ public class MapPlayer : MonoBehaviour
             rb.useGravity = false;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
         }
-
-        if (currentNode != null)
-        {
-            Vector3 startPos = currentNode.transform.position;
-            startPos.y += GetGroundOffset();
-            // transform.position = startPos;
-        }
     }
 
-    void Update()
+    private void Update()
     {
         if (isMoving) return;
-
         HandleMouseClick();
     }
 
-    void HandleMouseClick()
+    private void HandleMouseClick()
     {
         if (!Input.GetMouseButtonDown(0)) return;
         if (Camera.main == null) return;
@@ -84,47 +74,39 @@ public class MapPlayer : MonoBehaviour
 
             float distance = Vector3.Distance(transform.position, clickedPos);
 
-            // 超出范围：只提示，不移动
             if (distance > maxMoveDistance)
             {
                 ShowInvalidIndicator(hit.point);
                 return;
             }
 
-            // 在范围内：移动
             targetPosition = clickedPos;
             ShowValidIndicator(hit.point);
-
             StartCoroutine(MoveToPosition(targetPosition));
         }
     }
 
-    float GetGroundOffset()
+    private float GetGroundOffset()
     {
         if (capsule != null)
-        {
             return capsule.height * 0.5f + extraGroundOffset;
-        }
 
         return 1f;
     }
 
-    void ShowValidIndicator(Vector3 worldPos)
+    private void ShowValidIndicator(Vector3 worldPos)
     {
         if (validClickIndicatorPrefab == null) return;
 
         if (activeValidIndicator != null)
-        {
             Destroy(activeValidIndicator);
-        }
 
         Vector3 spawnPos = worldPos;
         spawnPos.y += indicatorGroundOffset;
-
         activeValidIndicator = Instantiate(validClickIndicatorPrefab, spawnPos, Quaternion.identity);
     }
 
-    void ShowInvalidIndicator(Vector3 worldPos)
+    private void ShowInvalidIndicator(Vector3 worldPos)
     {
         if (invalidClickIndicatorPrefab == null) return;
 
@@ -135,14 +117,12 @@ public class MapPlayer : MonoBehaviour
         Destroy(fx, invalidIndicatorLifeTime);
     }
 
-    IEnumerator MoveToPosition(Vector3 target)
+    private IEnumerator MoveToPosition(Vector3 target)
     {
         isMoving = true;
 
         Vector3 start = transform.position;
         float distance = Vector3.Distance(start, target);
-
-        // 限制时长，避免动画忽快忽慢
         float duration = Mathf.Clamp(distance / moveSpeed, 0.2f, 0.45f);
         float time = 0f;
 
@@ -155,14 +135,12 @@ public class MapPlayer : MonoBehaviour
             float t = time / duration;
 
             Vector3 pos = Vector3.Lerp(start, target, t);
-
             float height = Mathf.Sin(t * Mathf.PI) * jumpHeight;
             pos.y += height;
 
             transform.position = pos;
 
             float stretch = Mathf.Sin(t * Mathf.PI);
-
             float yScale = Mathf.Lerp(1f, stretchAmount, stretch);
             float xzScale = Mathf.Lerp(1f, squashAmount, stretch);
 
@@ -181,7 +159,6 @@ public class MapPlayer : MonoBehaviour
         if (audioSource && landSound)
             audioSource.PlayOneShot(landSound);
 
-        // 到达后删除提示
         if (activeValidIndicator != null)
         {
             Destroy(activeValidIndicator);
@@ -191,11 +168,13 @@ public class MapPlayer : MonoBehaviour
         isMoving = false;
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         MapNode node = other.GetComponent<MapNode>();
-
         if (node == null) return;
+
+        node.RefreshState();
+
         if (!node.isUnlocked) return;
         if (node.visited) return;
 
@@ -203,7 +182,7 @@ public class MapPlayer : MonoBehaviour
         node.TriggerNode();
     }
 
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, maxMoveDistance);

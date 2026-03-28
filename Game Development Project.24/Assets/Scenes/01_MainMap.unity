@@ -6096,7 +6096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
-  playerGold: 0
+  firstUnlockedNodeId: Node1
 --- !u!1 &938566397
 GameObject:
   m_ObjectHideFlags: 0
@@ -11058,6 +11058,10 @@ PrefabInstance:
     - target: {fileID: 4391850117281146171, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_Name
       value: PauseCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4391850117281146171, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5511994691445089394, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

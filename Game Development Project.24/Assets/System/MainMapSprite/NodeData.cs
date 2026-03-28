@@ -14,20 +14,20 @@ public class NodeData : ScriptableObject
         Rest
     }
 
-    [Header("节点名称")]
+    //[Header("节点唯一名称/ID")]
     public string nodeName;
 
-    [Header("节点类型")]
+    //[Header("节点类型")]
     public NodeType nodeType;
 
-    [Header("进入场景")]
+    //[Header("进入场景")]
     public string sceneName;
 
-    [Header("敌人配置")]
+    //[Header("敌人配置")]
     public List<EnemyWave> enemyWaves;
 
-    [Header("奖励金币")]
-    public int goldReward;
+    //[Header("完成该节点后解锁的下一个节点ID")]
+    public List<string> nextNodeIds = new List<string>();
 }
 
 [System.Serializable]
