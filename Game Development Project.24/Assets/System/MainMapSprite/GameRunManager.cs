@@ -6,13 +6,13 @@ public class GameRunManager : MonoBehaviour
 {
     public static GameRunManager Instance;
 
-    [Header("当前正在挑战的节点数据")]
+    //[Header("当前正在挑战的节点数据")]
     public NodeData currentNode;
 
-    [Header("初始解锁节点ID")]
-    public string firstUnlockedNodeId = "Node1";
+    //[Header("初始解锁节点ID")]
+    public MapNode firstUnlockedNode;
 
-    [Header("战斗统计")]
+    //[Header("战斗统计")]
     public int winCount = 0;
     public int loseCount = 0;
 
@@ -29,9 +29,23 @@ public class GameRunManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            if (!string.IsNullOrEmpty(firstUnlockedNodeId))
+            if (firstUnlockedNode != null && firstUnlockedNode.nodeData != null)
             {
-                unlockedNodeIds.Add(firstUnlockedNodeId);
+                string firstId = firstUnlockedNode.nodeData.nodeName;
+
+                if (!string.IsNullOrEmpty(firstId))
+                {
+                    unlockedNodeIds.Add(firstId);
+                    Debug.Log("初始解锁节点：" + firstId);
+                }
+                else
+                {
+                    Debug.LogWarning("首节点 nodeName 为空");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("firstUnlockedNode 没有设置！");
             }
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -170,9 +184,14 @@ public class GameRunManager : MonoBehaviour
         winCount = 0;
         loseCount = 0;
 
-        if (!string.IsNullOrEmpty(firstUnlockedNodeId))
+        if (firstUnlockedNode != null && firstUnlockedNode.nodeData != null)
         {
-            unlockedNodeIds.Add(firstUnlockedNodeId);
+            string firstId = firstUnlockedNode.nodeData.nodeName;
+
+            if (!string.IsNullOrEmpty(firstId))
+            {
+                unlockedNodeIds.Add(firstId);
+            }
         }
 
         RefreshAllMapNodesInScene();

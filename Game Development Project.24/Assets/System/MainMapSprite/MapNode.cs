@@ -4,27 +4,27 @@ using UnityEngine.SceneManagement;
 
 public class MapNode : MonoBehaviour
 {
-    [Header("仅用于场景中拖拽后继节点")]
+    //"仅用于场景中拖拽后继节点")]
     public List<MapNode> nextNodes = new List<MapNode>();
 
-    [Header("节点数据")]
+    //"节点数据")]
     public NodeData nodeData;
 
-    [Header("运行时状态")]
+    //"运行时状态")]
     public bool visited = false;
     public bool isUnlocked = false;
 
-    [Header("是否自动切场景")]
+    //"是否自动切场景")]
     public bool autoLoadScene = true;
 
-    [Header("显示")]
+    //"显示")]
     public Color lockedColor = Color.gray;
     public Color unlockedColor = Color.yellow;
     public Color visitedColor = Color.green;
     public Color lineColor = Color.white;
     public float sphereSize = 0.3f;
 
-    [Header("过渡控制器，可为空")]
+    //"过渡控制器，可为空")]
     public TransitionController transitionController;
 
     private void Start()
@@ -55,6 +55,8 @@ public class MapNode : MonoBehaviour
     {
         RefreshState();
 
+        Debug.Log($"节点 {name} 尝试触发, nodeName={nodeData?.nodeName}, isUnlocked={isUnlocked}, visited={visited}");
+
         if (!isUnlocked)
         {
             Debug.Log($"{name} 未解锁，不能进入");
@@ -73,10 +75,10 @@ public class MapNode : MonoBehaviour
             return;
         }
 
-        // 把当前节点和它的后继节点一起记录到管理器
         GameRunManager.Instance.EnterNode(this);
 
         Debug.Log("进入节点：" + nodeData.nodeName);
+        Debug.Log("准备加载场景：" + nodeData.sceneName);
 
         if (!autoLoadScene) return;
         if (string.IsNullOrEmpty(nodeData.sceneName)) return;

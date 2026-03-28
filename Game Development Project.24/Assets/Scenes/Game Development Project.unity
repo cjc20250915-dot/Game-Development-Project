@@ -998,8 +998,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae9e656be5c1fa4da1df3a78337355d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentNode: {fileID: 11400000, guid: 238a64356fa35b843a452f04cc6efa1d, type: 2}
-  firstUnlockedNodeId: Node1
+  currentNode: {fileID: 11400000, guid: 4473333a82e52114f84d876e8bc2ec4d, type: 2}
+  firstUnlockedNode: {fileID: 0}
+  winCount: 0
+  loseCount: 0
 --- !u!4 &395493050
 Transform:
   m_ObjectHideFlags: 0

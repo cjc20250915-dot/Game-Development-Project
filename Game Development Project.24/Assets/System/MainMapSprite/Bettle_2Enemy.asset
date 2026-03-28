@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb7a1992700d1e478ff3ee53ea25406, type: 3}
   m_Name: Bettle_2Enemy
   m_EditorClassIdentifier: 
-  nodeName: 
+  nodeName: Node_B
   nodeType: 0
   sceneName: Game Development Project
   enemyWaves:
@@ -24,6 +24,3 @@ MonoBehaviour:
     count: 1
   - enemyPrefab: {fileID: 5992146104891761328, guid: 2c3d9d5cb6858da4fa4e83c0a5e903ea, type: 3}
     count: 1
-  nextNodeIds:
-  - Node_C
-  - Node_D

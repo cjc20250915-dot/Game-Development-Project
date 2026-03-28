@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb7a1992700d1e478ff3ee53ea25406, type: 3}
   m_Name: Transform_Level_2
   m_EditorClassIdentifier: 
-  nodeName: 
+  nodeName: Node_F
   nodeType: 5
   sceneName: Indoor
   enemyWaves: []
-  goldReward: 0
