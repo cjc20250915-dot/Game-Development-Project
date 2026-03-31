@@ -126,10 +126,56 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4278547227332177370, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7847082083268791844}
+    - targetCorrespondingSourceObject: {fileID: 4278547227332177370, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 657689068420456043}
   m_SourcePrefab: {fileID: 100100000, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
 --- !u!4 &679388327789315133 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
   m_PrefabInstance: {fileID: 1073850576209486806}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3857158671063404044 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4278547227332177370, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
+  m_PrefabInstance: {fileID: 1073850576209486806}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &7847082083268791844
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3857158671063404044}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6515942656761904506, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
+--- !u!114 &657689068420456043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3857158671063404044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad634ee1525bac4bb6713a35fee3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyUnit: {fileID: 0}

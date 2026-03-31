@@ -122,8 +122,54 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8851712542887745050, guid: 3b014f8fe1abbd5448e7534d2b23cdb0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3677870432421575617}
+    - targetCorrespondingSourceObject: {fileID: 8851712542887745050, guid: 3b014f8fe1abbd5448e7534d2b23cdb0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5671939679679407637}
   m_SourcePrefab: {fileID: 100100000, guid: 3b014f8fe1abbd5448e7534d2b23cdb0, type: 3}
+--- !u!1 &3009135744364646015 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8851712542887745050, guid: 3b014f8fe1abbd5448e7534d2b23cdb0, type: 3}
+  m_PrefabInstance: {fileID: 5986692022679410789}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &3677870432421575617
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3009135744364646015}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 428598307412456442, guid: 3b014f8fe1abbd5448e7534d2b23cdb0, type: 3}
+--- !u!114 &5671939679679407637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3009135744364646015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad634ee1525bac4bb6713a35fee3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyUnit: {fileID: 0}
 --- !u!4 &6097796729959481230 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3b014f8fe1abbd5448e7534d2b23cdb0, type: 3}
