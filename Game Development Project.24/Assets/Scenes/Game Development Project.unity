@@ -3836,6 +3836,7 @@ GameObject:
   - component: {fileID: 1915873644}
   - component: {fileID: 1915873646}
   - component: {fileID: 1915873647}
+  - component: {fileID: 1915873648}
   m_Layer: 0
   m_Name: Battle Manager
   m_TagString: Untagged
@@ -3903,6 +3904,19 @@ MonoBehaviour:
   allySlotBoard: {fileID: 724882914}
   enemySlotBoard: {fileID: 1387914938}
   turnBattleManager: {fileID: 778505756}
+--- !u!114 &1915873648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915873643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26582919bddf3f342ad8cc7911292244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySlotBoard: {fileID: 1387914938}
 --- !u!1 &1935260344
 GameObject:
   m_ObjectHideFlags: 0
