@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2222879172463409979}
   - component: {fileID: 3990181624284782900}
   m_Layer: 0
-  m_Name: ToyPerfab
+  m_Name: ToyPerfab 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,6 +52,7 @@ MonoBehaviour:
   stepsPerTurn: 2
   skills:
   - {fileID: 11400000, guid: 860e795099237e4478377d75a6d4f0b2, type: 2}
+  - {fileID: 0}
 --- !u!114 &3990181624284782900
 MonoBehaviour:
   m_ObjectHideFlags: 0
