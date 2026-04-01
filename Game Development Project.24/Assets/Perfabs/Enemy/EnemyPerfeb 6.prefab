@@ -55,6 +55,17 @@ MonoBehaviour:
   probSkill: 0
   probDefend: 0.1
   skills: []
+  modelRoot: {fileID: 3141252481672909279}
+  hitShakeDuration: 0.2
+  hitShakeDistance: 0.2
+  hitShakeVibrato: 3
+  hitFlashDuration: 0.2
+  hitFlashCount: 2
+  hitVFXPrefab: {fileID: 0}
+  hitSFX: {fileID: 0}
+  deathVFXPrefab: {fileID: 0}
+  deathSFX: {fileID: 0}
+  audioSource: {fileID: 0}
 --- !u!1001 &3178768381613504052
 PrefabInstance:
   m_ObjectHideFlags: 0

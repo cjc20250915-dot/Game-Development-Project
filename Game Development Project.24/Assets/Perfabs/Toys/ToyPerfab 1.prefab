@@ -53,6 +53,18 @@ MonoBehaviour:
   skills:
   - {fileID: 11400000, guid: 860e795099237e4478377d75a6d4f0b2, type: 2}
   - {fileID: 0}
+  modelRoot: {fileID: 1518308146114792640}
+  hitShakeDuration: 0.2
+  hitShakeDistance: 0.2
+  hitShakeVibrato: 3
+  hitFlashDuration: 0.2
+  hitFlashCount: 2
+  hitVFXPrefab: {fileID: 0}
+  hitSFX: {fileID: 0}
+  deathVFXPrefab: {fileID: 0}
+  deathSFX: {fileID: 0}
+  audioSource: {fileID: 0}
+  deathDelay: 0.4
 --- !u!114 &3990181624284782900
 MonoBehaviour:
   m_ObjectHideFlags: 0
