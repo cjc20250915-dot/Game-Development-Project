@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class ToggleSlideUI : MonoBehaviour
 {
@@ -17,6 +18,13 @@ public class ToggleSlideUI : MonoBehaviour
     [Header("初始状态")]
     public bool startAtA = true;
 
+    [Header("可选：要切换内容的文本UI")]
+    public TMP_Text targetTextUI;
+
+    [Header("对应A/B状态的文本")]
+    [TextArea] public string textAtA = "A";
+    [TextArea] public string textAtB = "B";
+
     private bool isAtA = true;
     private Tween moveTween;
 
@@ -30,6 +38,8 @@ public class ToggleSlideUI : MonoBehaviour
 
         isAtA = startAtA;
         targetRect.anchoredPosition = isAtA ? posA : posB;
+
+        RefreshTextImmediate();
     }
 
     public void ToggleSlide()
@@ -38,6 +48,7 @@ public class ToggleSlideUI : MonoBehaviour
 
         moveTween?.Kill();
 
+        bool willGoToA = !isAtA;
         Vector2 targetPos = isAtA ? posB : posA;
 
         moveTween = targetRect
@@ -45,7 +56,8 @@ public class ToggleSlideUI : MonoBehaviour
             .SetEase(moveEase)
             .OnComplete(() =>
             {
-                isAtA = !isAtA;
+                isAtA = willGoToA;
+                RefreshTextImmediate();
             });
     }
 
@@ -61,6 +73,7 @@ public class ToggleSlideUI : MonoBehaviour
             .OnComplete(() =>
             {
                 isAtA = true;
+                RefreshTextImmediate();
             });
     }
 
@@ -76,6 +89,14 @@ public class ToggleSlideUI : MonoBehaviour
             .OnComplete(() =>
             {
                 isAtA = false;
+                RefreshTextImmediate();
             });
+    }
+
+    private void RefreshTextImmediate()
+    {
+        if (targetTextUI == null) return;
+
+        targetTextUI.text = isAtA ? textAtA : textAtB;
     }
 }

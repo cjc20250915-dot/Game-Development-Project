@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8991088156652591067}
   - component: {fileID: 2222879172463409979}
-  - component: {fileID: 3990181624284782900}
+  - component: {fileID: 691847878512723274}
   m_Layer: 0
   m_Name: ToyPerfab2
   m_TagString: Untagged
@@ -65,7 +65,7 @@ MonoBehaviour:
   deathSFX: {fileID: 0}
   audioSource: {fileID: 0}
   deathDelay: 0.4
---- !u!114 &3990181624284782900
+--- !u!114 &691847878512723274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracker: {fileID: 0}
+  enemySlotBoard: {fileID: 0}
 --- !u!1001 &7531832881247236865
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,82 +2,105 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class HoverSlideTag : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class HoverSlideLabel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("要滑动的标签")]
-    public RectTransform tagRect;
+    [Header("Target")]
+    [SerializeField] private RectTransform target;   // 滑动面板
+    [SerializeField] private CanvasGroup textCanvas; // 文字 CanvasGroup
 
-    [Header("位置设置")]
-    public Vector2 hiddenPos;
-    public Vector2 shownPos;
+    [Header("Positions")]
+    [SerializeField] private Vector2 hiddenPos;
+    [SerializeField] private Vector2 shownPos;
 
-    [Header("动画设置")]
-    public float duration = 0.25f;
-    public Ease easeOut = Ease.OutCubic;
-    public Ease easeBack = Ease.InCubic;
-
-    [Header("可选")]
-    public bool useFade = false;
-    public CanvasGroup tagCanvasGroup;
-    public float hiddenAlpha = 0f;
-    public float shownAlpha = 1f;
+    [Header("Timing")]
+    [SerializeField] private float moveDuration = 0.25f;
+    [SerializeField] private float fadeDuration = 0.2f;
 
     private Tween moveTween;
     private Tween fadeTween;
 
-    private void Start()
+    private bool isShown = false;
+
+    private void Awake()
     {
-        if (tagRect == null)
-        {
-            Debug.LogWarning("HoverSlideTag: tagRect 没有赋值。");
-            return;
-        }
+        if (target == null)
+            target = GetComponent<RectTransform>();
 
-        tagRect.anchoredPosition = hiddenPos;
+        // 初始位置
+        target.anchoredPosition = hiddenPos;
 
-        if (useFade && tagCanvasGroup != null)
+        // 初始透明
+        if (textCanvas != null)
         {
-            tagCanvasGroup.alpha = hiddenAlpha;
+            textCanvas.alpha = 0f;
+            textCanvas.interactable = false;
+            textCanvas.blocksRaycasts = false;
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        PlayShow();
+        ShowLabel();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        PlayHide();
+        HideLabel();
     }
 
-    private void PlayShow()
+    public void ShowLabel()
     {
-        if (tagRect == null) return;
+        if (isShown) return;
+        isShown = true;
+
+        // 杀掉旧动画（防止快速进出抖动）
+        moveTween?.Kill();
+        fadeTween?.Kill();
+
+        // 滑出
+        moveTween = target.DOAnchorPos(shownPos, moveDuration).SetUpdate(true);
+
+        // 淡入
+        if (textCanvas != null)
+        {
+            textCanvas.interactable = true;
+            textCanvas.blocksRaycasts = true;
+
+            fadeTween = textCanvas.DOFade(1f, fadeDuration).SetUpdate(true);
+        }
+    }
+
+    public void HideLabel()
+    {
+        if (!isShown) return;
+        isShown = false;
 
         moveTween?.Kill();
         fadeTween?.Kill();
 
-        moveTween = tagRect.DOAnchorPos(shownPos, duration).SetEase(easeOut);
+        // 滑回
+        moveTween = target.DOAnchorPos(hiddenPos, moveDuration).SetUpdate(true);
 
-        if (useFade && tagCanvasGroup != null)
+        // 淡出
+        if (textCanvas != null)
         {
-            fadeTween = tagCanvasGroup.DOFade(shownAlpha, duration);
+            fadeTween = textCanvas.DOFade(0f, fadeDuration)
+                .SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    if (!isShown)
+                    {
+                        textCanvas.interactable = false;
+                        textCanvas.blocksRaycasts = false;
+                    }
+                });
         }
     }
 
-    private void PlayHide()
+    // 方便按钮调用
+    public void ToggleLabel()
     {
-        if (tagRect == null) return;
-
-        moveTween?.Kill();
-        fadeTween?.Kill();
-
-        moveTween = tagRect.DOAnchorPos(hiddenPos, duration).SetEase(easeBack);
-
-        if (useFade && tagCanvasGroup != null)
-        {
-            fadeTween = tagCanvasGroup.DOFade(hiddenAlpha, duration);
-        }
+        if (isShown) HideLabel();
+        else ShowLabel();
     }
 }

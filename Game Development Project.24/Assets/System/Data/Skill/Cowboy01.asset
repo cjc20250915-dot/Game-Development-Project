@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Cowboy01
   m_EditorClassIdentifier: 
   skillName: Shot!
-  description: "\u6D88\u80174\u70B9\u53C9\u53C9\u4EE5\u5BF9\u4E00\u540D\u654C\u4EBA\u9020\u62105\u70B9\u4F24\u5BB3"
+  description: 2 Pencil 5 AOE
   dealsDamage: 1
   damageAmount: 5
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 0
-  isAOE: 0
+  isAOE: 1
   costs:
-  - type: 1
-    amount: 4
+  - type: 3
+    amount: 2

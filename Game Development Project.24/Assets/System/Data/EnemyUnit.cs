@@ -67,6 +67,23 @@ public class EnemyUnit : MonoBehaviour
     private Vector3 modelRootOriginalLocalPosition;
     private Renderer[] cachedRenderers;
 
+    [Header("Defend")]
+[SerializeField] private bool isDefending = false;
+[SerializeField] private float defendDamageMultiplier = 0.5f;
+
+public bool IsDefending => isDefending;
+
+public void EnterDefend()
+{
+    if (IsDead || deathStarted) return;
+    isDefending = true;
+}
+
+public void ClearDefend()
+{
+    isDefending = false;
+}
+
     private void Awake()
     {
         currentHP = maxHP;
@@ -80,25 +97,30 @@ public class EnemyUnit : MonoBehaviour
         OnHPChanged?.Invoke(currentHP, maxHP);
     }
 
-    public void TakeDamage(int damage)
+public void TakeDamage(int damage)
+{
+    if (IsDead || deathStarted) return;
+
+    int finalDamage = damage;
+
+    if (isDefending)
+        finalDamage = Mathf.Max(1, Mathf.RoundToInt(damage * defendDamageMultiplier));
+
+    currentHP -= finalDamage;
+    currentHP = Mathf.Max(0, currentHP);
+
+    OnHPChanged?.Invoke(currentHP, maxHP);
+
+    PlayHitFeedback();
+
+    if (currentHP <= 0)
     {
-        if (IsDead || deathStarted) return;
+        if (deathCoroutine != null)
+            StopCoroutine(deathCoroutine);
 
-        currentHP -= damage;
-        currentHP = Mathf.Max(0, currentHP);
-
-        OnHPChanged?.Invoke(currentHP, maxHP);
-
-        PlayHitFeedback();
-
-        if (currentHP <= 0)
-        {
-            if (deathCoroutine != null)
-                StopCoroutine(deathCoroutine);
-
-            deathCoroutine = StartCoroutine(DieAfterDelay());
-        }
+        deathCoroutine = StartCoroutine(DieAfterDelay());
     }
+}
 
     public void Heal(int amount)
     {
