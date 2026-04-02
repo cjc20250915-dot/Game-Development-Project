@@ -27,14 +27,26 @@ public class EnemySlotBoard : MonoBehaviour
     public SlotSpawnInfo slot3 = new SlotSpawnInfo(); // 左后
     public SlotSpawnInfo slot4 = new SlotSpawnInfo(); // 右后
 
+    [Header("Battle Result")]
+    [SerializeField] private BattleResultHandler battleResultHandler;
+
     [Header("Runtime (Read Only)")]
     [SerializeField] private List<EnemyUnit> spawnedEnemies = new List<EnemyUnit>();
 
     private GameObject inst1, inst2, inst3, inst4;
+    private bool battleWinTriggered = false;
 
     public IReadOnlyList<EnemyUnit> Enemies => spawnedEnemies;
 
     public event Action OnEnemiesChanged;
+
+    private void Awake()
+    {
+        if (battleResultHandler == null)
+        {
+            battleResultHandler = FindFirstObjectByType<BattleResultHandler>();
+        }
+    }
 
     public void ApplyNodeData(NodeData nodeData)
     {
@@ -83,6 +95,7 @@ public class EnemySlotBoard : MonoBehaviour
 
     public void SpawnAllEnemiesForBattle()
     {
+        battleWinTriggered = false;
         spawnedEnemies.Clear();
 
         SpawnIntoSlot(1, slot1, ref inst1);
@@ -101,12 +114,9 @@ public class EnemySlotBoard : MonoBehaviour
         ClearSlot(ref inst4);
 
         spawnedEnemies.Clear();
+        battleWinTriggered = false;
         OnEnemiesChanged?.Invoke();
     }
-
-    // =========================
-    // 前后排接口
-    // =========================
 
     public List<EnemyUnit> GetFrontRowAliveEnemies()
     {
@@ -145,6 +155,11 @@ public class EnemySlotBoard : MonoBehaviour
         List<EnemyUnit> all = GetAllAliveEnemies();
         if (all.Count == 0) return null;
         return all[UnityEngine.Random.Range(0, all.Count)];
+    }
+
+    public bool AreAllEnemiesDead()
+    {
+        return GetAllAliveEnemies().Count == 0;
     }
 
     private void AddAliveEnemyFromInstance(GameObject instance, List<EnemyUnit> result)
@@ -216,6 +231,25 @@ public class EnemySlotBoard : MonoBehaviour
         TryPromoteBackRow();
 
         OnEnemiesChanged?.Invoke();
+
+        CheckBattleWin();
+    }
+
+    private void CheckBattleWin()
+    {
+        if (battleWinTriggered) return;
+        if (!AreAllEnemiesDead()) return;
+
+        battleWinTriggered = true;
+
+        if (battleResultHandler != null)
+        {
+            battleResultHandler.OnBattleWin();
+        }
+        else
+        {
+            Debug.LogWarning("[EnemySlotBoard] All enemies are dead, but BattleResultHandler is missing.");
+        }
     }
 
     private void TryPromoteBackRow()

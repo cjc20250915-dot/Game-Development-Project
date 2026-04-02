@@ -1298,7 +1298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae9e656be5c1fa4da1df3a78337355d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentNode: {fileID: 11400000, guid: ce88762657e99934fba40b795212ae6b, type: 2}
+  currentNode: {fileID: 11400000, guid: 238a64356fa35b843a452f04cc6efa1d, type: 2}
   firstUnlockedNode: {fileID: 0}
   winCount: 0
   loseCount: 0
@@ -2646,6 +2646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movesPerTurn: 5
   movesText: {fileID: 1221927831}
+  turnPanelUI: {fileID: 658495171}
   allySlots: {fileID: 0}
   uiRootToDisableOnEnemyTurn: {fileID: 33246382}
   disabledBoardAlpha: 0.4
@@ -3258,6 +3259,10 @@ PrefabInstance:
     - target: {fileID: 569444136915052271, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1350218381080847570, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
+      propertyPath: m_text
+      value: Do you want to leave battle?
       objectReference: {fileID: 0}
     - target: {fileID: 2407856164548711847, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_IsActive
@@ -5128,6 +5133,7 @@ MonoBehaviour:
     localPosition: {x: 0, y: 0, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     localScale: {x: 1, y: 1, z: 1}
+  battleResultHandler: {fileID: 0}
   spawnedEnemies: []
 --- !u!1 &1389265924
 GameObject:
