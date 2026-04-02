@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032012790367023913}
   - component: {fileID: 4412728401335395556}
+  - component: {fileID: 7038344169860791148}
   m_Layer: 5
   m_Name: EnemyStatu
   m_TagString: Untagged
@@ -51,6 +52,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldOffset: {x: 0, y: 2.2, z: 0}
   defendIcon: {fileID: 8203347180029876413}
+--- !u!114 &7038344169860791148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2520366760622599081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4bf34d693bcd6645b2900ba98704e4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 7578099320260529689}
+  distance: 15
+  duration: 3
+  ease: 4
 --- !u!1 &8203347180029876413
 GameObject:
   m_ObjectHideFlags: 0
