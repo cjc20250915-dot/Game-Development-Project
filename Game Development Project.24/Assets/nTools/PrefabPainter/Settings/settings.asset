@@ -4261,7 +4261,7 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Stones_Min_3_Prefap
       settings:
-        brushRadius: 3.49
+        brushRadius: 1.02
         brushSpacing: 2.27
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
@@ -4279,8 +4279,8 @@ MonoBehaviour:
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 2
+        scaleUniformMin: 0.5
+        scaleUniformMax: 0.7
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -5201,7 +5201,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: grass
@@ -5836,8 +5836,8 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Grass
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
+        brushRadius: 0.63
+        brushSpacing: 0.17
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -5854,8 +5854,8 @@ MonoBehaviour:
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 0.2
-        scaleUniformMax: 0.4
+        scaleUniformMin: 0.3
+        scaleUniformMax: 0.35
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -6146,7 +6146,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     levelsGamma: 1
