@@ -22,10 +22,10 @@ public class EnemySlotBoard : MonoBehaviour
     }
 
     [Header("Slots (max 4)")]
-    public SlotSpawnInfo slot1 = new SlotSpawnInfo();
-    public SlotSpawnInfo slot2 = new SlotSpawnInfo();
-    public SlotSpawnInfo slot3 = new SlotSpawnInfo();
-    public SlotSpawnInfo slot4 = new SlotSpawnInfo();
+    public SlotSpawnInfo slot1 = new SlotSpawnInfo(); // 左前
+    public SlotSpawnInfo slot2 = new SlotSpawnInfo(); // 右前
+    public SlotSpawnInfo slot3 = new SlotSpawnInfo(); // 左后
+    public SlotSpawnInfo slot4 = new SlotSpawnInfo(); // 右后
 
     [Header("Runtime (Read Only)")]
     [SerializeField] private List<EnemyUnit> spawnedEnemies = new List<EnemyUnit>();
@@ -36,17 +36,10 @@ public class EnemySlotBoard : MonoBehaviour
 
     public event Action OnEnemiesChanged;
 
-    // 不再自动生成，交给 BattleManager 控制
-    // private void Start()
-    // {
-    //     SpawnAllEnemiesForBattle();
-    // }
-
     public void ApplyNodeData(NodeData nodeData)
     {
         ClearAll();
 
-        // 先清空所有槽位的预制体
         slot1.enemyPrefab = null;
         slot2.enemyPrefab = null;
         slot3.enemyPrefab = null;
@@ -63,8 +56,6 @@ public class EnemySlotBoard : MonoBehaviour
             return;
         }
 
-        // 把 NodeData.enemyWaves 按顺序映射到 4 个槽位
-        // 注意：这里的逻辑是“一个 wave 占一个槽位”
         for (int i = 0; i < nodeData.enemyWaves.Count && i < 4; i++)
         {
             EnemyWave wave = nodeData.enemyWaves[i];
@@ -113,26 +104,60 @@ public class EnemySlotBoard : MonoBehaviour
         OnEnemiesChanged?.Invoke();
     }
 
-public List<EnemyUnit> GetFrontRowAliveEnemies()
-{
-    List<EnemyUnit> result = new List<EnemyUnit>();
+    // =========================
+    // 前后排接口
+    // =========================
 
-    AddAliveEnemyFromInstance(inst1, result);
-    AddAliveEnemyFromInstance(inst2, result);
+    public List<EnemyUnit> GetFrontRowAliveEnemies()
+    {
+        List<EnemyUnit> result = new List<EnemyUnit>();
 
-    return result;
-}
+        AddAliveEnemyFromInstance(inst1, result);
+        AddAliveEnemyFromInstance(inst2, result);
 
-private void AddAliveEnemyFromInstance(GameObject instance, List<EnemyUnit> result)
-{
-    if (instance == null) return;
+        return result;
+    }
 
-    EnemyUnit unit = instance.GetComponentInChildren<EnemyUnit>();
-    if (unit == null) return;
-    if (unit.IsDead) return;
+    public List<EnemyUnit> GetBackRowAliveEnemies()
+    {
+        List<EnemyUnit> result = new List<EnemyUnit>();
 
-    result.Add(unit);
-}
+        AddAliveEnemyFromInstance(inst3, result);
+        AddAliveEnemyFromInstance(inst4, result);
+
+        return result;
+    }
+
+    public List<EnemyUnit> GetAllAliveEnemies()
+    {
+        List<EnemyUnit> result = new List<EnemyUnit>();
+
+        AddAliveEnemyFromInstance(inst1, result);
+        AddAliveEnemyFromInstance(inst2, result);
+        AddAliveEnemyFromInstance(inst3, result);
+        AddAliveEnemyFromInstance(inst4, result);
+
+        return result;
+    }
+
+    public EnemyUnit GetRandomAliveEnemy()
+    {
+        List<EnemyUnit> all = GetAllAliveEnemies();
+        if (all.Count == 0) return null;
+        return all[UnityEngine.Random.Range(0, all.Count)];
+    }
+
+    private void AddAliveEnemyFromInstance(GameObject instance, List<EnemyUnit> result)
+    {
+        if (instance == null) return;
+
+        EnemyUnit unit = instance.GetComponentInChildren<EnemyUnit>();
+        if (unit == null) return;
+        if (unit.IsDead) return;
+
+        result.Add(unit);
+    }
+
     private void SpawnIntoSlot(int index, SlotSpawnInfo info, ref GameObject instance)
     {
         if (!info.spawnOnBattleStart) return;
@@ -163,30 +188,65 @@ private void AddAliveEnemyFromInstance(GameObject instance, List<EnemyUnit> resu
         spawnedEnemies.Add(unit);
 
         GameObject spawnedRoot = instance;
-unit.OnDead += () => HandleEnemyDead(unit, spawnedRoot);
+        unit.OnDead += () => HandleEnemyDead(unit, spawnedRoot);
     }
 
-private void HandleEnemyDead(EnemyUnit dead, GameObject rootInstance)
-{
-    if (dead != null)
+    private void HandleEnemyDead(EnemyUnit dead, GameObject rootInstance)
     {
-        spawnedEnemies.Remove(dead);
+        if (dead != null)
+        {
+            spawnedEnemies.Remove(dead);
+        }
+
+        bool wasSlot1 = inst1 == rootInstance;
+        bool wasSlot2 = inst2 == rootInstance;
+        bool wasSlot3 = inst3 == rootInstance;
+        bool wasSlot4 = inst4 == rootInstance;
+
+        if (wasSlot1) inst1 = null;
+        if (wasSlot2) inst2 = null;
+        if (wasSlot3) inst3 = null;
+        if (wasSlot4) inst4 = null;
+
+        if (rootInstance != null)
+        {
+            Destroy(rootInstance);
+        }
+
+        TryPromoteBackRow();
+
+        OnEnemiesChanged?.Invoke();
     }
 
-    // 清掉对应槽位记录
-    if (inst1 == rootInstance) inst1 = null;
-    if (inst2 == rootInstance) inst2 = null;
-    if (inst3 == rootInstance) inst3 = null;
-    if (inst4 == rootInstance) inst4 = null;
-
-    // 销毁场上的敌人3D物体
-    if (rootInstance != null)
+    private void TryPromoteBackRow()
     {
-        Destroy(rootInstance);
+        // 1号位空了，3号位补到1号位
+        if (inst1 == null && inst3 != null)
+        {
+            inst1 = inst3;
+            inst3 = null;
+            MoveInstanceToSlot(inst1, slot1);
+        }
+
+        // 2号位空了，4号位补到2号位
+        if (inst2 == null && inst4 != null)
+        {
+            inst2 = inst4;
+            inst4 = null;
+            MoveInstanceToSlot(inst2, slot2);
+        }
     }
 
-    OnEnemiesChanged?.Invoke();
-}
+    private void MoveInstanceToSlot(GameObject instance, SlotSpawnInfo targetSlot)
+    {
+        if (instance == null || targetSlot == null || targetSlot.anchor == null) return;
+
+        Transform t = instance.transform;
+        t.SetParent(targetSlot.anchor, false);
+        t.localPosition = targetSlot.localPosition;
+        t.localRotation = Quaternion.Euler(targetSlot.localEulerAngles);
+        t.localScale = targetSlot.localScale;
+    }
 
     private void ClearSlot(ref GameObject instance)
     {

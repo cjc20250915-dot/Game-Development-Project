@@ -42,6 +42,16 @@ private bool pendingCooldownAfterResolve = false;
 private ClearedElementTrackerUI_TMP clearedTracker;
 [SerializeField] private MatchEffectExecutor matchEffectExecutor;
 
+public void SetBoardAlpha(float alpha)
+{
+    EnsureBoardCanvasGroup();
+
+    if (boardCanvasGroup != null)
+    {
+        boardCanvasGroup.alpha = alpha;
+    }
+}
+
 public void QueueCooldownAfterResolve()
 {
     pendingCooldownAfterResolve = true;
@@ -140,7 +150,13 @@ public void NotifyResolveFinished()
         {
             UnlockInput();
         }
-}
+    }
+
+    // ⭐ 新增：通知回合管理器，resolve 已完成
+    if (turn != null)
+    {
+        turn.OnBoardResolveFinished();
+    }
 }
 
     [Header("Spawn Weights (Type 0..3)")]

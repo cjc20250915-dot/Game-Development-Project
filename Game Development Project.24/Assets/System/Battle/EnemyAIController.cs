@@ -54,6 +54,7 @@ if (enemySlots != null)
 
     private IEnumerator EnemyTurnRoutine()
     {
+        ClearAllEnemyDefendStates();
         if (turn == null || allySlots == null)
         {
             Debug.LogWarning("[EnemyAI] Missing refs (turn/allySlots).");
@@ -95,6 +96,16 @@ turn.BeginPlayerTurn();
 
     // ===== Action Roll =====
 
+private void ClearAllEnemyDefendStates()
+{
+    if (enemySlots == null) return;
+
+    foreach (var e in enemySlots.Enemies)
+    {
+        if (e != null && !e.IsDead)
+            e.ClearDefend();
+    }
+}
 private EnemyActionType RollAction(EnemyUnit enemy)
 {
     // 归一化，防止总和不是1
@@ -128,10 +139,10 @@ private EnemyActionType RollAction(EnemyUnit enemy)
                 Debug.Log($"[EnemyAI] {enemy.name} uses SKILL (TODO)");
                 yield break;
 
-            case EnemyActionType.Defend:
-                // TODO：回头写防御逻辑（加护盾/减伤等）
-                Debug.Log($"[EnemyAI] {enemy.name} DEFENDS (TODO)");
-                yield break;
+case EnemyActionType.Defend:
+    enemy.EnterDefend();
+    Debug.Log($"[EnemyAI] {enemy.name} DEFENDS，受到的伤害减半");
+    yield break;
         }
     }
 

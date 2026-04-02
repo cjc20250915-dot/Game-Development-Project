@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8991088156652591067}
   - component: {fileID: 2222879172463409979}
-  - component: {fileID: 3990181624284782900}
+  - component: {fileID: 7201753682223682873}
   m_Layer: 0
-  m_Name: ToyPerfab
+  m_Name: ToyPerfab 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,20 @@ MonoBehaviour:
   stepsPerTurn: 2
   skills:
   - {fileID: 11400000, guid: 860e795099237e4478377d75a6d4f0b2, type: 2}
---- !u!114 &3990181624284782900
+  - {fileID: 0}
+  modelRoot: {fileID: 1518308146114792640}
+  hitShakeDuration: 0.2
+  hitShakeDistance: 0.2
+  hitShakeVibrato: 3
+  hitFlashDuration: 0.2
+  hitFlashCount: 2
+  hitVFXPrefab: {fileID: 0}
+  hitSFX: {fileID: 0}
+  deathVFXPrefab: {fileID: 0}
+  deathSFX: {fileID: 0}
+  audioSource: {fileID: 0}
+  deathDelay: 0.4
+--- !u!114 &7201753682223682873
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,6 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracker: {fileID: 0}
+  enemySlotBoard: {fileID: 0}
 --- !u!1001 &1340001533629852459
 PrefabInstance:
   m_ObjectHideFlags: 0

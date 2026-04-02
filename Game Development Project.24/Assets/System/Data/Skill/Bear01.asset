@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1d58871696bfe43bd36cb5a8f0e316, type: 3}
   m_Name: Bear01
   m_EditorClassIdentifier: 
-  skillName: "\u718A\u722A"
-  description: "\u6D88\u80174\u70B9\u6C14\u7403\u4EE5\u968F\u673A\u5BF9\u4E00\u540D\u654C\u4EBA\u9020\u62104\u70B9\u4F24\u5BB3"
+  skillName: Bear Punch!
+  description: 2 Balloon 10 Random, Selfdamage 2
   dealsDamage: 1
-  damageAmount: 4
+  damageAmount: 10
   dealsSelfDamage: 1
-  selfDamageAmount: 1
+  selfDamageAmount: 2
   randomTarget: 1
   isAOE: 0
   costs:
-  - type: 2
-    amount: 4
+  - type: 0
+    amount: 2
