@@ -61,11 +61,13 @@ MonoBehaviour:
   hitShakeVibrato: 3
   hitFlashDuration: 0.2
   hitFlashCount: 2
-  hitVFXPrefab: {fileID: 0}
+  hitVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
   hitSFX: {fileID: 0}
   deathVFXPrefab: {fileID: 0}
   deathSFX: {fileID: 0}
   audioSource: {fileID: 0}
+  isDefending: 0
+  defendDamageMultiplier: 0.5
 --- !u!1001 &3254814164009659542
 PrefabInstance:
   m_ObjectHideFlags: 0
