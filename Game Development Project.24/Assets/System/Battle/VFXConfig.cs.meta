@@ -1,2 +1,22 @@
 fileFormatVersion: 2
 guid: e18077f34dc1e6e4e8f80a59f6db13b8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - healVFX: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}
+  - normalAttackVFX: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  - lightningAttackVFX: {fileID: 9027514048236820045, guid: effb650189dc5714e9e9801b1cfb3991, type: 3}
+  - lightningHitShaderMaterial: {instanceID: 0}
+  - windAoEVFX: {fileID: 4772634663576830964, guid: e1385af346f4e624eb313ec1ea4fcd7e, type: 3}
+  - fireAoEVFX: {fileID: 8172849020266659018, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
+  - iceAttackVFX: {fileID: 888444077320411739, guid: 0c2509361b13505428ce788b7f846686, type: 3}
+  - iceFrozenShaderMaterial: {instanceID: 0}
+  - enemyShieldVFX: {fileID: 5824670795371433373, guid: f6fd568b816c64943a44efc3add3a881, type: 3}
+  - enemyDeathVFX: {fileID: 5985634496115995773, guid: 463cf9f7af4680240898f6aeba3fe3e6, type: 3}
+  - enemyDeathDissolveShaderMaterial: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
