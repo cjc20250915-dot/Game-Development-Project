@@ -12,6 +12,9 @@ public class TurnBattleManager : MonoBehaviour
     [Header("UI (Display)")]
     public TMP_Text movesText;
 
+    [Header("Turn Panel")]
+    public ToggleSlideUI turnPanelUI;
+
     [Header("Ally Slots")]
     public AllySlotBoard allySlots;
 
@@ -34,13 +37,10 @@ public class TurnBattleManager : MonoBehaviour
     public int RemainingMoves => remainingMoves;
     public int MoveCapThisTurn => moveCapThisTurn;
 
-    // ===== Turn events =====
     public event Action OnPlayerTurnBegan;
     public event Action OnPlayerTurnEnded;
     public event Action OnEnemyTurnBegan;
     public event Action OnEnemyTurnEnded;
-
-    // 敌人AI开始行动：空钩子（敌人AI在别处订阅/调用）
     public event Action OnEnemyAIRequested;
 
     private void Awake()
@@ -69,6 +69,7 @@ public class TurnBattleManager : MonoBehaviour
             movesText.text = $"Moves: {remainingMoves}";
     }
 
+
     public void OnEndTurnButtonClicked()
     {
         if (!IsPlayerTurn) return;
@@ -90,20 +91,24 @@ public class TurnBattleManager : MonoBehaviour
         int fromAllies = (allySlots != null) ? allySlots.TotalStepsPerTurn : 0;
         remainingMoves = Mathf.Max(1, fromAllies);
 
-        // 本回合开始时记录“本回合步数上限”
         moveCapThisTurn = remainingMoves;
 
-        // 玩家回合：允许棋盘操作 + 恢复显示
         if (board != null)
         {
             board.SetBoardInputEnabled(true);
             board.SetBoardAlpha(1f);
         }
 
-        // 玩家回合：恢复那一部分UI的操作
         SetLockedUIInteractable(true);
 
         RefreshUI();
+
+        // 切回玩家回合：只切面板和文本，不动摄像机
+if (turnPanelUI != null)
+{
+    turnPanelUI.SlideOnlyToA();
+}
+
         OnPlayerTurnBegan?.Invoke();
 
         Debug.Log($"[Turn] Player turn began. Moves={remainingMoves}, Cap={moveCapThisTurn}");
@@ -121,17 +126,22 @@ public class TurnBattleManager : MonoBehaviour
     {
         currentTurn = Turn.Enemy;
 
-        // 敌人回合：禁用棋盘操作 + 半透明
         if (board != null)
         {
             board.SetBoardInputEnabled(false);
             board.SetBoardAlpha(disabledBoardAlpha);
         }
 
-        // 敌人回合：禁用你指定的那一块UI
         SetLockedUIInteractable(false);
 
         RefreshUI();
+
+        // 切到敌方回合：只切面板和文本，不动摄像机
+if (turnPanelUI != null)
+{
+    turnPanelUI.SlideOnlyToB();
+}
+
         OnEnemyTurnBegan?.Invoke();
 
         Debug.Log("[Turn] Enemy turn began.");
@@ -160,9 +170,6 @@ public class TurnBattleManager : MonoBehaviour
         uiLockGroup.blocksRaycasts = enabled;
     }
 
-    /// <summary>
-    /// 每次玩家确认一次交换就消耗一步
-    /// </summary>
     public bool TryConsumePlayerMove()
     {
         if (!IsPlayerTurn) return false;
@@ -184,7 +191,6 @@ public class TurnBattleManager : MonoBehaviour
         if (remainingMoves > moveCapThisTurn)
             remainingMoves = moveCapThisTurn;
 
-        // 如果当前还是玩家回合，并且步数恢复到了可用状态
         if (IsPlayerTurn && remainingMoves > 0)
         {
             if (board != null)
@@ -199,10 +205,6 @@ public class TurnBattleManager : MonoBehaviour
         Debug.Log($"[Turn] Restored {amount} move(s). Remaining={remainingMoves}/{moveCapThisTurn}");
     }
 
-    /// <summary>
-    /// 由 BoardUIManager 在 resolve 完全结束时调用
-    /// 现在不再自动切敌人回合
-    /// </summary>
     public void OnBoardResolveFinished()
     {
         if (IsPlayerTurn && remainingMoves <= 0)

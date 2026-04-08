@@ -25,7 +25,6 @@ public class ToggleSlideUI : MonoBehaviour
     [TextArea] public string textAtA = "A";
     [TextArea] public string textAtB = "B";
 
-    // ⭐ 摄像机相关
     [Header("Camera Move")]
     public Transform targetCamera;
     public Transform camPosA;
@@ -48,7 +47,6 @@ public class ToggleSlideUI : MonoBehaviour
         isAtA = startAtA;
         targetRect.anchoredPosition = isAtA ? posA : posB;
 
-        // 摄像机初始位置
         if (targetCamera != null)
         {
             Transform startPos = isAtA ? camPosA : camPosB;
@@ -62,17 +60,23 @@ public class ToggleSlideUI : MonoBehaviour
         RefreshTextImmediate();
     }
 
+    // 原本的：UI + 文本 + 摄像机
     public void ToggleSlide()
+    {
+        ToggleSlideOnly();
+        ToggleCameraOnly();
+    }
+
+    // 新增：只切 UI + 文本
+    public void ToggleSlideOnly()
     {
         if (targetRect == null) return;
 
         moveTween?.Kill();
-        camTween?.Kill();
 
         bool willGoToA = !isAtA;
         Vector2 targetPos = isAtA ? posB : posA;
 
-        // UI滑动
         moveTween = targetRect
             .DOAnchorPos(targetPos, duration)
             .SetEase(moveEase)
@@ -81,26 +85,29 @@ public class ToggleSlideUI : MonoBehaviour
                 isAtA = willGoToA;
                 RefreshTextImmediate();
             });
+    }
 
-        // ⭐ 摄像机移动
-        if (targetCamera != null)
-        {
-            Transform target = isAtA ? camPosB : camPosA;
+    // 新增：只切摄像机
+    public void ToggleCameraOnly()
+    {
+        camTween?.Kill();
 
-            if (target != null)
-            {
-                camTween = DOTween.Sequence()
-                    .Append(targetCamera.DOMove(target.position, camMoveDuration))
-                    .Join(targetCamera.DORotateQuaternion(target.rotation, camMoveDuration))
-                    .SetEase(camEase);
-            }
-        }
+        if (targetCamera == null) return;
+
+        Transform target = isAtA ? camPosB : camPosA;
+        if (target == null) return;
+
+        camTween = DOTween.Sequence()
+            .Append(targetCamera.DOMove(target.position, camMoveDuration))
+            .Join(targetCamera.DORotateQuaternion(target.rotation, camMoveDuration))
+            .SetEase(camEase);
     }
 
     public void SlideToA()
     {
+        if (targetRect == null) return;
+
         moveTween?.Kill();
-        camTween?.Kill();
 
         moveTween = targetRect
             .DOAnchorPos(posA, duration)
@@ -110,14 +117,13 @@ public class ToggleSlideUI : MonoBehaviour
                 isAtA = true;
                 RefreshTextImmediate();
             });
-
-        MoveCameraTo(camPosA);
     }
 
     public void SlideToB()
     {
+        if (targetRect == null) return;
+
         moveTween?.Kill();
-        camTween?.Kill();
 
         moveTween = targetRect
             .DOAnchorPos(posB, duration)
@@ -127,13 +133,23 @@ public class ToggleSlideUI : MonoBehaviour
                 isAtA = false;
                 RefreshTextImmediate();
             });
+    }
 
+    public void MoveCameraToA()
+    {
+        MoveCameraTo(camPosA);
+    }
+
+    public void MoveCameraToB()
+    {
         MoveCameraTo(camPosB);
     }
 
     private void MoveCameraTo(Transform target)
     {
         if (targetCamera == null || target == null) return;
+
+        camTween?.Kill();
 
         camTween = DOTween.Sequence()
             .Append(targetCamera.DOMove(target.position, camMoveDuration))
@@ -144,7 +160,46 @@ public class ToggleSlideUI : MonoBehaviour
     private void RefreshTextImmediate()
     {
         if (targetTextUI == null) return;
-
         targetTextUI.text = isAtA ? textAtA : textAtB;
     }
+
+public void SlideOnlyToA()
+{
+    if (targetRect == null) return;
+
+    moveTween?.Kill();
+    camTween?.Kill(); // ⭐ 也要停掉摄像机旧动画
+
+    moveTween = targetRect
+        .DOAnchorPos(posA, duration)
+        .SetEase(moveEase)
+        .OnComplete(() =>
+        {
+            isAtA = true;
+            RefreshTextImmediate();
+        });
+
+    // ⭐ 每次都把摄像机移动到 A
+    MoveCameraToA();
+}
+
+public void SlideOnlyToB()
+{
+    if (targetRect == null) return;
+
+    moveTween?.Kill();
+    camTween?.Kill(); // ⭐ 防止叠动画
+
+    moveTween = targetRect
+        .DOAnchorPos(posB, duration)
+        .SetEase(moveEase)
+        .OnComplete(() =>
+        {
+            isAtA = false;
+            RefreshTextImmediate();
+        });
+
+    // ⭐ 注意：这里也移动到 A（不是 B）
+    MoveCameraToA();
+}
 }

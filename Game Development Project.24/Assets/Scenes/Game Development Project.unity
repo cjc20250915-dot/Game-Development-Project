@@ -1298,7 +1298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae9e656be5c1fa4da1df3a78337355d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentNode: {fileID: 11400000, guid: ce88762657e99934fba40b795212ae6b, type: 2}
+  currentNode: {fileID: 11400000, guid: 238a64356fa35b843a452f04cc6efa1d, type: 2}
   firstUnlockedNode: {fileID: 0}
   winCount: 0
   loseCount: 0
@@ -2487,6 +2487,51 @@ RectTransform:
   m_AnchoredPosition: {x: -128, y: 24}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &759675062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 759675063}
+  - component: {fileID: 759675064}
+  m_Layer: 0
+  m_Name: VFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &759675063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759675062}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.37504935, y: -0.21900082, z: -5.607852}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &759675064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759675062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26af5dd122a38de4b85497a1cd4b3d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: db0e1664067f4784b8bc929287f11ba5, type: 2}
 --- !u!1 &769682430
 GameObject:
   m_ObjectHideFlags: 0
@@ -2646,6 +2691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movesPerTurn: 5
   movesText: {fileID: 1221927831}
+  turnPanelUI: {fileID: 658495171}
   allySlots: {fileID: 0}
   uiRootToDisableOnEnemyTurn: {fileID: 33246382}
   disabledBoardAlpha: 0.4
@@ -3258,6 +3304,10 @@ PrefabInstance:
     - target: {fileID: 569444136915052271, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1350218381080847570, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
+      propertyPath: m_text
+      value: Do you want to leave battle?
       objectReference: {fileID: 0}
     - target: {fileID: 2407856164548711847, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_IsActive
@@ -5128,6 +5178,7 @@ MonoBehaviour:
     localPosition: {x: 0, y: 0, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     localScale: {x: 1, y: 1, z: 1}
+  battleResultHandler: {fileID: 0}
   spawnedEnemies: []
 --- !u!1 &1389265924
 GameObject:
@@ -7793,3 +7844,4 @@ SceneRoots:
   - {fileID: 1915873645}
   - {fileID: 395493050}
   - {fileID: 1028030947}
+  - {fileID: 759675063}

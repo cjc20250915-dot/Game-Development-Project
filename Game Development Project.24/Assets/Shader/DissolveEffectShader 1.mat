@@ -68,7 +68,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _DISSOLVE: 0
-    - _DissolveEdgeWidth: 0.04
+    - _DissolveEdgeWidth: 0.116
     - _EmissionStrength: 0
     - _FresnelStrength: 3.8
     - _MainTexContrast: 1
