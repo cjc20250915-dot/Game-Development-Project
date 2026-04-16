@@ -52,7 +52,7 @@ MonoBehaviour:
   stepsPerTurn: 2
   skills:
   - {fileID: 11400000, guid: 860e795099237e4478377d75a6d4f0b2, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 4c7e1a029fc2c5646860eb3775458be0, type: 2}
   modelRoot: {fileID: 1518308146114792640}
   hitShakeDuration: 0.2
   hitShakeDistance: 0.2
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracker: {fileID: 0}
   enemySlotBoard: {fileID: 0}
+  owner: {fileID: 0}
 --- !u!1001 &1340001533629852459
 PrefabInstance:
   m_ObjectHideFlags: 0

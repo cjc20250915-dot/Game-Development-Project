@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b1d58871696bfe43bd36cb5a8f0e316, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  skillName: Test
+  description: 
+  dealsDamage: 1
+  damageAmount: 100
+  dealsSelfDamage: 0
+  selfDamageAmount: 0
+  randomTarget: 1
+  isAOE: 1
+  costs:
+  - type: 0
+    amount: 0
