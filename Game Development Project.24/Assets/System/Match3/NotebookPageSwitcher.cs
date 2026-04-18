@@ -32,6 +32,10 @@ public class NotebookPageSwitcher : MonoBehaviour
     [Header("Button")]
     [SerializeField] private Button switchButton;
 
+    [Header("External hide (e.g. enemy target selection)")]
+    [Tooltip("若指定，隐藏/显示时会切换整个区域（建议拖「翻页按钮」的父物体或整条页眉 UI）。不填则只切换 switchButton 本身。")]
+    [SerializeField] private GameObject pageSwitchUiRoot;
+
     [Header("Flip Image Fade")]
 [SerializeField] private CanvasGroup[] flipFadeImages;
 [SerializeField] private float flipImageFadeOutDuration = 0.12f;
@@ -345,5 +349,26 @@ private void SetGroupImmediate(CanvasGroup[] groups, bool show)
     {
         if (switchButton != null)
             switchButton.interactable = value;
+    }
+
+    /// <summary>
+    /// 外部系统（例如敌方目标选择模式）用于隐藏或显示翻页相关 UI。退出模式时请再调用一次并传 false 以恢复显示。
+    /// 优先使用 <see cref="pageSwitchUiRoot"/>；否则只切换 <see cref="switchButton"/> 所在物体。
+    /// </summary>
+    public void SetPageSwitchButtonHidden(bool hidden)
+    {
+        if (pageSwitchUiRoot != null)
+        {
+            pageSwitchUiRoot.SetActive(!hidden);
+            return;
+        }
+
+        if (switchButton != null)
+        {
+            switchButton.gameObject.SetActive(!hidden);
+            return;
+        }
+
+        Debug.LogWarning("[NotebookPageSwitcher] SetPageSwitchButtonHidden: 未配置 pageSwitchUiRoot 或 switchButton，无法隐藏翻页 UI。");
     }
 }

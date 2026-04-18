@@ -70,7 +70,8 @@ public class PlayerHealthBarBinder : MonoBehaviour
         AutoFindBoardIfNeeded();
 
         AllyUnit target = ResolveTargetAlly();
-        if (target == currentBoundAlly) return;
+        // 友军被 Destroy 后引用会变成 Unity 假 null，必须与槽位上的 null 区分，否则会跳过解绑
+        if (target != null && target == currentBoundAlly) return;
 
         currentBoundAlly = target;
 

@@ -8,6 +8,7 @@ public class SkillCaster : MonoBehaviour
 
     [Header("Battle Refs")]
     [SerializeField] private EnemySlotBoard enemySlotBoard;
+    [SerializeField] private EnemyTargetSelectionManager enemyTargetSelection;
 
     [Header("Owner")]
     [SerializeField] private AllyUnit owner;
@@ -16,6 +17,9 @@ public class SkillCaster : MonoBehaviour
     {
         if (enemySlotBoard == null)
             enemySlotBoard = FindFirstObjectByType<EnemySlotBoard>();
+
+        if (enemyTargetSelection == null)
+            enemyTargetSelection = FindFirstObjectByType<EnemyTargetSelectionManager>();
 
         if (tracker == null)
             tracker = FindFirstObjectByType<ClearedElementTrackerUI_TMP>();
@@ -63,20 +67,36 @@ public class SkillCaster : MonoBehaviour
             return false;
         }
 
-        // 2) 这一版只支持：
-        //    AOE前排、随机前排
-        if (!skill.isAOE && !skill.randomTarget)
-        {
-            Debug.Log($"[SkillCaster] {skill.skillName} requires manual target selection. Not implemented yet.");
-            return false;
-        }
-
-        // 3) 找前排目标
+        // 2) 找前排目标（前排两格之一）
         List<EnemyUnit> frontEnemies = enemySlotBoard.GetFrontRowAliveEnemies();
         if (frontEnemies == null || frontEnemies.Count == 0)
         {
             Debug.Log($"[SkillCaster] No alive front-row enemies. Cast failed: {skill.skillName}");
             return false;
+        }
+
+        // 3) 单体手动选目标：isAOE=false 且 randomTarget=false，点击前排敌人后结算
+        if (!skill.isAOE && !skill.randomTarget)
+        {
+            if (enemyTargetSelection == null)
+            {
+                Debug.LogWarning($"[SkillCaster] EnemyTargetSelectionManager missing, cannot select target for {skill.skillName}");
+                return false;
+            }
+
+            if (enemyTargetSelection.IsSelectingTarget())
+            {
+                Debug.Log($"[SkillCaster] Already selecting an enemy target. Cancel or finish first.");
+                return false;
+            }
+
+            enemyTargetSelection.BeginSelectEnemy(selectedEnemy =>
+            {
+                CompleteManualSingleTargetCast(skill, selectedEnemy);
+            });
+
+            Debug.Log($"[SkillCaster] Select a front-row enemy for {skill.skillName}");
+            return true;
         }
 
         // 4) 扣除元素
@@ -107,6 +127,53 @@ public class SkillCaster : MonoBehaviour
 
         Debug.Log($"[SkillCaster] Cast success: {skill.skillName}");
         return true;
+    }
+
+    /// <summary>
+    /// 手动点选前排单体后结算（此时才扣元素）
+    /// </summary>
+    private void CompleteManualSingleTargetCast(SkillData skill, EnemyUnit target)
+    {
+        if (skill == null || target == null || target.IsDead)
+        {
+            Debug.LogWarning("[SkillCaster] Manual cast aborted: invalid target.");
+            return;
+        }
+
+        if (enemySlotBoard == null || tracker == null)
+            return;
+
+        List<EnemyUnit> front = enemySlotBoard.GetFrontRowAliveEnemies();
+        if (front == null || !front.Contains(target))
+        {
+            Debug.LogWarning("[SkillCaster] Selected enemy is not a valid front-row target anymore.");
+            return;
+        }
+
+        if (!CanCast(skill))
+        {
+            Debug.Log($"[SkillCaster] Not enough elements to finish {skill.skillName}");
+            return;
+        }
+
+        if (!tracker.Spend(skill.costs))
+        {
+            Debug.LogWarning($"[SkillCaster] Spend failed for {skill.skillName}");
+            return;
+        }
+
+        if (skill.dealsDamage)
+        {
+            target.TakeDamage(skill.damageAmount);
+            Debug.Log($"[SkillCaster] {skill.skillName} dealt {skill.damageAmount} damage to selected FRONT enemy: {target.name}");
+        }
+
+        if (skill.dealsSelfDamage && skill.selfDamageAmount > 0)
+        {
+            ApplySelfDamage(skill.selfDamageAmount, skill.skillName);
+        }
+
+        Debug.Log($"[SkillCaster] Cast success: {skill.skillName}");
     }
 
     private void CastFrontRowRandom(int damage, List<EnemyUnit> frontEnemies, string skillName)

@@ -23,6 +23,9 @@ public class AllySlotBoard : MonoBehaviour
     public SlotSpawnInfo slotAInfo = new SlotSpawnInfo();
     public SlotSpawnInfo slotBInfo = new SlotSpawnInfo();
 
+    [Header("Battle Result")]
+    [SerializeField] private BattleResultHandler battleResultHandler;
+
     [Header("Current Allies (Read Only)")]
     [SerializeField] private AllyUnit slotA;
     [SerializeField] private AllyUnit slotB;
@@ -30,6 +33,8 @@ public class AllySlotBoard : MonoBehaviour
     // 保存实例，方便清理/替换
     private GameObject slotAInstance;
     private GameObject slotBInstance;
+
+    private bool battleLoseTriggered;
 
     public AllyUnit SlotA => slotA;
     public AllyUnit SlotB => slotB;
@@ -47,6 +52,12 @@ public class AllySlotBoard : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        if (battleResultHandler == null)
+            battleResultHandler = FindFirstObjectByType<BattleResultHandler>();
+    }
+
     private void Start()
     {
         // 进入战斗场景后自动呈现
@@ -57,6 +68,8 @@ public class AllySlotBoard : MonoBehaviour
 
     public void SpawnAlliesForBattle()
     {
+        battleLoseTriggered = false;
+
         // A
         if (slotAInfo.spawnOnBattleStart)
             SpawnIntoSlot(0, slotAInfo, ref slotAInstance, ref slotA);
@@ -66,6 +79,29 @@ public class AllySlotBoard : MonoBehaviour
             SpawnIntoSlot(1, slotBInfo, ref slotBInstance, ref slotB);
 
         OnSlotsChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// 是否至少还有一名存活的友军（槽位上有实例且未死亡）。
+    /// </summary>
+    public bool HasAliveAlly()
+    {
+        if (slotA != null && !slotA.IsDead) return true;
+        if (slotB != null && !slotB.IsDead) return true;
+        return false;
+    }
+
+    private void CheckBattleLose()
+    {
+        if (battleLoseTriggered) return;
+        if (HasAliveAlly()) return;
+
+        battleLoseTriggered = true;
+
+        if (battleResultHandler != null)
+            battleResultHandler.OnBattleLose();
+        else
+            Debug.LogWarning("[AllySlotBoard] 友军全灭，但 BattleResultHandler 未绑定。");
     }
 
     public void ClearSlotA() => ClearSlotInternal(0, ref slotAInstance, ref slotA);
@@ -151,7 +187,41 @@ public class AllySlotBoard : MonoBehaviour
 
     private void OnAllyDead(AllyUnit dead)
     {
-        // 不自动移除模型，只通知步数变化
+        if (dead == null) return;
+
+        dead.OnDead -= OnAllyDead;
+
+        if (slotA == dead)
+        {
+            if (slotAInstance != null)
+            {
+                Destroy(slotAInstance);
+                slotAInstance = null;
+            }
+            else
+            {
+                Destroy(dead.gameObject);
+            }
+
+            slotA = null;
+        }
+        else if (slotB == dead)
+        {
+            if (slotBInstance != null)
+            {
+                Destroy(slotBInstance);
+                slotBInstance = null;
+            }
+            else
+            {
+                Destroy(dead.gameObject);
+            }
+
+            slotB = null;
+        }
+
         OnSlotsChanged?.Invoke();
+
+        CheckBattleLose();
     }
 }

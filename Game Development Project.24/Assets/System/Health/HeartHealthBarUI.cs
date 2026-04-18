@@ -42,6 +42,16 @@ public class HeartHealthBarUI : MonoBehaviour
             boundAlly.OnHPChanged -= UpdateHearts;
 
         boundAlly = ally;
+        StopEffectRoutine();
+        KillAllHeartPunchTweens();
+
+        if (boundAlly == null)
+        {
+            // 与敌人头顶血条不同：玩家血条留在 Canvas，仅解绑，保留最后一次显示
+            initializedVisual = true;
+            return;
+        }
+
         EnsureRuntimeBuffers();
         if (previousFills != null)
         {
@@ -49,18 +59,9 @@ public class HeartHealthBarUI : MonoBehaviour
                 previousFills[i] = -1f;
         }
         initializedVisual = false;
-        StopEffectRoutine();
-        KillAllHeartPunchTweens();
 
-        if (boundAlly != null)
-        {
-            boundAlly.OnHPChanged += UpdateHearts;
-            UpdateHearts(boundAlly.currentHP, boundAlly.maxHP);
-        }
-        else
-        {
-            SetAllHeartsVisible(false);
-        }
+        boundAlly.OnHPChanged += UpdateHearts;
+        UpdateHearts(boundAlly.currentHP, boundAlly.maxHP);
     }
 
     private void OnDestroy()

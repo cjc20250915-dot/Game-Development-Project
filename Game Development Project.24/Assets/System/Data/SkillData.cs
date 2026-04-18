@@ -25,10 +25,10 @@ public class SkillData : ScriptableObject
     public int selfDamageAmount = 0;
 
     [Header("Target Settings")]
-    [Tooltip("是否随机选定目标")]
+    [Tooltip("是否随机选定前排目标。若为 false 且非 AOE，则需手动点击前排两名敌人之一")]
     public bool randomTarget = true;
 
-    [Tooltip("是否为AOE技能（攻击所有敌人）")]
+    [Tooltip("是否为AOE技能（攻击前排所有存活敌人）")]
     public bool isAOE = false;
 
     [Header("Element Cost (use int type)")]

@@ -191,6 +191,7 @@ MonoBehaviour:
   moveEase: 4
   rotateEase: 4
   switchButton: {fileID: 1374274841}
+  pageSwitchUiRoot: {fileID: 0}
   flipFadeImages:
   - {fileID: 1067995062}
   flipImageFadeOutDuration: 0
@@ -2470,6 +2471,7 @@ MonoBehaviour:
     localPosition: {x: 0, y: 0, z: 0}
     localEulerAngles: {x: 0, y: 0, z: 0}
     localScale: {x: 1, y: 1, z: 1}
+  battleResultHandler: {fileID: 1028030946}
   slotA: {fileID: 0}
   slotB: {fileID: 0}
 --- !u!4 &724882915
@@ -7730,6 +7732,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySlotBoard: {fileID: 1387914938}
+  onEnterTargetSelectionMode:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 658495171}
+        m_TargetAssemblyTypeName: ToggleSlideUI, Assembly-CSharp
+        m_MethodName: ToggleSlide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExitTargetSelectionMode:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 658495171}
+        m_TargetAssemblyTypeName: ToggleSlideUI, Assembly-CSharp
+        m_MethodName: ToggleSlide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  uiInputBlockRoot: {fileID: 33246382}
 --- !u!114 &1915873649
 MonoBehaviour:
   m_ObjectHideFlags: 0
