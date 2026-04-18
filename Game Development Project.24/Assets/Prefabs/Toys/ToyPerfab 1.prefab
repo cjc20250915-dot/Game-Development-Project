@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Basic
-  maxHP: 30
-  currentHP: 30
+  maxHP: 60
+  currentHP: 60
   stepsPerTurn: 2
   skills:
   - {fileID: 11400000, guid: 860e795099237e4478377d75a6d4f0b2, type: 2}

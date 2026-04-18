@@ -9,15 +9,14 @@ public class HealthBarUI : MonoBehaviour
 
     float targetFill;
     private EnemyUnit boundEnemy;
+    private AllyUnit boundAlly;
 
     public void BindEnemy(EnemyUnit enemy)
     {
-        if (boundEnemy != null)
-        {
-            boundEnemy.OnHPChanged -= UpdateHP;
-        }
+        UnbindCurrentTarget();
 
         boundEnemy = enemy;
+        boundAlly = null;
 
         if (boundEnemy != null)
         {
@@ -26,12 +25,32 @@ public class HealthBarUI : MonoBehaviour
         }
     }
 
+    public void BindAlly(AllyUnit ally)
+    {
+        UnbindCurrentTarget();
+
+        boundAlly = ally;
+        boundEnemy = null;
+
+        if (boundAlly != null)
+        {
+            boundAlly.OnHPChanged += UpdateHP;
+            UpdateHP(boundAlly.currentHP, boundAlly.maxHP);
+        }
+    }
+
     private void OnDestroy()
     {
+        UnbindCurrentTarget();
+    }
+
+    private void UnbindCurrentTarget()
+    {
         if (boundEnemy != null)
-        {
             boundEnemy.OnHPChanged -= UpdateHP;
-        }
+
+        if (boundAlly != null)
+            boundAlly.OnHPChanged -= UpdateHP;
     }
 
     void UpdateHP(int current, int max)
