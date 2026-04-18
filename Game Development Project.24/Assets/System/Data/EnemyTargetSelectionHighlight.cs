@@ -1,29 +1,37 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 与 <see cref="EnemyClickableTarget"/> 配合：在选择模式下显示「可选中」与「悬停」两套提示（优先使用独立物体，否则用颜色叠加）。
+/// 选敌高亮：利用材质上的描边属性（如 Cartoon/CartoonRender 的 _OutlineColor / _OutlineWidth）显示黄色边框，悬停为蓝色。
 /// </summary>
 [DisallowMultipleComponent]
 public class EnemyTargetSelectionHighlight : MonoBehaviour
 {
-    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
-    private static readonly int ColorId = Shader.PropertyToID("_Color");
+    private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
+    private static readonly int OutlineWidthId = Shader.PropertyToID("_OutlineWidth");
 
     [SerializeField] private EnemyUnit enemyUnit;
-    [Header("Optional VFX roots (assign in prefab)")]
-    [SerializeField] private GameObject selectableHint;
-    [SerializeField] private GameObject hoverHint;
 
-    [Header("Tint fallback (when both hints are null)")]
-    [SerializeField] private Color selectableTint = new Color(1f, 0.92f, 0.45f, 1f);
-    [SerializeField] private Color hoverTint = new Color(1f, 1f, 0.75f, 1f);
+    [Header("Outline (Cartoon/CartoonRender 等带 _OutlineColor 的材质)")]
+    [SerializeField] private Color selectableOutlineColor = new Color(1f, 0.85f, 0.1f, 1f);
+    [SerializeField] private Color hoverOutlineColor = new Color(0.25f, 0.55f, 1f, 1f);
+    [Tooltip("选敌时的描边宽度（与角色材质默认宽度独立，便于统一）")]
+    [SerializeField] private float selectableOutlineWidth = 0.035f;
+    [Tooltip("悬停时描边宽度，略大可更明显")]
+    [SerializeField] private float hoverOutlineWidth = 0.045f;
 
-    private Renderer[] renderers;
-    private Color[] cachedBaseColors;
-    private bool[] colorPropValid;
-    private bool[] useBaseColorId;
     private MaterialPropertyBlock mpb;
-    private bool tintCached;
+
+    private struct OutlineSlot
+    {
+        public Renderer Renderer;
+        public int MaterialIndex;
+        public Color CachedColor;
+        public float CachedWidth;
+    }
+
+    private OutlineSlot[] slots;
+    private bool cacheBuilt;
 
     private void Awake()
     {
@@ -33,99 +41,113 @@ public class EnemyTargetSelectionHighlight : MonoBehaviour
         mpb = new MaterialPropertyBlock();
     }
 
-    private void EnsureTintCache()
+    private void BuildCache()
     {
-        if (tintCached) return;
-        tintCached = true;
+        if (cacheBuilt) return;
+        cacheBuilt = true;
 
         Transform tintRoot = enemyUnit != null ? enemyUnit.transform : transform;
-        renderers = tintRoot.GetComponentsInChildren<Renderer>(true);
-        cachedBaseColors = new Color[renderers.Length];
-        colorPropValid = new bool[renderers.Length];
-        useBaseColorId = new bool[renderers.Length];
+        Renderer[] renderers = tintRoot.GetComponentsInChildren<Renderer>(true);
 
-        for (int i = 0; i < renderers.Length; i++)
+        var list = new List<OutlineSlot>();
+
+        for (int ri = 0; ri < renderers.Length; ri++)
         {
-            Renderer r = renderers[i];
+            Renderer r = renderers[ri];
             if (r == null) continue;
 
-            Material m = r.sharedMaterial;
-            if (m == null) continue;
+            Material[] mats = r.sharedMaterials;
+            if (mats == null) continue;
 
-            if (m.HasProperty(BaseColorId))
+            for (int mi = 0; mi < mats.Length; mi++)
             {
-                cachedBaseColors[i] = m.GetColor(BaseColorId);
-                colorPropValid[i] = true;
-                useBaseColorId[i] = true;
-            }
-            else if (m.HasProperty(ColorId))
-            {
-                cachedBaseColors[i] = m.GetColor(ColorId);
-                colorPropValid[i] = true;
-                useBaseColorId[i] = false;
+                Material mat = mats[mi];
+                if (mat == null) continue;
+                if (!mat.HasProperty(OutlineColorId)) continue;
+
+                Color c = mat.GetColor(OutlineColorId);
+                float w = mat.HasProperty(OutlineWidthId) ? mat.GetFloat(OutlineWidthId) : selectableOutlineWidth;
+
+                list.Add(new OutlineSlot
+                {
+                    Renderer = r,
+                    MaterialIndex = mi,
+                    CachedColor = c,
+                    CachedWidth = w
+                });
             }
         }
+
+        slots = list.ToArray();
+
+        if (slots.Length == 0)
+            Debug.LogWarning("[EnemyTargetSelectionHighlight] 未找到带 _OutlineColor 的材质，无法显示选敌描边。敌人需使用 Cartoon/CartoonRender（或 Shader 中含 _OutlineColor / _OutlineWidth）。", this);
     }
 
     public void ApplyVisuals(bool selectionMode, bool isSelectableFront, bool hovered)
     {
-        bool useHints = selectableHint != null || hoverHint != null;
+        BuildCache();
+        if (slots == null || slots.Length == 0) return;
 
-        if (useHints)
+        bool show = selectionMode && isSelectableFront;
+        if (!show)
         {
-            ClearTint();
-            bool showSelectable = selectionMode && isSelectableFront;
-            bool showHover = showSelectable && hovered;
-            bool hasHoverLayer = hoverHint != null;
-
-            if (selectableHint != null)
-                selectableHint.SetActive(showSelectable && (!hasHoverLayer || !showHover));
-
-            if (hoverHint != null)
-                hoverHint.SetActive(showHover);
-
+            ClearOutline();
             return;
         }
 
-        EnsureTintCache();
-        if (renderers == null || renderers.Length == 0) return;
+        Color col = hovered ? hoverOutlineColor : selectableOutlineColor;
+        float w = hovered ? hoverOutlineWidth : selectableOutlineWidth;
 
-        bool showTint = selectionMode && isSelectableFront;
-        if (!showTint)
+        for (int i = 0; i < slots.Length; i++)
         {
-            ClearTint();
-            return;
-        }
+            OutlineSlot s = slots[i];
+            if (s.Renderer == null) continue;
 
-        Color mul = hovered ? hoverTint : selectableTint;
-
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            Renderer r = renderers[i];
-            if (r == null) continue;
-            if (!colorPropValid[i]) continue;
-
-            r.GetPropertyBlock(mpb);
-            Color c = cachedBaseColors[i] * mul;
-            if (useBaseColorId[i])
-                mpb.SetColor(BaseColorId, c);
-            else
-                mpb.SetColor(ColorId, c);
-            r.SetPropertyBlock(mpb);
+            s.Renderer.GetPropertyBlock(mpb, s.MaterialIndex);
+            mpb.SetColor(OutlineColorId, col);
+            if (s.Renderer.sharedMaterials[s.MaterialIndex] != null &&
+                s.Renderer.sharedMaterials[s.MaterialIndex].HasProperty(OutlineWidthId))
+                mpb.SetFloat(OutlineWidthId, w);
+            s.Renderer.SetPropertyBlock(mpb, s.MaterialIndex);
         }
     }
 
+    /// <summary>
+    /// 恢复默认描边（来自材质资源上的值）
+    /// </summary>
     public void ClearTint()
     {
-        if (selectableHint != null) selectableHint.SetActive(false);
-        if (hoverHint != null) hoverHint.SetActive(false);
+        ClearOutline();
+    }
 
-        if (renderers == null || renderers.Length == 0) return;
+    private void ClearOutline()
+    {
+        if (slots == null || slots.Length == 0) return;
 
-        for (int i = 0; i < renderers.Length; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            if (renderers[i] != null)
-                renderers[i].SetPropertyBlock(null);
+            OutlineSlot s = slots[i];
+            if (s.Renderer == null) continue;
+
+            Material mat = s.Renderer.sharedMaterials[s.MaterialIndex];
+            if (mat != null && mat.HasProperty(OutlineColorId))
+            {
+                s.Renderer.GetPropertyBlock(mpb, s.MaterialIndex);
+                mpb.SetColor(OutlineColorId, s.CachedColor);
+                if (mat.HasProperty(OutlineWidthId))
+                    mpb.SetFloat(OutlineWidthId, s.CachedWidth);
+                s.Renderer.SetPropertyBlock(mpb, s.MaterialIndex);
+            }
+            else
+            {
+                s.Renderer.SetPropertyBlock(null, s.MaterialIndex);
+            }
         }
+    }
+
+    private void OnDestroy()
+    {
+        ClearTint();
     }
 }

@@ -136,6 +136,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shaga_A
       objectReference: {fileID: 0}
+    - target: {fileID: 5627207596866042197, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627207596866042197, guid: 54ca584addfe1c441b0c67d38ec88d0f, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a7b8c9d0e1f234561234567890abcdef, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -192,3 +200,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnit: {fileID: 0}
+  highlight: {fileID: 0}

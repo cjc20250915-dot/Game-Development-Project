@@ -132,6 +132,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -2870888277693070827, guid: 1a6c68c9f6a78734b83a388c15384f1a, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -2870888277693070827, guid: 1a6c68c9f6a78734b83a388c15384f1a, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a7b8c9d0e1f234561234567890abcdef, type: 2}
     - target: {fileID: 919132149155446097, guid: 1a6c68c9f6a78734b83a388c15384f1a, type: 3}
       propertyPath: m_Name
       value: Big_Boar_A
@@ -192,3 +200,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyUnit: {fileID: 0}
+  highlight: {fileID: 0}
