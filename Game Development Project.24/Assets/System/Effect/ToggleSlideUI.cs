@@ -32,6 +32,10 @@ public class ToggleSlideUI : MonoBehaviour
     public float camMoveDuration = 0.5f;
     public Ease camEase = Ease.OutCubic;
 
+    [Header("Breathing Camera")]
+    public BreathingCamera breathingCamera;
+    public bool disableBreathingWhileMoving = true;
+
     private bool isAtA = true;
     private Tween moveTween;
     private Tween camTween;
@@ -57,17 +61,20 @@ public class ToggleSlideUI : MonoBehaviour
             }
         }
 
+        if (breathingCamera != null && targetCamera != null)
+        {
+            breathingCamera.SetBasePosition(targetCamera.position);
+        }
+
         RefreshTextImmediate();
     }
 
-    // 原本的：UI + 文本 + 摄像机
     public void ToggleSlide()
     {
         ToggleSlideOnly();
         ToggleCameraOnly();
     }
 
-    // 新增：只切 UI + 文本
     public void ToggleSlideOnly()
     {
         if (targetRect == null) return;
@@ -87,7 +94,6 @@ public class ToggleSlideUI : MonoBehaviour
             });
     }
 
-    // 新增：只切摄像机
     public void ToggleCameraOnly()
     {
         camTween?.Kill();
@@ -97,10 +103,7 @@ public class ToggleSlideUI : MonoBehaviour
         Transform target = isAtA ? camPosB : camPosA;
         if (target == null) return;
 
-        camTween = DOTween.Sequence()
-            .Append(targetCamera.DOMove(target.position, camMoveDuration))
-            .Join(targetCamera.DORotateQuaternion(target.rotation, camMoveDuration))
-            .SetEase(camEase);
+        MoveCameraTo(target);
     }
 
     public void SlideToA()
@@ -151,10 +154,25 @@ public class ToggleSlideUI : MonoBehaviour
 
         camTween?.Kill();
 
+        if (breathingCamera != null && disableBreathingWhileMoving)
+        {
+            breathingCamera.SetBreathingEnabled(false);
+        }
+
         camTween = DOTween.Sequence()
             .Append(targetCamera.DOMove(target.position, camMoveDuration))
             .Join(targetCamera.DORotateQuaternion(target.rotation, camMoveDuration))
-            .SetEase(camEase);
+            .SetEase(camEase)
+            .OnComplete(() =>
+            {
+                if (breathingCamera != null)
+                {
+                    breathingCamera.SetBasePosition(targetCamera.position);
+
+                    if (disableBreathingWhileMoving)
+                        breathingCamera.SetBreathingEnabled(true);
+                }
+            });
     }
 
     private void RefreshTextImmediate()
@@ -163,43 +181,41 @@ public class ToggleSlideUI : MonoBehaviour
         targetTextUI.text = isAtA ? textAtA : textAtB;
     }
 
-public void SlideOnlyToA()
-{
-    if (targetRect == null) return;
+    public void SlideOnlyToA()
+    {
+        if (targetRect == null) return;
 
-    moveTween?.Kill();
-    camTween?.Kill(); // ⭐ 也要停掉摄像机旧动画
+        moveTween?.Kill();
+        camTween?.Kill();
 
-    moveTween = targetRect
-        .DOAnchorPos(posA, duration)
-        .SetEase(moveEase)
-        .OnComplete(() =>
-        {
-            isAtA = true;
-            RefreshTextImmediate();
-        });
+        moveTween = targetRect
+            .DOAnchorPos(posA, duration)
+            .SetEase(moveEase)
+            .OnComplete(() =>
+            {
+                isAtA = true;
+                RefreshTextImmediate();
+            });
 
-    // ⭐ 每次都把摄像机移动到 A
-    MoveCameraToA();
-}
+        MoveCameraToA();
+    }
 
-public void SlideOnlyToB()
-{
-    if (targetRect == null) return;
+    public void SlideOnlyToB()
+    {
+        if (targetRect == null) return;
 
-    moveTween?.Kill();
-    camTween?.Kill(); // ⭐ 防止叠动画
+        moveTween?.Kill();
+        camTween?.Kill();
 
-    moveTween = targetRect
-        .DOAnchorPos(posB, duration)
-        .SetEase(moveEase)
-        .OnComplete(() =>
-        {
-            isAtA = false;
-            RefreshTextImmediate();
-        });
+        moveTween = targetRect
+            .DOAnchorPos(posB, duration)
+            .SetEase(moveEase)
+            .OnComplete(() =>
+            {
+                isAtA = false;
+                RefreshTextImmediate();
+            });
 
-    // ⭐ 注意：这里也移动到 A（不是 B）
-    MoveCameraToA();
-}
+        MoveCameraToA();
+    }
 }

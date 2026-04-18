@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class TurnBattleManager : MonoBehaviour
 {
@@ -11,6 +12,17 @@ public class TurnBattleManager : MonoBehaviour
 
     [Header("UI (Display)")]
     public TMP_Text movesText;
+
+    [Header("Move UI Effect")]
+public bool enableMoveUIEffect = true;
+public float moveTextPunchScale = 0.25f;
+public float moveTextPunchDuration = 0.25f;
+public Color moveGainColor = Color.green;
+public Color moveLoseColor = Color.yellow;
+
+private Color movesTextOriginalColor = Color.white;
+private Tween moveTextColorTween;
+private Tween moveTextScaleTween;
 
     [Header("Turn Panel")]
     public ToggleSlideUI turnPanelUI;
@@ -58,16 +70,53 @@ public class TurnBattleManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        BeginPlayerTurn();
-    }
+private void Start()
+{
+    if (movesText != null)
+        movesTextOriginalColor = movesText.color;
+
+    BeginPlayerTurn();
+}
 
     private void RefreshUI()
     {
         if (movesText != null)
             movesText.text = $"Moves: {remainingMoves}";
     }
+
+    private void PlayMoveUIEffect(int delta)
+{
+    if (!enableMoveUIEffect || movesText == null) return;
+
+    Transform textTf = movesText.transform;
+
+    moveTextScaleTween?.Kill();
+    moveTextColorTween?.Kill();
+
+    textTf.localScale = Vector3.one;
+    movesText.color = movesTextOriginalColor;
+
+    // 跳动
+    moveTextScaleTween = textTf.DOPunchScale(
+        Vector3.one * moveTextPunchScale,
+        moveTextPunchDuration,
+        8,
+        0.8f
+    );
+
+    // 闪光
+    Color flashColor = delta >= 0 ? moveGainColor : moveLoseColor;
+
+    moveTextColorTween = DOTween.Sequence()
+        .Append(movesText.DOColor(flashColor, 0.08f))
+        .Append(movesText.DOColor(movesTextOriginalColor, 0.18f));
+}
+
+private void RefreshUIWithEffect(int delta)
+{
+    RefreshUI();
+    PlayMoveUIEffect(delta);
+}
 
 
     public void OnEndTurnButtonClicked()
@@ -175,35 +224,35 @@ if (turnPanelUI != null)
         if (!IsPlayerTurn) return false;
         if (remainingMoves <= 0) return false;
 
-        remainingMoves--;
-        RefreshUI();
+remainingMoves--;
+RefreshUIWithEffect(-1);
 
         Debug.Log($"[Turn] Player used 1 move. Remaining={remainingMoves}");
         return true;
     }
 
-    public void RestoreMoves(int amount)
+public void RestoreMoves(int amount)
+{
+    if (amount <= 0) return;
+
+    remainingMoves += amount;
+
+    if (remainingMoves > moveCapThisTurn)
+        remainingMoves = moveCapThisTurn;
+
+    if (IsPlayerTurn && remainingMoves > 0)
     {
-        if (amount <= 0) return;
-
-        remainingMoves += amount;
-
-        if (remainingMoves > moveCapThisTurn)
-            remainingMoves = moveCapThisTurn;
-
-        if (IsPlayerTurn && remainingMoves > 0)
+        if (board != null)
         {
-            if (board != null)
-            {
-                board.SetBoardInputEnabled(true);
-                board.SetBoardAlpha(1f);
-            }
+            board.SetBoardInputEnabled(true);
+            board.SetBoardAlpha(1f);
         }
-
-        RefreshUI();
-
-        Debug.Log($"[Turn] Restored {amount} move(s). Remaining={remainingMoves}/{moveCapThisTurn}");
     }
+
+    RefreshUIWithEffect(amount);
+
+    Debug.Log($"[Turn] Restored {amount} move(s). Remaining={remainingMoves}/{moveCapThisTurn}");
+}
 
     public void OnBoardResolveFinished()
     {

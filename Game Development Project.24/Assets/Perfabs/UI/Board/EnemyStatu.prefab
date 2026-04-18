@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8398e3e83889b498f202a9dd2be228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldOffset: {x: 0, y: 2.2, z: 0}
+  worldOffset: {x: 0, y: 2, z: 0}
   defendIcon: {fileID: 8203347180029876413}
 --- !u!114 &7038344169860791148
 MonoBehaviour:

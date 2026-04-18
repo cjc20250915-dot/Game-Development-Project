@@ -32,6 +32,12 @@ public class NotebookPageSwitcher : MonoBehaviour
     [Header("Button")]
     [SerializeField] private Button switchButton;
 
+    [Header("Flip Image Fade")]
+[SerializeField] private CanvasGroup[] flipFadeImages;
+[SerializeField] private float flipImageFadeOutDuration = 0.12f;
+[SerializeField] private float flipImageFadeInDuration = 0.18f;
+[SerializeField] private float flipImageHoldDuration = 0.02f;
+
     [Header("Canvas (Optional but Recommended)")]
     [SerializeField] private Canvas pageACanvas;
     [SerializeField] private Canvas pageBCanvas;
@@ -82,70 +88,110 @@ private void PlaySharedBriefHide()
     }
 }
 
-    public void TogglePages()
+private void PlayFlipImageFade()
+{
+    if (flipFadeImages == null) return;
+
+    for (int i = 0; i < flipFadeImages.Length; i++)
     {
-        if (isAnimating) return;
-        if (currentTopPage == null || currentBottomPage == null) return;
-        if (topPageSlot == null || bottomPageSlot == null) return;
-        if (topToBottomMidPoint == null || bottomToTopMidPoint == null) return;
+        CanvasGroup cg = flipFadeImages[i];
+        if (cg == null) continue;
 
-        isAnimating = true;
-        SetButtonInteractable(false);
+        cg.DOKill();
+        cg.gameObject.SetActive(true);
 
-        Transform oldTop = currentTopPage;
-        Transform oldBottom = currentBottomPage;
-
-        // 动画开始前，先把即将上来的页面临时提到前面，避免穿帮
-        BringPageToFront(oldBottom);
-
-        Sequence seq = DOTween.Sequence();
-
-        // ===== 第一段：移动到中间点 =====
-        seq.AppendCallback(() =>
-        {
-            oldTop.SetAsLastSibling();
-            oldBottom.SetAsLastSibling();
-        });
-
-        seq.Append(oldTop.DOMove(topToBottomMidPoint.position, moveDuration * 0.5f).SetEase(moveEase));
-        oldTop.DORotate(topToBottomMidPoint.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
-
-        oldBottom.DOMove(bottomToTopMidPoint.position, moveDuration * 0.5f).SetEase(moveEase);
-        oldBottom.DORotate(bottomToTopMidPoint.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
-
-        // ===== UI 淡入淡出，和第一页同步开始 =====
-       // ===== UI 淡入淡出 =====
-PlayFadeForSwap();
-PlaySharedBriefHide();
-
-        // ===== 第二段：移动到最终位置 =====
-        seq.Append(oldTop.DOMove(bottomPageSlot.position, moveDuration * 0.5f).SetEase(moveEase));
-        oldTop.DORotate(bottomPageSlot.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
-
-        oldBottom.DOMove(topPageSlot.position, moveDuration * 0.5f).SetEase(moveEase);
-        oldBottom.DORotate(topPageSlot.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
-
-        seq.OnComplete(() =>
-        {
-            // 交换当前上下身份
-            currentTopPage = oldBottom;
-            currentBottomPage = oldTop;
-
-            isAOnTop = (currentTopPage == pageA);
-
-            // 强制对齐，避免累计误差
-            currentTopPage.position = topPageSlot.position;
-            currentTopPage.rotation = topPageSlot.rotation;
-
-            currentBottomPage.position = bottomPageSlot.position;
-            currentBottomPage.rotation = bottomPageSlot.rotation;
-
-            ApplyLayerOrder();
-
-            isAnimating = false;
-            SetButtonInteractable(true);
-        });
+        // 这里只先淡出，淡入会在翻页切换点再调用
+        cg.DOFade(0f, flipImageFadeOutDuration).SetEase(Ease.OutSine);
     }
+}
+
+private void FadeInFlipImages()
+{
+    if (flipFadeImages == null) return;
+
+    for (int i = 0; i < flipFadeImages.Length; i++)
+    {
+        CanvasGroup cg = flipFadeImages[i];
+        if (cg == null) continue;
+
+        cg.DOKill();
+        cg.gameObject.SetActive(true);
+
+        Sequence s = DOTween.Sequence();
+        if (flipImageHoldDuration > 0f)
+            s.AppendInterval(flipImageHoldDuration);
+
+        s.Append(cg.DOFade(1f, flipImageFadeInDuration).SetEase(Ease.InSine));
+    }
+}
+
+   public void TogglePages()
+{
+    if (isAnimating) return;
+    if (currentTopPage == null || currentBottomPage == null) return;
+    if (topPageSlot == null || bottomPageSlot == null) return;
+    if (topToBottomMidPoint == null || bottomToTopMidPoint == null) return;
+
+    isAnimating = true;
+    SetButtonInteractable(false);
+
+    Transform oldTop = currentTopPage;
+    Transform oldBottom = currentBottomPage;
+
+    BringPageToFront(oldBottom);
+
+    Sequence seq = DOTween.Sequence();
+
+    // ===== 第一段：移动到中间点 =====
+    seq.AppendCallback(() =>
+    {
+        oldTop.SetAsLastSibling();
+        oldBottom.SetAsLastSibling();
+    });
+
+    seq.Append(oldTop.DOMove(topToBottomMidPoint.position, moveDuration * 0.5f).SetEase(moveEase));
+    oldTop.DORotate(topToBottomMidPoint.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
+
+    oldBottom.DOMove(bottomToTopMidPoint.position, moveDuration * 0.5f).SetEase(moveEase);
+    oldBottom.DORotate(bottomToTopMidPoint.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
+
+    // ===== UI 淡入淡出 =====
+    PlayFadeForSwap();
+    PlaySharedBriefHide();
+    PlayFlipImageFade();
+
+    // ===== 到达翻页切换点后，让图片再淡入 =====
+    seq.AppendCallback(() =>
+    {
+        FadeInFlipImages();
+    });
+
+    // ===== 第二段：移动到最终位置 =====
+    seq.Append(oldTop.DOMove(bottomPageSlot.position, moveDuration * 0.5f).SetEase(moveEase));
+    oldTop.DORotate(bottomPageSlot.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
+
+    oldBottom.DOMove(topPageSlot.position, moveDuration * 0.5f).SetEase(moveEase);
+    oldBottom.DORotate(topPageSlot.eulerAngles, moveDuration * 0.5f).SetEase(rotateEase);
+
+    seq.OnComplete(() =>
+    {
+        currentTopPage = oldBottom;
+        currentBottomPage = oldTop;
+
+        isAOnTop = (currentTopPage == pageA);
+
+        currentTopPage.position = topPageSlot.position;
+        currentTopPage.rotation = topPageSlot.rotation;
+
+        currentBottomPage.position = bottomPageSlot.position;
+        currentBottomPage.rotation = bottomPageSlot.rotation;
+
+        ApplyLayerOrder();
+
+        isAnimating = false;
+        SetButtonInteractable(true);
+    });
+}
 
     private void SnapPages()
     {
