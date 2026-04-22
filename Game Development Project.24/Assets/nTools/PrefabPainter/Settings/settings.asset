@@ -5837,7 +5837,7 @@ MonoBehaviour:
     - name: Grass
       settings:
         brushRadius: 0.63
-        brushSpacing: 0.17
+        brushSpacing: 1
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -5854,8 +5854,8 @@ MonoBehaviour:
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 0.3
-        scaleUniformMax: 0.35
+        scaleUniformMin: 1
+        scaleUniformMax: 0.7
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
