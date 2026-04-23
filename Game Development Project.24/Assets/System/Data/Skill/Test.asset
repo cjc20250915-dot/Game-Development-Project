@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Test
   description: 
   dealsDamage: 1
-  damageAmount: 100
+  damageAmount: 1000
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 1
