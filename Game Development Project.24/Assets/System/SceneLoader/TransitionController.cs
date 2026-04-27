@@ -47,6 +47,11 @@ IEnumerator Transition(string sceneName)
 
     yield return StartCoroutine(AnimateCircle(2f, -0.2f));
 
+    // 转场结束时必须恢复：否则目标场景若没有会重置 Cursor 的对象（例如 Indoor），鼠标会一直锁定/隐藏
+    Cursor.visible = true;
+    Cursor.lockState = CursorLockMode.None;
+    isTransitioning = false;
+
     Destroy(gameObject, destroyDelayAfterLoad);
 }
     IEnumerator AnimateCircle(float from, float to)

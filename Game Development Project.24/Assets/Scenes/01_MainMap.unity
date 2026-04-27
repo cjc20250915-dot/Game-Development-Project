@@ -30619,9 +30619,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 1314344114}
   moveSpeed: 5
-  maxMoveDistance: 5
+  maxMoveDistance: 6
   jumpHeight: 1.5
   extraGroundOffset: 0.05
+  minGroundUpDot: 0.9
   squashAmount: 0.7
   stretchAmount: 1.2
   validClickIndicatorPrefab: {fileID: 1775176343694052, guid: cdb3e920ac0e0f747b3492cc5d5b8ed5, type: 3}

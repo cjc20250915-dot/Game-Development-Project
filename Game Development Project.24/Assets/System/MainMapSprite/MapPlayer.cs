@@ -17,6 +17,9 @@ public class MapPlayer : MonoBehaviour
     //[Header("额外离地偏移")]
     public float extraGroundOffset = 0.05f;
 
+    //[Header("地面判定：法线与世界上方向点积下限，墙面约 0，水平地面约 1")]
+    public float minGroundUpDot = 0.85f;
+
     //[Header("跳跃形变")]
     public float squashAmount = 0.7f;
     public float stretchAmount = 1.2f;
@@ -69,6 +72,12 @@ public class MapPlayer : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            if (Vector3.Dot(hit.normal, Vector3.up) < minGroundUpDot)
+            {
+                ShowInvalidIndicator(hit.point);
+                return;
+            }
+
             Vector3 clickedPos = hit.point;
             clickedPos.y += GetGroundOffset();
 
