@@ -9460,10 +9460,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
   moveSpeed: 5
+  maxMoveDistance: 3
   jumpHeight: 1.5
   extraGroundOffset: 0.05
+  minGroundUpDot: 0.85
   squashAmount: 0.7
   stretchAmount: 1.2
+  validClickIndicatorPrefab: {fileID: 0}
+  invalidClickIndicatorPrefab: {fileID: 0}
+  invalidIndicatorLifeTime: 0.5
+  indicatorGroundOffset: 0.02
   audioSource: {fileID: 0}
   jumpSound: {fileID: 0}
   landSound: {fileID: 0}
