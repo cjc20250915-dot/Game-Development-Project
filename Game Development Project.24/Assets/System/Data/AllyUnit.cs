@@ -44,18 +44,23 @@ public class AllyUnit : MonoBehaviour
     [SerializeField] private int hitFlashCount = 2;
 
     [Header("Hit VFX / SFX")]
-    [SerializeField] private GameObject hitVFXPrefab;
-    [SerializeField] private AudioClip hitSFX;
+    [Tooltip("受伤时在模型位置生成的特效")]
+    public GameObject hitVFXPrefab;
+    [Tooltip("受伤时播放的音效")]
+    public AudioClip hitSFX;
 
     [Header("Death VFX / SFX")]
-    [SerializeField] private GameObject deathVFXPrefab;
-    [SerializeField] private AudioClip deathSFX;
+    [Tooltip("死亡流程开始时生成的特效")]
+    public GameObject deathVFXPrefab;
+    [Tooltip("死亡流程开始时播放的音效")]
+    public AudioClip deathSFX;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
 
     [Header("Death")]
-    [SerializeField] private float deathDelay = 0.4f;
+    [Tooltip("HP 归零后，延迟这么久再派发 OnDead（与 EnemyUnit 一致，便于播放死亡表现）")]
+    public float deathDelay = 1.5f;
 
     private bool deathStarted = false;
 

@@ -19,6 +19,8 @@ public class SkillButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private SkillData currentSkill;
     private AllyUnit owner;
+    /// <summary>非 null 时点击改为对该 SkillCaster.TryCast（固定技能按钮）。</summary>
+    private SkillCaster casterOverride;
     private Coroutine tooltipFadeRoutine;
 
     public SkillData CurrentSkill => currentSkill;
@@ -52,10 +54,36 @@ public class SkillButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void BindSkill(AllyUnit newOwner, SkillData skill)
     {
+        casterOverride = null;
         owner = newOwner;
         currentSkill = skill;
 
-        bool hasSkill = owner != null && currentSkill != null;
+        RefreshVisualState();
+    }
+
+    /// <summary>
+    /// 固定技能：技能资产来自外部 ScriptableObject，释放时使用指定的 SkillCaster（例如绑在 SlotA 角色上的组件）。
+    /// </summary>
+    public void BindFixedSkill(SkillCaster caster, SkillData skill)
+    {
+        casterOverride = caster;
+        currentSkill = skill;
+        owner = null;
+
+        if (caster != null)
+        {
+            owner = caster.GetComponentInParent<AllyUnit>();
+            if (owner == null)
+                owner = caster.GetComponentInChildren<AllyUnit>();
+        }
+
+        RefreshVisualState();
+    }
+
+    private void RefreshVisualState()
+    {
+        bool hasSkill = currentSkill != null &&
+                        (casterOverride != null || owner != null);
 
         if (button != null)
             button.interactable = hasSkill;
@@ -75,33 +103,32 @@ public class SkillButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ClearSkill()
     {
+        casterOverride = null;
         BindSkill(null, null);
     }
 
     private void OnClickButton()
     {
-        if (owner == null)
-        {
-            Debug.LogWarning("[SkillButtonUI] Owner is null.");
-            return;
-        }
-
         if (currentSkill == null)
         {
             Debug.LogWarning("[SkillButtonUI] Skill is null.");
             return;
         }
 
-        SkillCaster caster = owner.GetComponent<SkillCaster>();
-        if (caster == null)
-            caster = owner.GetComponentInParent<SkillCaster>();
+        SkillCaster caster = casterOverride;
 
-        if (caster == null)
-            caster = owner.GetComponentInChildren<SkillCaster>();
+        if (caster == null && owner != null)
+        {
+            caster = owner.GetComponent<SkillCaster>();
+            if (caster == null)
+                caster = owner.GetComponentInParent<SkillCaster>();
+            if (caster == null)
+                caster = owner.GetComponentInChildren<SkillCaster>();
+        }
 
         if (caster == null)
         {
-            Debug.LogWarning($"[SkillButtonUI] No SkillCaster found on {owner.name}.");
+            Debug.LogWarning("[SkillButtonUI] No SkillCaster — bind ally skill or fixed skill caster.");
             return;
         }
 
@@ -111,7 +138,7 @@ public class SkillButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (currentSkill == null || owner == null)
+        if (currentSkill == null || (owner == null && casterOverride == null))
             return;
 
         FadeTooltip(true);
