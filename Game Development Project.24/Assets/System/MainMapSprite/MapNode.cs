@@ -83,6 +83,13 @@ public class MapNode : MonoBehaviour
         if (!autoLoadScene) return;
         if (string.IsNullOrEmpty(nodeData.sceneName)) return;
 
+        if (nodeData.nodeType == NodeData.NodeType.Battle)
+        {
+            MapPlayer mapPlayer = FindFirstObjectByType<MapPlayer>();
+            if (mapPlayer != null)
+                GameRunManager.Instance.SetMainMapReturnPose(mapPlayer.transform.position, mapPlayer.transform.rotation);
+        }
+
         if (transitionController != null)
         {
             transitionController.LoadSceneWithTransition(nodeData.sceneName);
