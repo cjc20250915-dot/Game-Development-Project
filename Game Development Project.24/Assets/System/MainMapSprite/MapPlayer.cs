@@ -55,6 +55,12 @@ public class MapPlayer : MonoBehaviour
             rb.useGravity = false;
             rb.constraints = RigidbodyConstraints.FreezeRotation;
         }
+
+        if (GameRunManager.Instance != null &&
+            GameRunManager.Instance.TryConsumeMainMapReturnPose(out Vector3 returnPos, out Quaternion returnRot))
+        {
+            transform.SetPositionAndRotation(returnPos, returnRot);
+        }
     }
 
     private void Update()

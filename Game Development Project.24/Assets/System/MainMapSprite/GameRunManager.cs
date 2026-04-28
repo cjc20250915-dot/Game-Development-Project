@@ -6,21 +6,26 @@ public class GameRunManager : MonoBehaviour
 {
     public static GameRunManager Instance;
 
-    //[Header("当前正在挑战的节点数据")]
+    //[Header("??????????????????")]
     public NodeData currentNode;
 
-    //[Header("初始解锁节点ID")]
+    //[Header("??????????ID")]
     public MapNode firstUnlockedNode;
 
-    //[Header("战斗统计")]
+    //[Header("??????")]
     public int winCount = 0;
     public int loseCount = 0;
 
     private HashSet<string> completedNodeIds = new HashSet<string>();
     private HashSet<string> unlockedNodeIds = new HashSet<string>();
 
-    // 当前节点完成后要解锁的后继节点ID
+    // ?????????????????????ID
     private List<string> pendingNextNodeIds = new List<string>();
+
+    // ??????????????????????????????????????????????????????? MapPlayer ????
+    private bool hasPendingMainMapReturnPose;
+    private Vector3 pendingMainMapReturnPosition;
+    private Quaternion pendingMainMapReturnRotation;
 
     private void Awake()
     {
@@ -36,16 +41,16 @@ public class GameRunManager : MonoBehaviour
                 if (!string.IsNullOrEmpty(firstId))
                 {
                     unlockedNodeIds.Add(firstId);
-                    Debug.Log("初始解锁节点：" + firstId);
+                    Debug.Log("??????????" + firstId);
                 }
                 else
                 {
-                    Debug.LogWarning("首节点 nodeName 为空");
+                    Debug.LogWarning("???? nodeName ???");
                 }
             }
             else
             {
-                Debug.LogWarning("firstUnlockedNode 没有设置！");
+                Debug.LogWarning("firstUnlockedNode ????????");
             }
 
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -83,7 +88,7 @@ public class GameRunManager : MonoBehaviour
 
         if (nodes.Length > 0)
         {
-            Debug.Log($"场景 {SceneManager.GetActiveScene().name} 中地图节点状态已刷新，数量：{nodes.Length}");
+            Debug.Log($"???? {SceneManager.GetActiveScene().name} ??????????????????????{nodes.Length}");
         }
     }
 
@@ -91,7 +96,7 @@ public class GameRunManager : MonoBehaviour
     {
         if (mapNode == null || mapNode.nodeData == null)
         {
-            Debug.LogWarning("EnterNode 失败：mapNode 或 nodeData 为空");
+            Debug.LogWarning("EnterNode ????mapNode ?? nodeData ???");
             return;
         }
 
@@ -109,20 +114,20 @@ public class GameRunManager : MonoBehaviour
             }
         }
 
-        Debug.Log("进入节点（仅记录，不推进进度）：" + currentNode.nodeName);
+        Debug.Log("?????????????????????????" + currentNode.nodeName);
     }
 
     public void CompleteCurrentNodeAsWin()
     {
         winCount++;
-        Debug.Log("战斗胜利，当前胜利次数：" + winCount);
+        Debug.Log("????????????????????" + winCount);
         CompleteCurrentNode();
     }
 
     public void CompleteCurrentNodeAsLose()
     {
         loseCount++;
-        Debug.Log("战斗失败，当前失败次数：" + loseCount);
+        Debug.Log("??????????????????" + loseCount);
         CompleteCurrentNode();
     }
 
@@ -130,7 +135,7 @@ public class GameRunManager : MonoBehaviour
     {
         if (currentNode == null)
         {
-            Debug.LogWarning("CompleteCurrentNode 失败：currentNode 为空");
+            Debug.LogWarning("CompleteCurrentNode ????currentNode ???");
             return;
         }
 
@@ -138,7 +143,7 @@ public class GameRunManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(currentId))
         {
-            Debug.LogWarning("CompleteCurrentNode 失败：当前节点 nodeName 为空");
+            Debug.LogWarning("CompleteCurrentNode ?????????? nodeName ???");
             return;
         }
 
@@ -152,11 +157,11 @@ public class GameRunManager : MonoBehaviour
             if (!completedNodeIds.Contains(nextId))
             {
                 unlockedNodeIds.Add(nextId);
-                Debug.Log("解锁节点：" + nextId);
+                Debug.Log("???????" + nextId);
             }
         }
 
-        Debug.Log("完成节点：" + currentId);
+        Debug.Log("?????" + currentId);
 
         pendingNextNodeIds.Clear();
         currentNode = null;
@@ -180,6 +185,7 @@ public class GameRunManager : MonoBehaviour
         unlockedNodeIds.Clear();
         pendingNextNodeIds.Clear();
         currentNode = null;
+        hasPendingMainMapReturnPose = false;
 
         winCount = 0;
         loseCount = 0;
@@ -196,5 +202,29 @@ public class GameRunManager : MonoBehaviour
 
         RefreshAllMapNodesInScene();
         Debug.Log("进度已重置");
+    }
+
+    /// <summary>在即将离开主图场景时调用（例如进入战斗）</summary>
+    public void SetMainMapReturnPose(Vector3 worldPosition, Quaternion worldRotation)
+    {
+        pendingMainMapReturnPosition = worldPosition;
+        pendingMainMapReturnRotation = worldRotation;
+        hasPendingMainMapReturnPose = true;
+    }
+
+    /// <summary>回到主图后若存在记录则恢复玩家站位，并清除标记</summary>
+    public bool TryConsumeMainMapReturnPose(out Vector3 worldPosition, out Quaternion worldRotation)
+    {
+        if (!hasPendingMainMapReturnPose)
+        {
+            worldPosition = default;
+            worldRotation = default;
+            return false;
+        }
+
+        worldPosition = pendingMainMapReturnPosition;
+        worldRotation = pendingMainMapReturnRotation;
+        hasPendingMainMapReturnPose = false;
+        return true;
     }
 }
