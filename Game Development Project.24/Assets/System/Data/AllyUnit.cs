@@ -8,6 +8,9 @@ public class AllyUnit : MonoBehaviour
     [Header("Basic Info")]
     public string displayName = "Ally";
 
+    [Tooltip("战斗 HUD、头像框等使用的角色图片（Sprite）")]
+    public Sprite characterPortrait;
+
     [Header("HP")]
     [Min(1)] public int maxHP = 30;
     public int currentHP;

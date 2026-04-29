@@ -68,6 +68,8 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   isDefending: 0
   defendDamageMultiplier: 0.5
+  freezeSkipNextEnemyPhase: 0
+  freezeOverlayMaterial: {fileID: 2100000, guid: 492ff14b36fc59644b5141e5fd417eb2, type: 2}
 --- !u!1001 &2430558034464541765
 PrefabInstance:
   m_ObjectHideFlags: 0
