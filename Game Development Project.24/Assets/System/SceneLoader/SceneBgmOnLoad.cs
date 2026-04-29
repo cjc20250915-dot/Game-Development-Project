@@ -13,7 +13,7 @@ public class SceneBgmOnLoad : MonoBehaviour
     [SerializeField] private bool playWhenSceneLoads = true;
 
     [Header("Audio（与 AudioSource 一致，进场景时应用到全局 BGM）")]
-    [Range(0f, 1f)]
+    [Range(0f, 10f)]
     [SerializeField] private float volume = 1f;
     [SerializeField] private bool loop = true;
     [SerializeField] private float pitch = 1f;

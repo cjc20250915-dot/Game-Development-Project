@@ -10,6 +10,7 @@ public class bgmManager : MonoBehaviour
     {
         if (Instance != null)
         {
+            ApplyThisObjectBgmToExistingInstance();
             Destroy(gameObject);
             return;
         }
@@ -22,7 +23,11 @@ public class bgmManager : MonoBehaviour
 
     public void PlayBGM(AudioClip clip)
     {
-        if (audioSource.clip == clip) return;
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null || clip == null) return;
+        if (audioSource.clip == clip && audioSource.isPlaying) return;
 
         audioSource.clip = clip;
         audioSource.Play();
@@ -30,6 +35,47 @@ public class bgmManager : MonoBehaviour
 
     public void StopBGM()
     {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null) return;
         audioSource.Stop();
+    }
+
+    public bool PauseBGM()
+    {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null || !audioSource.isPlaying) return false;
+
+        audioSource.Pause();
+        return true;
+    }
+
+    public void ResumeBGM()
+    {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null || audioSource.isPlaying) return;
+
+        audioSource.UnPause();
+    }
+
+    private void ApplyThisObjectBgmToExistingInstance()
+    {
+        AudioSource duplicateSource = GetComponent<AudioSource>();
+        if (duplicateSource == null || duplicateSource.clip == null) return;
+
+        AudioSource existingSource = Instance.GetComponent<AudioSource>();
+        if (existingSource == null) return;
+
+        existingSource.volume = duplicateSource.volume;
+        existingSource.loop = duplicateSource.loop;
+        existingSource.pitch = duplicateSource.pitch;
+        existingSource.spatialBlend = duplicateSource.spatialBlend;
+
+        Instance.PlayBGM(duplicateSource.clip);
     }
 }
