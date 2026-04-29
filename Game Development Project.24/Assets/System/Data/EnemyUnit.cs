@@ -62,6 +62,7 @@ public class EnemyUnit : MonoBehaviour
     public AudioClip deathSFX;
 
     [Header("Audio")]
+    [Tooltip("可为空：运行时自动在本物体或子物体上查找 AudioSource")]
     [SerializeField] private AudioSource audioSource;
 
     private bool deathStarted = false;
@@ -195,6 +196,8 @@ public void ClearDefend()
 
     private void Awake()
     {
+        EnsureAudioSource();
+
         currentHP = maxHP;
 
         if (modelRoot == null)
@@ -204,6 +207,16 @@ public void ClearDefend()
         cachedRenderers = modelRoot.GetComponentsInChildren<Renderer>(true);
 
         OnHPChanged?.Invoke(currentHP, maxHP);
+    }
+
+    private void EnsureAudioSource()
+    {
+        if (audioSource != null)
+            return;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = GetComponentInChildren<AudioSource>(true);
     }
 
     private void Start()
