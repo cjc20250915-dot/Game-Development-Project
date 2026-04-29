@@ -29,6 +29,9 @@ public class GameRunManager : MonoBehaviour
 
     private PostTransitionPresentationConfig pendingMapPresentation;
 
+    /// <summary>需先离开任意 MapNode 触发体再进的闸：未完成战斗退出(Abort)，或<strong>战后传送回大地图</strong>(ConsumeReturnPose)，二者共用；Resolve Spawn 若在重叠内仍保持。</summary>
+    private bool gateMapNodeBattleUntilLeaveTrigger;
+
     private void Awake()
     {
         if (Instance == null)
@@ -214,6 +217,7 @@ public class GameRunManager : MonoBehaviour
         currentNode = null;
         hasPendingMainMapReturnPose = false;
         pendingMapPresentation = null;
+        gateMapNodeBattleUntilLeaveTrigger = false;
 
         winCount = 0;
         loseCount = 0;
@@ -253,6 +257,73 @@ public class GameRunManager : MonoBehaviour
         worldPosition = pendingMainMapReturnPosition;
         worldRotation = pendingMainMapReturnRotation;
         hasPendingMainMapReturnPose = false;
+
+        // 战后回到大地图会先瞬移到节点旁；若出生时仍与该节点 Trigger 重叠，会先拦一次 TriggerNode（与 Abort 同源 gate），再走 Resolve。
+        gateMapNodeBattleUntilLeaveTrigger = true;
+
         return true;
+    }
+
+    /// <summary>在仍有一场未结算战斗时调用（例如暂停里「回主菜单」）：清空 currentNode，并在大地图上要求先离开节点触发区再进入才进战斗。</summary>
+    public void AbortUnfinishedBattleIfNeeded()
+    {
+        if (currentNode == null)
+            return;
+
+        pendingNextNodeIds.Clear();
+        currentNode = null;
+        gateMapNodeBattleUntilLeaveTrigger = true;
+    }
+
+    public bool ShouldBlockMapNodeAutoEnter()
+    {
+        return gateMapNodeBattleUntilLeaveTrigger;
+    }
+
+    /// <summary>玩家离开任意 MapNode 的触发碰撞体时调用，解除「需离开后再进」的限制。</summary>
+    public void ClearMapNodeEnterGateAfterExitTrigger()
+    {
+        if (!gateMapNodeBattleUntilLeaveTrigger) return;
+        gateMapNodeBattleUntilLeaveTrigger = false;
+    }
+
+    /// <summary>大地图生成玩家并摆好位置后调用：若出生点不在任何节点触发器内，则无需等待 OnTriggerExit。</summary>
+    public void ResolveMapNodeGateOnMainMapSpawn(Collider playerCollider)
+    {
+        if (!gateMapNodeBattleUntilLeaveTrigger)
+            return;
+
+        if (playerCollider == null)
+        {
+            gateMapNodeBattleUntilLeaveTrigger = false;
+            return;
+        }
+
+        Bounds b = playerCollider.bounds;
+        const float pad = 0.05f;
+        Vector3 halfExtents = b.extents + Vector3.one * pad;
+        Collider[] cols = Physics.OverlapBox(b.center, halfExtents, Quaternion.identity, ~0, QueryTriggerInteraction.Collide);
+
+        if (cols == null || cols.Length == 0)
+        {
+            gateMapNodeBattleUntilLeaveTrigger = false;
+            return;
+        }
+
+        bool insideAnyMapNodeOverlap = false;
+        foreach (Collider c in cols)
+        {
+            if (c == null || c == playerCollider) continue;
+            if (c.GetComponentInParent<MapNode>() != null)
+                insideAnyMapNodeOverlap = true;
+        }
+
+        if (insideAnyMapNodeOverlap)
+        {
+            gateMapNodeBattleUntilLeaveTrigger = true;
+            return;
+        }
+
+        gateMapNodeBattleUntilLeaveTrigger = false;
     }
 }

@@ -25,6 +25,8 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         pauseMenuUI.SetActive(false);
+        if (GameRunManager.Instance != null)
+            GameRunManager.Instance.AbortUnfinishedBattleIfNeeded();
         SceneManager.LoadScene("00_MainMenu");
     }
 

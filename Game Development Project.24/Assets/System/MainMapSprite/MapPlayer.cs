@@ -64,6 +64,14 @@ public class MapPlayer : MonoBehaviour
         {
             transform.SetPositionAndRotation(returnPos, returnRot);
         }
+
+        Physics.SyncTransforms();
+
+        if (GameRunManager.Instance != null)
+        {
+            Collider col = capsule != null ? capsule : GetComponent<Collider>();
+            GameRunManager.Instance.ResolveMapNodeGateOnMainMapSpawn(col);
+        }
     }
 
     private void Update()
@@ -223,16 +231,28 @@ public class MapPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        MapNode node = other.GetComponent<MapNode>();
+        MapNode node = other.GetComponentInParent<MapNode>();
         if (node == null) return;
 
-        node.RefreshState();
+        bool blocked = GameRunManager.Instance != null && GameRunManager.Instance.ShouldBlockMapNodeAutoEnter();
+        if (blocked)
+            return;
 
-        if (!node.isUnlocked) return;
-        if (node.visited) return;
+        node.RefreshState();
+        if (!node.isUnlocked)
+            return;
+
+        if (node.visited)
+            return;
 
         currentNode = node;
         node.TriggerNode();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponentInParent<MapNode>() == null) return;
+        GameRunManager.Instance?.ClearMapNodeEnterGateAfterExitTrigger();
     }
 
     private void OnDrawGizmosSelected()

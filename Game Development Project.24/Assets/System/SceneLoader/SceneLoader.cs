@@ -13,6 +13,8 @@ public class SceneLoader : MonoBehaviour
     public void LoadMenuScene()
     {
         Debug.Log("Returning to MainMenu");
+        if (GameRunManager.Instance != null)
+            GameRunManager.Instance.AbortUnfinishedBattleIfNeeded();
         SceneManager.LoadScene("00_MainMenu");
     }
     public void LoadGameScene()
