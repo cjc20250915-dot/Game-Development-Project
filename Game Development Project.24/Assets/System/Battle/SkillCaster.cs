@@ -314,7 +314,7 @@ public class SkillCaster : MonoBehaviour
         }
 
         if (skill.appliesFreeze)
-            enemy.ScheduleFreezeNextEnemyPhase();
+            enemy.ScheduleFreezeNextEnemyPhase(skill.freezeVFXPrefab);
     }
 
     private void ApplySelfDamage(int damage, string skillName)
