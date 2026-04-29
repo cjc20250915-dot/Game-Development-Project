@@ -119,7 +119,7 @@ public class SkillCaster : MonoBehaviour
             return false;
         }
 
-        AllyUnit healedUnit = ApplyHeal(skill);
+        ApplyHeal(skill);
 
         List<EnemyUnit> enemyTargetsResolved = new List<EnemyUnit>();
         if (needsEnemyTargets && frontEnemies != null)
@@ -128,7 +128,7 @@ public class SkillCaster : MonoBehaviour
         if (skill.dealsSelfDamage && skill.selfDamageAmount > 0)
             ApplySelfDamage(skill.selfDamageAmount, skill.skillName);
 
-        PlaySkillFeedback(skill, healedUnit, enemyTargetsResolved);
+        PlaySkillFeedback(skill, enemyTargetsResolved);
 
         Debug.Log($"[SkillCaster] Cast success: {skill.skillName}");
         return true;
@@ -167,7 +167,7 @@ public class SkillCaster : MonoBehaviour
             return;
         }
 
-        AllyUnit healedUnit = ApplyHeal(skill);
+        ApplyHeal(skill);
 
         List<EnemyUnit> enemyTargetsResolved = new List<EnemyUnit>();
         if (NeedsEnemyTargeting(skill))
@@ -178,7 +178,7 @@ public class SkillCaster : MonoBehaviour
         if (skill.dealsSelfDamage && skill.selfDamageAmount > 0)
             ApplySelfDamage(skill.selfDamageAmount, skill.skillName);
 
-        PlaySkillFeedback(skill, healedUnit, enemyTargetsResolved);
+        PlaySkillFeedback(skill, enemyTargetsResolved);
 
         Debug.Log($"[SkillCaster] Cast success: {skill.skillName}");
     }
@@ -192,7 +192,7 @@ public class SkillCaster : MonoBehaviour
         if (target == null || target.IsDead)
             return null;
 
-        target.Heal(skill.healAmount);
+        target.Heal(skill.healAmount, skill.healVFXPrefab, skill.healSFX);
         return target;
     }
 
@@ -329,19 +329,14 @@ public class SkillCaster : MonoBehaviour
     }
 
     /// <summary>
-    /// 顺序：回血 → 自残 → 冻结音效。对敌伤害的 VFX/SFX 由 EnemyUnit.TakeDamageFromSkill 在扣血时播放，避免与默认受击重复。
+    /// 自残 / 冻结等反馈。回血与对敌伤害反馈分别在 AllyUnit.Heal / EnemyUnit.TakeDamageFromSkill 内播放。
     /// </summary>
-    private void PlaySkillFeedback(SkillData skill, AllyUnit healedUnit, List<EnemyUnit> enemyTargetsResolved)
+    private void PlaySkillFeedback(SkillData skill, List<EnemyUnit> enemyTargetsResolved)
     {
         if (skill == null)
             return;
 
-        if (skill.dealsHeal && skill.healAmount > 0 && healedUnit != null)
-        {
-            Vector3 pos = healedUnit.transform.position;
-            PlayFeedbackSound(skill.healSFX, pos);
-            SpawnFeedbackVFX(skill.healVFXPrefab, pos);
-        }
+        // 回血 VFX/SFX 已在 AllyUnit.Heal（来自 SkillData 覆盖或友方预制体默认）内播放。
 
         if (skill.dealsSelfDamage && skill.selfDamageAmount > 0 && owner != null)
         {

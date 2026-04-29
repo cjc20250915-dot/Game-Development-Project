@@ -52,7 +52,9 @@ public class AllyUnit : MonoBehaviour
     [Tooltip("受伤时播放的音效")]
     public AudioClip hitSFX;
 
-    [Header("Heal SFX")]
+    [Header("Heal VFX / SFX")]
+    [Tooltip("回血时在 modelRoot 世界坐标生成的特效；粒子请勿勾选 Looping（持续发射），否则会约 3 秒后强制销毁实例")]
+    public GameObject healVFXPrefab;
     [Tooltip("回血时播放的音效（通过 AllyUnit.Heal 触发）")]
     public AudioClip healSFX;
 
@@ -136,7 +138,10 @@ public class AllyUnit : MonoBehaviour
         }
     }
 
-    public void Heal(int amount)
+    /// <param name="amount">回复量</param>
+    /// <param name="healVFXOverride">非空则代替预制体上的 healVFXPrefab（技能回血等）</param>
+    /// <param name="healSFXOverride">非空则代替预制体上的 healSFX</param>
+    public void Heal(int amount, GameObject healVFXOverride = null, AudioClip healSFXOverride = null)
     {
         if (IsDead || deathStarted) return;
         if (amount <= 0) return;
@@ -146,8 +151,66 @@ public class AllyUnit : MonoBehaviour
 
         OnHPChanged?.Invoke(currentHP, maxHP);
 
-        if (audioSource != null && healSFX != null)
-            audioSource.PlayOneShot(healSFX);
+        EnsureAudioSource();
+
+        GameObject vfxPrefab = healVFXOverride != null ? healVFXOverride : healVFXPrefab;
+        if (vfxPrefab != null)
+            SpawnHealVfx(vfxPrefab);
+
+        AudioClip sfx = healSFXOverride != null ? healSFXOverride : healSFX;
+        if (audioSource != null && sfx != null)
+            audioSource.PlayOneShot(sfx);
+    }
+
+    /// <summary>
+    /// 生成在友方 <see cref="modelRoot"/> 的世界坐标处；带 Cartoon FX 的预制体会自行销毁，
+    /// 否则按粒子时长兜底销毁（避免 Looping 粒子永远不删导致「一直在播」）。
+    /// </summary>
+    private void SpawnHealVfx(GameObject prefab)
+    {
+        GameObject vfx = Instantiate(prefab, modelRoot.position, Quaternion.identity);
+
+        // 与 VFXManager：CFXR 自带结束销毁；否则 Destroy 兜底
+        if (vfx.GetComponentInChildren<CartoonFX.CFXR_Effect>(true) != null)
+            return;
+
+        Destroy(vfx, EstimateHealVfxDestroyDelay(vfx));
+    }
+
+    /// <summary>
+    /// 根据非 Loop 粒子的 duration + lifetime 估算；若存在 Looping 或未检测到粒子则短延时销毁。
+    /// </summary>
+    private static float EstimateHealVfxDestroyDelay(GameObject root)
+    {
+        float maxEnd = 0f;
+        bool anyLooping = false;
+
+        var systems = root.GetComponentsInChildren<ParticleSystem>(true);
+        foreach (var ps in systems)
+        {
+            var main = ps.main;
+            if (main.loop)
+            {
+                anyLooping = true;
+                continue;
+            }
+
+            float startLife = main.startLifetime.constant;
+            if (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
+                startLife = Mathf.Max(main.startLifetime.constantMin, main.startLifetime.constantMax);
+
+            float end = main.duration + startLife;
+            if (end > maxEnd)
+                maxEnd = end;
+        }
+
+        if (anyLooping && maxEnd <= 0f)
+            return 3f;
+
+        if (maxEnd <= 0f)
+            return 3f;
+
+        return Mathf.Clamp(maxEnd + 0.25f, 0.75f, 20f);
     }
 
     private void PlayHitFeedback()
