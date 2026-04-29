@@ -52,6 +52,10 @@ public class AllyUnit : MonoBehaviour
     [Tooltip("受伤时播放的音效")]
     public AudioClip hitSFX;
 
+    [Header("Heal SFX")]
+    [Tooltip("回血时播放的音效（通过 AllyUnit.Heal 触发）")]
+    public AudioClip healSFX;
+
     [Header("Death VFX / SFX")]
     [Tooltip("死亡流程开始时生成的特效")]
     public GameObject deathVFXPrefab;
@@ -141,6 +145,9 @@ public class AllyUnit : MonoBehaviour
         if (currentHP > maxHP) currentHP = maxHP;
 
         OnHPChanged?.Invoke(currentHP, maxHP);
+
+        if (audioSource != null && healSFX != null)
+            audioSource.PlayOneShot(healSFX);
     }
 
     private void PlayHitFeedback()

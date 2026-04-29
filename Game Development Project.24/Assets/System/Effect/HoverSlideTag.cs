@@ -16,6 +16,12 @@ public class HoverSlideLabel : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private float moveDuration = 0.25f;
     [SerializeField] private float fadeDuration = 0.2f;
 
+    [Header("Audio")]
+    [Tooltip("鼠标进入（第一次展开面板）时播放；留空则不播")]
+    [SerializeField] private AudioClip hoverSFX;
+    [Tooltip("可为空：自动在本物体或子物体上找 AudioSource")]
+    [SerializeField] private AudioSource audioSource;
+
     private Tween moveTween;
     private Tween fadeTween;
 
@@ -23,6 +29,8 @@ public class HoverSlideLabel : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void Awake()
     {
+        EnsureAudioSource();
+
         if (target == null)
             target = GetComponent<RectTransform>();
 
@@ -36,6 +44,31 @@ public class HoverSlideLabel : MonoBehaviour, IPointerEnterHandler, IPointerExit
             textCanvas.interactable = false;
             textCanvas.blocksRaycasts = false;
         }
+    }
+
+    private void EnsureAudioSource()
+    {
+        if (audioSource != null)
+            return;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = GetComponentInChildren<AudioSource>(true);
+    }
+
+    private void PlayHoverSFX()
+    {
+        if (hoverSFX == null)
+            return;
+
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(hoverSFX);
+            return;
+        }
+
+        if (Camera.main != null)
+            AudioSource.PlayClipAtPoint(hoverSFX, Camera.main.transform.position);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -52,6 +85,8 @@ public class HoverSlideLabel : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (isShown) return;
         isShown = true;
+
+        PlayHoverSFX();
 
         // 杀掉旧动画（防止快速进出抖动）
         moveTween?.Kill();
