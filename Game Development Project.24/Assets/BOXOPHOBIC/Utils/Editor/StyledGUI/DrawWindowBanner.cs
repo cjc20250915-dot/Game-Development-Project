@@ -1,4 +1,4 @@
-﻿// Cristian Pop - https://boxophobic.com/
+// Cristian Pop - https://boxophobic.com/
 
 using UnityEngine;
 using UnityEditor;
@@ -67,13 +67,13 @@ namespace Boxophobic.StyledGUI
 
         public static void DrawWindowBanner(Color color, string title, string subtitle)
         {
-            GUIStyle titleStyle = new GUIStyle("label")
+            GUIStyle titleStyle = new GUIStyle(EditorStyles.label)
             {
                 richText = true,
                 alignment = TextAnchor.MiddleCenter
             };
 
-            GUIStyle subTitleStyle = new GUIStyle("label")
+            GUIStyle subTitleStyle = new GUIStyle(EditorStyles.label)
             {
                 richText = true,
                 alignment = TextAnchor.MiddleRight
@@ -108,13 +108,13 @@ namespace Boxophobic.StyledGUI
 
         public static void DrawWindowBanner(string title, string subtitle)
         {
-            GUIStyle titleStyle = new GUIStyle("label")
+            GUIStyle titleStyle = new GUIStyle(EditorStyles.label)
             {
                 richText = true,
                 alignment = TextAnchor.MiddleCenter
             };
 
-            GUIStyle subTitleStyle = new GUIStyle("label")
+            GUIStyle subTitleStyle = new GUIStyle(EditorStyles.label)
             {
                 richText = true,
                 alignment = TextAnchor.MiddleRight

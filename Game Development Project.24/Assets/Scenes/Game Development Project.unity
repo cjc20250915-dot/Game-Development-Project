@@ -2077,6 +2077,10 @@ MonoBehaviour:
   origin: {x: 0, y: 0}
   moveDuration: 0.18
   clearDelay: 0.15
+  matchClearSFX_Match3: {fileID: 0}
+  matchClearSFX_Match4: {fileID: 0}
+  matchClearSFX_Match5Plus: {fileID: 0}
+  matchClearAudioSource: {fileID: 0}
   dragThreshold: 25
   previewDuration: 0.08
   postMoveInputCooldown: 0.2
@@ -9944,6 +9948,9 @@ MonoBehaviour:
   higherSpeedFirst: 1
   thinkDelay: 0.25
   betweenEnemiesDelay: 0.15
+  attackLungeForwardDuration: 0.14
+  attackLungeReturnDuration: 0.16
+  attackLungeReach: 0.88
 --- !u!114 &1915873650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10114,7 +10121,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1933195644
 MonoBehaviour:
   m_ObjectHideFlags: 0

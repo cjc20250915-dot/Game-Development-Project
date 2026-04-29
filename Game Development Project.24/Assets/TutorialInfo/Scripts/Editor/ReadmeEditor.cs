@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -99,7 +99,7 @@ public class ReadmeEditor : Editor
 
         var iconWidth = Mathf.Min(EditorGUIUtility.currentViewWidth / 3f - 20f, 128f);
 
-        GUILayout.BeginHorizontal("In BigTitle");
+        GUILayout.BeginHorizontal();
         {
             if (readme.icon != null)
             {

@@ -12,7 +12,8 @@ public class EnemyUnit : MonoBehaviour
     public bool IsDead => currentHP <= 0;
 
     [Header("Death")]
-    [SerializeField] private float deathDelay = 0.4f;
+    [Tooltip("HP 归零后，延迟这么久再派发 OnDead")]
+    public float deathDelay = 1.5f;
 
     /// <summary>
     /// 当血量变化时触发（用于刷新血条UI）
@@ -49,12 +50,16 @@ public class EnemyUnit : MonoBehaviour
     [SerializeField] private int hitFlashCount = 2;
 
     [Header("Hit VFX / SFX")]
-    [SerializeField] private GameObject hitVFXPrefab;
-    [SerializeField] private AudioClip hitSFX;
+    [Tooltip("受伤时在模型位置生成的特效")]
+    public GameObject hitVFXPrefab;
+    [Tooltip("受伤时播放的音效")]
+    public AudioClip hitSFX;
 
     [Header("Death VFX / SFX")]
-    [SerializeField] private GameObject deathVFXPrefab;
-    [SerializeField] private AudioClip deathSFX;
+    [Tooltip("死亡流程开始时生成的特效")]
+    public GameObject deathVFXPrefab;
+    [Tooltip("死亡流程开始时播放的音效")]
+    public AudioClip deathSFX;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -83,6 +88,88 @@ public void ClearDefend()
 {
     isDefending = false;
 }
+
+    [Header("Freeze (player skill)")]
+    [Tooltip("由技能施加：下一次敌方回合开始时若仍为 true，则本回合跳过行动（Consume 后清除）。敌方回合开始的防御清除仍会执行。")]
+    [SerializeField] private bool freezeSkipNextEnemyPhase;
+
+    [Header("Freeze Visual")]
+    [Tooltip("冰冻观感：追加到 modelRoot 下所有 Renderer 的材质槽末尾。建议使用 Assets/Shader 下的冰冻材质（如 IceEffectMat）。")]
+    public Material freezeOverlayMaterial;
+
+    private Material[][] freezeMaterialBackup;
+    private bool freezeOverlayApplied;
+
+    /// <summary>是否已成功挂上冻结标记（用于技能音效：避免击杀后仍播冻结音）。</summary>
+    public bool HasFreezeScheduledForNextEnemyPhase => freezeSkipNextEnemyPhase;
+
+    /// <summary>标记：下一次敌方行动中跳过全部行动（攻击/技能/防御均不执行）。</summary>
+    public void ScheduleFreezeNextEnemyPhase()
+    {
+        if (IsDead || deathStarted)
+            return;
+
+        freezeSkipNextEnemyPhase = true;
+        ApplyFreezeVisualOverlay();
+    }
+
+    /// <summary>若本敌人因冻结应跳过本回合行动，返回 true 并清除冻结标记。</summary>
+    public bool ConsumeFreezeSkipActionsIfScheduled()
+    {
+        if (!freezeSkipNextEnemyPhase)
+            return false;
+
+        freezeSkipNextEnemyPhase = false;
+        RemoveFreezeVisualOverlay();
+        return true;
+    }
+
+    private void ApplyFreezeVisualOverlay()
+    {
+        if (freezeOverlayMaterial == null || freezeOverlayApplied || modelRoot == null)
+            return;
+
+        Renderer[] rends = modelRoot.GetComponentsInChildren<Renderer>(true);
+        if (rends == null || rends.Length == 0)
+            return;
+
+        freezeMaterialBackup = new Material[rends.Length][];
+
+        for (int i = 0; i < rends.Length; i++)
+        {
+            Renderer r = rends[i];
+            if (r == null)
+                continue;
+
+            freezeMaterialBackup[i] = r.sharedMaterials;
+
+            var mats = new Material[r.sharedMaterials.Length + 1];
+            r.sharedMaterials.CopyTo(mats, 0);
+            mats[mats.Length - 1] = freezeOverlayMaterial;
+            r.materials = mats;
+        }
+
+        freezeOverlayApplied = true;
+    }
+
+    private void RemoveFreezeVisualOverlay()
+    {
+        if (!freezeOverlayApplied || freezeMaterialBackup == null || modelRoot == null)
+            return;
+
+        Renderer[] rends = modelRoot.GetComponentsInChildren<Renderer>(true);
+        int n = Mathf.Min(rends.Length, freezeMaterialBackup.Length);
+
+        for (int i = 0; i < n; i++)
+        {
+            Renderer r = rends[i];
+            if (r != null && freezeMaterialBackup[i] != null)
+                r.materials = freezeMaterialBackup[i];
+        }
+
+        freezeMaterialBackup = null;
+        freezeOverlayApplied = false;
+    }
 
     private void Awake()
     {
@@ -217,6 +304,8 @@ public void TakeDamage(int damage)
 
     private void Die()
     {
+        freezeSkipNextEnemyPhase = false;
+        RemoveFreezeVisualOverlay();
         OnDead?.Invoke();
         Debug.Log("[Enemy] Dead");
     }

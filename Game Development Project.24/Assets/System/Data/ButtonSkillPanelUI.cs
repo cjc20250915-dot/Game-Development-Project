@@ -11,6 +11,13 @@ public class BattleSkillPanelUI : MonoBehaviour
     [SerializeField] private SkillButtonUI button3;
     [SerializeField] private SkillButtonUI button4;
 
+    [Header("5th Button — Fixed Skill (not from ally.skills list)")]
+    [SerializeField] private SkillButtonUI button5;
+    [Tooltip("拖到 Project 里的 SkillData 资产")]
+    [SerializeField] private SkillData fixedSkillAsset;
+    [Tooltip("为空则在 Refresh 时用 SlotA → SlotB 上第一个存活友军的 SkillCaster")]
+    [SerializeField] private SkillCaster fixedSkillCasterOverride;
+
     private void OnEnable()
     {
         if (allySlotBoard != null)
@@ -44,6 +51,48 @@ public class BattleSkillPanelUI : MonoBehaviour
         BindButtonToSkill(button2, ally1, 1);
         BindButtonToSkill(button3, ally2, 0);
         BindButtonToSkill(button4, ally2, 1);
+
+        BindFixedSkillButton();
+    }
+
+    private void BindFixedSkillButton()
+    {
+        if (button5 == null)
+            return;
+
+        SkillCaster caster = ResolveFixedSkillCaster();
+        if (fixedSkillAsset == null || caster == null)
+        {
+            button5.ClearSkill();
+            return;
+        }
+
+        button5.BindFixedSkill(caster, fixedSkillAsset);
+    }
+
+    private SkillCaster ResolveFixedSkillCaster()
+    {
+        if (fixedSkillCasterOverride != null)
+            return fixedSkillCasterOverride;
+
+        if (allySlotBoard == null)
+            return null;
+
+        if (allySlotBoard.SlotA != null && !allySlotBoard.SlotA.IsDead)
+        {
+            SkillCaster c = allySlotBoard.SlotA.GetComponentInChildren<SkillCaster>(true);
+            if (c != null)
+                return c;
+        }
+
+        if (allySlotBoard.SlotB != null && !allySlotBoard.SlotB.IsDead)
+        {
+            SkillCaster c = allySlotBoard.SlotB.GetComponentInChildren<SkillCaster>(true);
+            if (c != null)
+                return c;
+        }
+
+        return null;
     }
 
     private void BindButtonToSkill(SkillButtonUI buttonUI, AllyUnit owner, int skillIndex)
@@ -75,5 +124,6 @@ public class BattleSkillPanelUI : MonoBehaviour
         if (button2 != null) button2.ClearSkill();
         if (button3 != null) button3.ClearSkill();
         if (button4 != null) button4.ClearSkill();
+        if (button5 != null) button5.ClearSkill();
     }
 }

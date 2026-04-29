@@ -296,7 +296,7 @@ namespace CartoonFX
                     {
                         if (_HelpBoxRichTextStyle == null)
                         {
-                            _HelpBoxRichTextStyle = new GUIStyle("HelpBox");
+                            _HelpBoxRichTextStyle = new GUIStyle(EditorStyles.helpBox);
                             _HelpBoxRichTextStyle.richText = true;
                             _HelpBoxRichTextStyle.margin = new RectOffset(4, 4, 0, 0);
                             _HelpBoxRichTextStyle.padding = new RectOffset(4, 4, 4, 4);

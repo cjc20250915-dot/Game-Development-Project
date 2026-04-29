@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class BattleResultHandler : MonoBehaviour
 {
-    [Header("µØÍ¼³¡¾°Ãû³Æ")]
-    public string mapSceneName = "MapScene";
+    [Header("??????")]
+    public string mapSceneName = "01_MainMap";
 
     public void OnBattleWin()
     {
