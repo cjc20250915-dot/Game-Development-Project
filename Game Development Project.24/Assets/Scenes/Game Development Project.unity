@@ -8019,7 +8019,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 4
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -9968,6 +9968,9 @@ MonoBehaviour:
   button2: {fileID: 542737834}
   button3: {fileID: 319611960}
   button4: {fileID: 1781867573}
+  button5: {fileID: 0}
+  fixedSkillAsset: {fileID: 0}
+  fixedSkillCasterOverride: {fileID: 0}
 --- !u!114 &1915873651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10121,7 +10124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1933195644
 MonoBehaviour:
   m_ObjectHideFlags: 0
