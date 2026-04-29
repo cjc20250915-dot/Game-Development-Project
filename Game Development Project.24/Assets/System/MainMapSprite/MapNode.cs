@@ -32,6 +32,10 @@ public class MapNode : MonoBehaviour
     //"过渡控制器，可为空")]
     public TransitionController transitionController;
 
+    [Header("战斗结算后隐藏子物体")]
+    [Tooltip("拖入节点下的子物体（可多个）；该节点在任意一次战斗结束并回到大地图后会被关闭显示；新周目 ResetRunProgress 后会重新显示。")]
+    [SerializeField] private GameObject[] hideChildrenAfterBattleReturn;
+
     private void Start()
     {
         RefreshState();
@@ -54,6 +58,22 @@ public class MapNode : MonoBehaviour
         string nodeId = nodeData.nodeName;
         visited = GameRunManager.Instance.IsNodeCompleted(nodeId);
         isUnlocked = GameRunManager.Instance.IsNodeUnlocked(nodeId);
+
+        ApplyHideChildrenAfterBattleReturn();
+    }
+
+    /// <summary>该节点已通过战斗结算（胜负皆可）回到大地图时，隐藏配置的子物体。</summary>
+    private void ApplyHideChildrenAfterBattleReturn()
+    {
+        if (hideChildrenAfterBattleReturn == null || hideChildrenAfterBattleReturn.Length == 0) return;
+
+        bool hide = visited;
+        for (int i = 0; i < hideChildrenAfterBattleReturn.Length; i++)
+        {
+            GameObject go = hideChildrenAfterBattleReturn[i];
+            if (go == null) continue;
+            go.SetActive(!hide);
+        }
     }
 
     public void TriggerNode()
