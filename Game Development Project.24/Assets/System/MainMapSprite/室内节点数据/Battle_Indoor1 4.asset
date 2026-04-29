@@ -12,18 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb7a1992700d1e478ff3ee53ea25406, type: 3}
   m_Name: Battle_Indoor1 4
   m_EditorClassIdentifier: 
-  nodeName: 
+  nodeName: Node_F1
   nodeType: 0
-  sceneName: 
+  sceneName: Game Development Project 2
   presentationAfterTransitionToMap:
     enabled: 0
     presentationVideo: {fileID: 0}
     fadeInDuration: 0.5
     fadeOutDuration: 0.5
   enemyWaves:
-  - enemyPrefab: {fileID: 5992146104891761328, guid: b26b484680b6bb64c958edcee0730832, type: 3}
+  - enemyPrefab: {fileID: 5992146104891761328, guid: 46e5a6c34a37d9e4bb618be7e95970bb, type: 3}
     count: 1
-  - enemyPrefab: {fileID: 5992146104891761328, guid: 2e51448e2cc9c924c9083bf047abdd21, type: 3}
+  - enemyPrefab: {fileID: 5992146104891761328, guid: 46e5a6c34a37d9e4bb618be7e95970bb, type: 3}
     count: 1
-  - enemyPrefab: {fileID: 5992146104891761328, guid: 3ecc26452af06f5408148da1f42e8259, type: 3}
+  - enemyPrefab: {fileID: 5992146104891761328, guid: b00ae0e933dc11a4eb35a23dec23469a, type: 3}
+    count: 1
+  - enemyPrefab: {fileID: 5992146104891761328, guid: b00ae0e933dc11a4eb35a23dec23469a, type: 3}
     count: 1

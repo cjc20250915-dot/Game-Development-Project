@@ -86,6 +86,8 @@ public class GameRunManager : MonoBehaviour
             FindObjectsSortMode.None
         );
 
+        UnlockIndoorRootsIfNeeded(nodes);
+
         foreach (MapNode node in nodes)
         {
             node.RefreshState();
@@ -94,6 +96,44 @@ public class GameRunManager : MonoBehaviour
         if (nodes.Length > 0)
         {
             Debug.Log($"???? {SceneManager.GetActiveScene().name} ??????????????????????{nodes.Length}");
+        }
+    }
+
+    /// <summary>
+    /// 室外 01_MainMap 的节点链通过 nextNodes 解锁；下一关 Indoor 场景无法被拖进上一份地图的 nextNodes，
+    /// 且 DontDestroy 的 GM 只吃第一个场景的 firstUnlockedNode，关卡内第二个 GM会被销毁，
+    /// 因此首次进入 Indoor 时把「没有其他节点指向」的根节点 Id 记入解锁集合（后续仍靠室内 nextNodes 链推进）。
+    /// </summary>
+    private void UnlockIndoorRootsIfNeeded(MapNode[] nodes)
+    {
+        if (nodes.Length == 0)
+            return;
+        if (!string.Equals(SceneManager.GetActiveScene().name, "Indoor", System.StringComparison.Ordinal))
+            return;
+
+        HashSet<string> referenced = new HashSet<string>();
+        foreach (MapNode mn in nodes)
+        {
+            foreach (MapNode nx in mn.nextNodes)
+            {
+                if (nx == null || nx.nodeData == null)
+                    continue;
+                string id = nx.nodeData.nodeName;
+                if (!string.IsNullOrEmpty(id))
+                    referenced.Add(id);
+            }
+        }
+
+        foreach (MapNode mn in nodes)
+        {
+            if (mn.nodeData == null)
+                continue;
+            string id = mn.nodeData.nodeName;
+            if (string.IsNullOrEmpty(id))
+                continue;
+            if (referenced.Contains(id))
+                continue;
+            unlockedNodeIds.Add(id);
         }
     }
 
