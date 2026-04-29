@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb7a1992700d1e478ff3ee53ea25406, type: 3}
   m_Name: Battle_Indoor1 2
   m_EditorClassIdentifier: 
-  nodeName: 
+  nodeName: Node_C1
   nodeType: 0
-  sceneName: 
+  sceneName: Game Development Project 2
   presentationAfterTransitionToMap:
     enabled: 0
     presentationVideo: {fileID: 0}
