@@ -29,31 +29,32 @@ public class TransitionController : MonoBehaviour
         }
     }
 
-IEnumerator Transition(string sceneName)
-{
-    isTransitioning = true;
+    IEnumerator Transition(string sceneName)
+    {
+        isTransitioning = true;
 
-    // 禁用鼠标（转场开始）
-    Cursor.visible = false;
-    Cursor.lockState = CursorLockMode.Locked;
+        // 禁用鼠标（转场开始）
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
-    yield return StartCoroutine(AnimateCircle(-0.2f, 2f));
+        yield return StartCoroutine(AnimateCircle(-0.2f, 2f));
 
-    yield return new WaitForSecondsRealtime(minWaitTime);
+        yield return new WaitForSecondsRealtime(minWaitTime);
 
-    AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
-    while (!op.isDone)
-        yield return null;
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+        while (!op.isDone)
+            yield return null;
 
-    yield return StartCoroutine(AnimateCircle(2f, -0.2f));
+        yield return StartCoroutine(AnimateCircle(2f, -0.2f));
 
-    // 转场结束时必须恢复：否则目标场景若没有会重置 Cursor 的对象（例如 Indoor），鼠标会一直锁定/隐藏
-    Cursor.visible = true;
-    Cursor.lockState = CursorLockMode.None;
-    isTransitioning = false;
+        // 转场结束时必须恢复：否则目标场景若没有会重置 Cursor 的对象（例如 Indoor），鼠标会一直锁定/隐藏
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        isTransitioning = false;
 
-    Destroy(gameObject, destroyDelayAfterLoad);
-}
+        Destroy(gameObject, destroyDelayAfterLoad);
+    }
+
     IEnumerator AnimateCircle(float from, float to)
     {
         float t = 0f;

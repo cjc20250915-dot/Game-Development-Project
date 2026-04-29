@@ -27,6 +27,8 @@ public class GameRunManager : MonoBehaviour
     private Vector3 pendingMainMapReturnPosition;
     private Quaternion pendingMainMapReturnRotation;
 
+    private PostTransitionPresentationConfig pendingMapPresentation;
+
     private void Awake()
     {
         if (Instance == null)
@@ -163,8 +165,33 @@ public class GameRunManager : MonoBehaviour
 
         Debug.Log("?????" + currentId);
 
+        if (currentNode.presentationAfterTransitionToMap != null &&
+            currentNode.presentationAfterTransitionToMap.enabled &&
+            currentNode.presentationAfterTransitionToMap.presentationVideo != null)
+        {
+            pendingMapPresentation = new PostTransitionPresentationConfig
+            {
+                enabled = true,
+                presentationVideo = currentNode.presentationAfterTransitionToMap.presentationVideo,
+                fadeInDuration = currentNode.presentationAfterTransitionToMap.fadeInDuration,
+                fadeOutDuration = currentNode.presentationAfterTransitionToMap.fadeOutDuration
+            };
+            Debug.Log($"[GameRunManager] ????????????????? {currentId}??clip={pendingMapPresentation.presentationVideo?.name}");
+        }
+        else
+        {
+            pendingMapPresentation = null;
+        }
+
         pendingNextNodeIds.Clear();
         currentNode = null;
+    }
+
+    public bool TryConsumePendingMapPresentation(out PostTransitionPresentationConfig pres)
+    {
+        pres = pendingMapPresentation;
+        pendingMapPresentation = null;
+        return pres != null && pres.enabled;
     }
 
     public bool IsNodeCompleted(string nodeId)
@@ -186,6 +213,7 @@ public class GameRunManager : MonoBehaviour
         pendingNextNodeIds.Clear();
         currentNode = null;
         hasPendingMainMapReturnPose = false;
+        pendingMapPresentation = null;
 
         winCount = 0;
         loseCount = 0;
@@ -201,10 +229,10 @@ public class GameRunManager : MonoBehaviour
         }
 
         RefreshAllMapNodesInScene();
-        Debug.Log("进度已重置");
+        Debug.Log("??????????");
     }
 
-    /// <summary>在即将离开主图场景时调用（例如进入战斗）</summary>
+    /// <summary>????????????????????????????????</summary>
     public void SetMainMapReturnPose(Vector3 worldPosition, Quaternion worldRotation)
     {
         pendingMainMapReturnPosition = worldPosition;
@@ -212,7 +240,7 @@ public class GameRunManager : MonoBehaviour
         hasPendingMainMapReturnPose = true;
     }
 
-    /// <summary>回到主图后若存在记录则恢复玩家站位，并清除标记</summary>
+    /// <summary>????????????????????????????????????</summary>
     public bool TryConsumeMainMapReturnPose(out Vector3 worldPosition, out Quaternion worldRotation)
     {
         if (!hasPendingMainMapReturnPose)

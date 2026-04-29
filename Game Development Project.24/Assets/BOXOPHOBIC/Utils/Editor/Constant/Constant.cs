@@ -1,4 +1,4 @@
-﻿//  Cristian Pop - https://boxophobic.com/
+//  Cristian Pop - https://boxophobic.com/
 
 using UnityEngine;
 using UnityEditor;
@@ -53,17 +53,24 @@ namespace Boxophobic.Constants
             }
         }
 
+        static GUIStyle _titleStyle;
+        static GUIStyle _headerStyle;
+
+        /// <summary>基于 EditorStyles，避免在 Inspector 原生重绘阶段使用按名称查找的 GUIStyle 导致异常。</summary>
         public static GUIStyle TitleStyle
         {
             get
             {
-                GUIStyle guiStyle = new GUIStyle("label")
+                if (_titleStyle == null)
                 {
-                    richText = true,
-                    alignment = TextAnchor.MiddleCenter
-                };
+                    _titleStyle = new GUIStyle(EditorStyles.label)
+                    {
+                        richText = true,
+                        alignment = TextAnchor.MiddleCenter
+                    };
+                }
 
-                return guiStyle;
+                return _titleStyle;
             }
         }
 
@@ -71,14 +78,17 @@ namespace Boxophobic.Constants
         {
             get
             {
-                GUIStyle guiStyle = new GUIStyle("label")
+                if (_headerStyle == null)
                 {
-                    richText = true,
-                    fontStyle = FontStyle.Bold,
-                    alignment = TextAnchor.MiddleLeft
-                };
+                    _headerStyle = new GUIStyle(EditorStyles.label)
+                    {
+                        richText = true,
+                        fontStyle = FontStyle.Bold,
+                        alignment = TextAnchor.MiddleLeft
+                    };
+                }
 
-                return guiStyle;
+                return _headerStyle;
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿//--------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------
 // Cartoon FX
 // (c) 2012-2025 Jean Moreno
 //--------------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace CartoonFX
 			{
 				if(_shurikenToggle == null)
 				{
-					_shurikenToggle = new GUIStyle("ShurikenToggle");
+					_shurikenToggle = new GUIStyle(EditorStyles.toggle);
 					_shurikenToggle.fontSize = 9;
 					_shurikenToggle.contentOffset = new Vector2(16, -1);
 					if(EditorGUIUtility.isProSkin)
@@ -200,7 +200,7 @@ namespace CartoonFX
 			{
 				if(_HelpBoxRichTextStyle == null)
 				{
-					_HelpBoxRichTextStyle = new GUIStyle("HelpBox");
+					_HelpBoxRichTextStyle = new GUIStyle(EditorStyles.helpBox);
 					_HelpBoxRichTextStyle.richText = true;
 				}
 				return _HelpBoxRichTextStyle;

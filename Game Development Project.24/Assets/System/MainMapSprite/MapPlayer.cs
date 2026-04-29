@@ -20,6 +20,9 @@ public class MapPlayer : MonoBehaviour
     //[Header("地面判定：法线与世界上方向点积下限，墙面约 0，水平地面约 1")]
     public float minGroundUpDot = 0.85f;
 
+    //[Header("朝向：仅在 XZ 水平面上面朝点击方向（绕 Y 轴，无俯仰）")]
+    public bool faceClickDirection2D = true;
+
     //[Header("跳跃形变")]
     public float squashAmount = 0.7f;
     public float stretchAmount = 1.2f;
@@ -137,6 +140,9 @@ public class MapPlayer : MonoBehaviour
         isMoving = true;
 
         Vector3 start = transform.position;
+        if (faceClickDirection2D)
+            FaceHorizontalToward(start, target);
+
         float distance = Vector3.Distance(start, target);
         float duration = Mathf.Clamp(distance / moveSpeed, 0.2f, 0.45f);
         float time = 0f;
@@ -181,6 +187,16 @@ public class MapPlayer : MonoBehaviour
         }
 
         isMoving = false;
+    }
+
+    /// <summary>在水平面（忽略 Y）上朝目标方向旋转，仅绕 Y，等价于 2D 顶视角朝向。</summary>
+    private void FaceHorizontalToward(Vector3 fromWorld, Vector3 toWorld)
+    {
+        Vector3 d = toWorld - fromWorld;
+        d.y = 0f;
+        if (d.sqrMagnitude < 1e-8f) return;
+
+        transform.rotation = Quaternion.LookRotation(d.normalized, Vector3.up);
     }
 
     private void OnTriggerEnter(Collider other)

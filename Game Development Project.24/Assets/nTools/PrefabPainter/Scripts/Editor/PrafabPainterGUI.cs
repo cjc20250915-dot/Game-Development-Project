@@ -1,4 +1,4 @@
-﻿
+
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -125,14 +125,14 @@ namespace nTools.PrefabPainter
 
         public static GUIStyle      multibrushIconText;
 
-        public static GUIStyle      buttonLeft  = "buttonleft";
-        public static GUIStyle      buttonMid   = "buttonmid";
-        public static GUIStyle      buttonRight = "buttonright";
+        public static GUIStyle      buttonLeft;
+        public static GUIStyle      buttonMid;
+        public static GUIStyle      buttonRight;
 
         public static GUIStyle      boldFoldout;
         public static GUIStyle      handlesBoldTextStyle;
         public static GUIStyle      handlesTextStyle;
-        public static GUIStyle      toolbarSeachCancelButtonStyle = "ToolbarSearchCancelButton";
+        public static GUIStyle      toolbarSeachCancelButtonStyle;
 
         public static Color         colorBlue = new Color32 (62, 125, 231, 255);
         public static Color         backgroundColor;
@@ -186,12 +186,9 @@ namespace nTools.PrefabPainter
 
 
 
-            if(buttonLeft == null || buttonMid == null || buttonRight == null)
-            {
-                buttonLeft  = new GUIStyle(EditorStyles.miniButtonLeft);
-                buttonMid   = new GUIStyle(EditorStyles.miniButtonMid);
-                buttonRight = new GUIStyle(EditorStyles.miniButtonRight);
-            }
+            buttonLeft  = new GUIStyle(EditorStyles.miniButtonLeft);
+            buttonMid   = new GUIStyle(EditorStyles.miniButtonMid);
+            buttonRight = new GUIStyle(EditorStyles.miniButtonRight);
 
 
             boldFoldout = new GUIStyle(EditorStyles.foldout);
@@ -205,10 +202,7 @@ namespace nTools.PrefabPainter
             handlesTextStyle = new GUIStyle(EditorStyles.largeLabel);
             handlesTextStyle.normal.textColor = Color.red;
 
-            if (toolbarSeachCancelButtonStyle == null)
-            {
-                toolbarSeachCancelButtonStyle = EditorStyles.miniButton;
-            }
+            toolbarSeachCancelButtonStyle = EditorStyles.miniButton;
 
             leftGreyMiniLabel = new GUIStyle(EditorStyles.centeredGreyMiniLabel);
             leftGreyMiniLabel.alignment = TextAnchor.MiddleLeft;

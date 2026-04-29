@@ -15,6 +15,11 @@ MonoBehaviour:
   nodeName: Node_E
   nodeType: 0
   sceneName: Game Development Project
+  presentationAfterTransitionToMap:
+    enabled: 1
+    presentationVideo: {fileID: 32900000, guid: 202866d45436bc5429b6cd66cc35ee4e, type: 3}
+    fadeInDuration: 0.5
+    fadeOutDuration: 0.5
   enemyWaves:
   - enemyPrefab: {fileID: 5992146104891761328, guid: 4c6f4e489e4f20d46978233fdc429f82, type: 3}
     count: 1
