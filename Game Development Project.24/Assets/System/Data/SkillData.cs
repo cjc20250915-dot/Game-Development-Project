@@ -57,6 +57,8 @@ public class SkillData : ScriptableObject
     [Header("Skill Feedback — Freeze")]
     [Tooltip("施加冻结时播放一次（多目标时仍播一次）")]
     public AudioClip freezeSFX;
+    [Tooltip("冻结期间持续存在，直到冻结解除时自动销毁（生成在敌人身上）")]
+    public GameObject freezeVFXPrefab;
 
     [Header("Element Cost (use int type)")]
     [Tooltip("技能释放所需消耗的元素及数量")]

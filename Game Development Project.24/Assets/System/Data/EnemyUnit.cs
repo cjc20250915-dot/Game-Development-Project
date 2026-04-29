@@ -99,18 +99,20 @@ public void ClearDefend()
 
     private Material[][] freezeMaterialBackup;
     private bool freezeOverlayApplied;
+    private GameObject freezeVFXInstance;
 
     /// <summary>是否已成功挂上冻结标记（用于技能音效：避免击杀后仍播冻结音）。</summary>
     public bool HasFreezeScheduledForNextEnemyPhase => freezeSkipNextEnemyPhase;
 
     /// <summary>标记：下一次敌方行动中跳过全部行动（攻击/技能/防御均不执行）。</summary>
-    public void ScheduleFreezeNextEnemyPhase()
+    public void ScheduleFreezeNextEnemyPhase(GameObject freezeVFXPrefab = null)
     {
         if (IsDead || deathStarted)
             return;
 
         freezeSkipNextEnemyPhase = true;
         ApplyFreezeVisualOverlay();
+        ApplyFreezeVFX(freezeVFXPrefab);
     }
 
     /// <summary>若本敌人因冻结应跳过本回合行动，返回 true 并清除冻结标记。</summary>
@@ -121,6 +123,7 @@ public void ClearDefend()
 
         freezeSkipNextEnemyPhase = false;
         RemoveFreezeVisualOverlay();
+        RemoveFreezeVFX();
         return true;
     }
 
@@ -171,6 +174,25 @@ public void ClearDefend()
         freezeOverlayApplied = false;
     }
 
+    private void ApplyFreezeVFX(GameObject freezeVFXPrefab)
+    {
+        if (freezeVFXPrefab == null || freezeVFXInstance != null)
+            return;
+
+        Transform parent = modelRoot != null ? modelRoot : transform;
+        freezeVFXInstance = Instantiate(freezeVFXPrefab, parent.position, Quaternion.identity, parent);
+        freezeVFXInstance.transform.localPosition = Vector3.zero;
+    }
+
+    private void RemoveFreezeVFX()
+    {
+        if (freezeVFXInstance == null)
+            return;
+
+        Destroy(freezeVFXInstance);
+        freezeVFXInstance = null;
+    }
+
     private void Awake()
     {
         currentHP = maxHP;
@@ -182,6 +204,13 @@ public void ClearDefend()
         cachedRenderers = modelRoot.GetComponentsInChildren<Renderer>(true);
 
         OnHPChanged?.Invoke(currentHP, maxHP);
+    }
+
+    private void Start()
+    {
+        // 槽位系统会在 Instantiate 后再设置 local pose，这里二次采样避免受击重置到旧坐标。
+        if (modelRoot != null)
+            modelRootOriginalLocalPosition = modelRoot.localPosition;
     }
 
 public void TakeDamage(int damage)
@@ -306,6 +335,7 @@ public void TakeDamage(int damage)
     {
         freezeSkipNextEnemyPhase = false;
         RemoveFreezeVisualOverlay();
+        RemoveFreezeVFX();
         OnDead?.Invoke();
         Debug.Log("[Enemy] Dead");
     }
