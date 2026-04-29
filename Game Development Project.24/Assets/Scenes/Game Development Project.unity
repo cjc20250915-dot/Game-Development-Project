@@ -7288,7 +7288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgm: {fileID: 8300000, guid: af943323f79928a49b552544b888ff21, type: 3}
   playWhenSceneLoads: 1
-  volume: 0.387
+  volume: 0.16
   loop: 1
   pitch: 1
   spatialBlend: 0
