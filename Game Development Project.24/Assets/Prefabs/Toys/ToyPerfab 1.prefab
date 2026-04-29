@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Basic
-  characterPortrait: {fileID: 0}
+  characterPortrait: {fileID: 21300000, guid: d7fb2e361d1ed4946a63e006fa1379bd, type: 3}
   maxHP: 60
   currentHP: 60
   stepsPerTurn: 2
