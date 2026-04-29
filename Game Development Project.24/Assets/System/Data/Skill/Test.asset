@@ -14,12 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Test
   description: 
+  dealsHeal: 0
+  healAmount: 0
+  healTargetMode: 0
   dealsDamage: 1
   damageAmount: 1000
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 1
   isAOE: 1
+  appliesFreeze: 0
+  freezeSFX: {fileID: 0}
+  freezeVFXPrefab: {fileID: 0}
   costs:
   - type: 0
     amount: 0
+  healSFX: {fileID: 0}
+  healVFXPrefab: {fileID: 0}
+  selfHarmSFX: {fileID: 0}
+  selfHarmVFXPrefab: {fileID: 0}
+  enemyDamageSFX: {fileID: 0}
+  enemyDamageVFXPrefab: {fileID: 5880797563127281583, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}

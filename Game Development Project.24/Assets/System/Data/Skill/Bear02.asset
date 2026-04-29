@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b1d58871696bfe43bd36cb5a8f0e316, type: 3}
-  m_Name: Cowboy01
+  m_Name: Bear02
   m_EditorClassIdentifier: 
-  skillName: Shot !
-  description: Consumes 2 pencils to deal 10 damage to an enemy
+  skillName: Cotton filling
+  description: Consumes 3 biscuits to restore 1 heart
   dealsHeal: 0
-  healAmount: 0
+  healAmount: 20
   healTargetMode: 0
-  dealsDamage: 1
-  damageAmount: 10
+  dealsDamage: 0
+  damageAmount: 5
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 0
   isAOE: 0
   appliesFreeze: 0
   freezeSFX: {fileID: 0}
-  freezeVFXPrefab: {fileID: 888444077320411739, guid: 0c2509361b13505428ce788b7f846686, type: 3}
+  freezeVFXPrefab: {fileID: 0}
   costs:
-  - type: 2
-    amount: 2
+  - type: 1
+    amount: 3
   healSFX: {fileID: 0}
-  healVFXPrefab: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}
+  healVFXPrefab: {fileID: 0}
   selfHarmSFX: {fileID: 0}
-  selfHarmVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  selfHarmVFXPrefab: {fileID: 0}
   enemyDamageSFX: {fileID: 0}
-  enemyDamageVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  enemyDamageVFXPrefab: {fileID: 0}

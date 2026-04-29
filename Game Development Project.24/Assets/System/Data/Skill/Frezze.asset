@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Frezze
   m_EditorClassIdentifier: 
   skillName: jelly !
-  description: Consume 1 jelly to freeze 1 enemy
+  description: Consumes 1 jelly to freeze an enemy
   dealsHeal: 0
   healAmount: 0
   healTargetMode: 0
@@ -25,6 +25,7 @@ MonoBehaviour:
   isAOE: 0
   appliesFreeze: 1
   freezeSFX: {fileID: 0}
+  freezeVFXPrefab: {fileID: 888444077320411739, guid: 0c2509361b13505428ce788b7f846686, type: 3}
   costs:
   - type: 4
     amount: 1

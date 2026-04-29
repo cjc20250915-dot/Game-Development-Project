@@ -48,20 +48,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Basic
-  characterPortrait: {fileID: 0}
+  characterPortrait: {fileID: 21300000, guid: d7fb2e361d1ed4946a63e006fa1379bd, type: 3}
   maxHP: 60
   currentHP: 60
   stepsPerTurn: 2
   skills:
   - {fileID: 11400000, guid: 860e795099237e4478377d75a6d4f0b2, type: 2}
-  - {fileID: 11400000, guid: 4c7e1a029fc2c5646860eb3775458be0, type: 2}
+  - {fileID: 11400000, guid: 774a4e366b3d1724c88ff4d22baa30fa, type: 2}
   modelRoot: {fileID: 1518308146114792640}
   hitShakeDuration: 0.2
   hitShakeDistance: 0.2
   hitShakeVibrato: 3
   hitFlashDuration: 0.2
   hitFlashCount: 2
-  hitVFXPrefab: {fileID: 0}
+  hitVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
   hitSFX: {fileID: 8300000, guid: 03e5ff6ae14a7934b919e814f99ec3f9, type: 3}
   healSFX: {fileID: 8300000, guid: 385b8f7d1af1602418a35a9617089c38, type: 3}
   deathVFXPrefab: {fileID: 0}

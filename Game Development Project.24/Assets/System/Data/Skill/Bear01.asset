@@ -12,14 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1d58871696bfe43bd36cb5a8f0e316, type: 3}
   m_Name: Bear01
   m_EditorClassIdentifier: 
-  skillName: Bear Punch!
-  description: 2 Balloon 10 Random, Selfdamage 2
+  skillName: Bear Punch !
+  description: Consumes 2 balloons to deal 10 damage to a random enemy, but costs
+    5 health points
+  dealsHeal: 0
+  healAmount: 0
+  healTargetMode: 0
   dealsDamage: 1
   damageAmount: 10
   dealsSelfDamage: 1
-  selfDamageAmount: 2
+  selfDamageAmount: 5
   randomTarget: 1
   isAOE: 0
+  appliesFreeze: 0
+  freezeSFX: {fileID: 0}
+  freezeVFXPrefab: {fileID: 888444077320411739, guid: 0c2509361b13505428ce788b7f846686, type: 3}
   costs:
   - type: 0
     amount: 2
+  healSFX: {fileID: 0}
+  healVFXPrefab: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}
+  selfHarmSFX: {fileID: 0}
+  selfHarmVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  enemyDamageSFX: {fileID: 0}
+  enemyDamageVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}

@@ -121,15 +121,14 @@ public class SkillCaster : MonoBehaviour
 
         AllyUnit healedUnit = ApplyHeal(skill);
 
-        List<EnemyUnit> damagedEnemies = new List<EnemyUnit>();
         List<EnemyUnit> enemyTargetsResolved = new List<EnemyUnit>();
         if (needsEnemyTargets && frontEnemies != null)
-            enemyTargetsResolved = ApplyEnemyDamageAndFreeze(skill, frontEnemies, damagedEnemies);
+            enemyTargetsResolved = ApplyEnemyDamageAndFreeze(skill, frontEnemies);
 
         if (skill.dealsSelfDamage && skill.selfDamageAmount > 0)
             ApplySelfDamage(skill.selfDamageAmount, skill.skillName);
 
-        PlaySkillFeedback(skill, healedUnit, damagedEnemies, enemyTargetsResolved);
+        PlaySkillFeedback(skill, healedUnit, enemyTargetsResolved);
 
         Debug.Log($"[SkillCaster] Cast success: {skill.skillName}");
         return true;
@@ -170,17 +169,16 @@ public class SkillCaster : MonoBehaviour
 
         AllyUnit healedUnit = ApplyHeal(skill);
 
-        List<EnemyUnit> damagedEnemies = new List<EnemyUnit>();
         List<EnemyUnit> enemyTargetsResolved = new List<EnemyUnit>();
         if (NeedsEnemyTargeting(skill))
             enemyTargetsResolved.Add(target);
 
-        ApplyEnemyEffectsToSingleTarget(skill, target, damagedEnemies);
+        ApplyEnemyEffectsToSingleTarget(skill, target);
 
         if (skill.dealsSelfDamage && skill.selfDamageAmount > 0)
             ApplySelfDamage(skill.selfDamageAmount, skill.skillName);
 
-        PlaySkillFeedback(skill, healedUnit, damagedEnemies, enemyTargetsResolved);
+        PlaySkillFeedback(skill, healedUnit, enemyTargetsResolved);
 
         Debug.Log($"[SkillCaster] Cast success: {skill.skillName}");
     }
@@ -291,25 +289,24 @@ public class SkillCaster : MonoBehaviour
         return list;
     }
 
-    private List<EnemyUnit> ApplyEnemyDamageAndFreeze(SkillData skill, List<EnemyUnit> frontEnemies, List<EnemyUnit> damagedEnemies)
+    private List<EnemyUnit> ApplyEnemyDamageAndFreeze(SkillData skill, List<EnemyUnit> frontEnemies)
     {
         List<EnemyUnit> targets = ResolveFrontRowTargets(skill, frontEnemies);
 
         for (int i = 0; i < targets.Count; i++)
-            ApplyEnemyEffectsToSingleTarget(skill, targets[i], damagedEnemies);
+            ApplyEnemyEffectsToSingleTarget(skill, targets[i]);
 
         return targets;
     }
 
-    private void ApplyEnemyEffectsToSingleTarget(SkillData skill, EnemyUnit enemy, List<EnemyUnit> damagedEnemies)
+    private void ApplyEnemyEffectsToSingleTarget(SkillData skill, EnemyUnit enemy)
     {
         if (skill == null || enemy == null || enemy.IsDead)
             return;
 
         if (skill.dealsDamage)
         {
-            enemy.TakeDamage(skill.damageAmount);
-            damagedEnemies.Add(enemy);
+            enemy.TakeDamageFromSkill(skill.damageAmount, skill.enemyDamageVFXPrefab, skill.enemyDamageSFX);
             Debug.Log($"[SkillCaster] {skill.skillName} dealt {skill.damageAmount} damage to FRONT enemy: {enemy.name}");
         }
 
@@ -332,9 +329,9 @@ public class SkillCaster : MonoBehaviour
     }
 
     /// <summary>
-    /// 顺序：回血 → 自残 → 冻结音效 → 对敌伤害（仅按技能配置触发对应反馈）。
+    /// 顺序：回血 → 自残 → 冻结音效。对敌伤害的 VFX/SFX 由 EnemyUnit.TakeDamageFromSkill 在扣血时播放，避免与默认受击重复。
     /// </summary>
-    private void PlaySkillFeedback(SkillData skill, AllyUnit healedUnit, List<EnemyUnit> damagedEnemies, List<EnemyUnit> enemyTargetsResolved)
+    private void PlaySkillFeedback(SkillData skill, AllyUnit healedUnit, List<EnemyUnit> enemyTargetsResolved)
     {
         if (skill == null)
             return;
@@ -368,19 +365,6 @@ public class SkillCaster : MonoBehaviour
 
             if (sfxOrigin != null)
                 PlayFeedbackSound(skill.freezeSFX, sfxOrigin.transform.position);
-        }
-
-        if (skill.dealsDamage && damagedEnemies != null && damagedEnemies.Count > 0)
-        {
-            Vector3 soundPos = damagedEnemies[0].transform.position;
-            PlayFeedbackSound(skill.enemyDamageSFX, soundPos);
-
-            for (int i = 0; i < damagedEnemies.Count; i++)
-            {
-                var e = damagedEnemies[i];
-                if (e != null)
-                    SpawnFeedbackVFX(skill.enemyDamageVFXPrefab, e.transform.position);
-            }
         }
     }
 

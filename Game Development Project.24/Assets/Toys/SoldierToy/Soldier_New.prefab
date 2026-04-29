@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8355536224084096068}
   m_Layer: 0
   m_Name: Soldier_New
-  m_TagString: Untagged
+  m_TagString: AI generated
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
