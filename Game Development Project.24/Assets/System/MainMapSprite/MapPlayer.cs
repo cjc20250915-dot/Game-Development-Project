@@ -79,29 +79,51 @@ public class MapPlayer : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (!TryRaycastGroundClick(ray, out RaycastHit hit))
+            return;
+
+        if (Vector3.Dot(hit.normal, Vector3.up) < minGroundUpDot)
         {
-            if (Vector3.Dot(hit.normal, Vector3.up) < minGroundUpDot)
-            {
-                ShowInvalidIndicator(hit.point);
-                return;
-            }
-
-            Vector3 clickedPos = hit.point;
-            clickedPos.y += GetGroundOffset();
-
-            float distance = Vector3.Distance(transform.position, clickedPos);
-
-            if (distance > maxMoveDistance)
-            {
-                ShowInvalidIndicator(hit.point);
-                return;
-            }
-
-            targetPosition = clickedPos;
-            ShowValidIndicator(hit.point);
-            StartCoroutine(MoveToPosition(targetPosition));
+            ShowInvalidIndicator(hit.point);
+            return;
         }
+
+        Vector3 clickedPos = hit.point;
+        clickedPos.y += GetGroundOffset();
+
+        float distance = Vector3.Distance(transform.position, clickedPos);
+
+        if (distance > maxMoveDistance)
+        {
+            ShowInvalidIndicator(hit.point);
+            return;
+        }
+
+        targetPosition = clickedPos;
+        ShowValidIndicator(hit.point);
+        StartCoroutine(MoveToPosition(targetPosition));
+    }
+
+    /// <summary>沿射线由近到远查找第一个「作为地面」的命中：忽略本角色与带 MapNode 的物体，从而可点到节点下方的地面。</summary>
+    private bool TryRaycastGroundClick(Ray ray, out RaycastHit groundHit)
+    {
+        groundHit = default;
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+        if (hits == null || hits.Length == 0) return false;
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit h in hits)
+        {
+            if (h.collider == null) continue;
+            if (h.collider.GetComponentInParent<MapPlayer>() == this) continue;
+            if (h.collider.GetComponentInParent<MapNode>() != null) continue;
+
+            groundHit = h;
+            return true;
+        }
+
+        return false;
     }
 
     private float GetGroundOffset()

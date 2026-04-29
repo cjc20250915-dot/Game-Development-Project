@@ -24,6 +24,11 @@ public class MapNode : MonoBehaviour
     public Color lineColor = Color.white;
     public float sphereSize = 0.3f;
 
+    [Header("碰撞体线框（Scene / 带 Gizmos 的 Game 视图）")]
+    [Tooltip("开启后在编辑器中画出本物体上 Collider 的线框，便于对齐点击区域。")]
+    public bool showColliderWire = false;
+    public Color colliderWireColor = new Color(0f, 1f, 1f, 0.9f);
+
     //"过渡控制器，可为空")]
     public TransitionController transitionController;
 
@@ -119,5 +124,48 @@ public class MapNode : MonoBehaviour
                 Gizmos.DrawLine(transform.position, node.transform.position);
             }
         }
+
+        if (showColliderWire)
+        {
+            Gizmos.color = colliderWireColor;
+            foreach (Collider col in GetComponents<Collider>())
+            {
+                if (col == null || !col.enabled) continue;
+                DrawColliderWire(col);
+            }
+        }
+    }
+
+    private static void DrawColliderWire(Collider c)
+    {
+        switch (c)
+        {
+            case BoxCollider box:
+                {
+                    Matrix4x4 old = Gizmos.matrix;
+                    Gizmos.matrix = box.transform.localToWorldMatrix;
+                    Gizmos.DrawWireCube(box.center, box.size);
+                    Gizmos.matrix = old;
+                    break;
+                }
+            case SphereCollider sphere:
+                {
+                    Vector3 worldCenter = sphere.transform.TransformPoint(sphere.center);
+                    float r = sphere.radius * MaxComponent(sphere.transform.lossyScale);
+                    Gizmos.DrawWireSphere(worldCenter, r);
+                    break;
+                }
+            case CapsuleCollider cap:
+                Gizmos.DrawWireCube(cap.bounds.center, cap.bounds.size);
+                break;
+            default:
+                Gizmos.DrawWireCube(c.bounds.center, c.bounds.size);
+                break;
+        }
+    }
+
+    private static float MaxComponent(Vector3 v)
+    {
+        return Mathf.Max(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
     }
 }
