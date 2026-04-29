@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,10 @@ public class EnemySlotBoard : MonoBehaviour
     public SlotSpawnInfo slot2 = new SlotSpawnInfo(); // 右前
     public SlotSpawnInfo slot3 = new SlotSpawnInfo(); // 左后
     public SlotSpawnInfo slot4 = new SlotSpawnInfo(); // 右后
+
+    [Header("Promotion (back → front)")]
+    [Tooltip("前排阵亡后后排顶上前所用移动时间（秒）")]
+    [SerializeField] private float promoteMoveDuration = 0.45f;
 
     [Header("Battle Result")]
     [SerializeField] private BattleResultHandler battleResultHandler;
@@ -259,7 +264,7 @@ public class EnemySlotBoard : MonoBehaviour
         {
             inst1 = inst3;
             inst3 = null;
-            MoveInstanceToSlot(inst1, slot1);
+            StartCoroutine(PromoteEnemyToSlotRoutine(inst1, slot1));
         }
 
         // 2号位空了，4号位补到2号位
@@ -267,19 +272,50 @@ public class EnemySlotBoard : MonoBehaviour
         {
             inst2 = inst4;
             inst4 = null;
-            MoveInstanceToSlot(inst2, slot2);
+            StartCoroutine(PromoteEnemyToSlotRoutine(inst2, slot2));
         }
     }
 
-    private void MoveInstanceToSlot(GameObject instance, SlotSpawnInfo targetSlot)
+    /// <summary>
+    /// 后排顶前排：先挂到新锚点并保持世界坐标不变，再插值到槽位约定本地 pose（避免瞬移）。
+    /// </summary>
+    private IEnumerator PromoteEnemyToSlotRoutine(GameObject instance, SlotSpawnInfo targetSlot)
     {
-        if (instance == null || targetSlot == null || targetSlot.anchor == null) return;
+        if (instance == null || targetSlot == null || targetSlot.anchor == null)
+            yield break;
 
         Transform t = instance.transform;
-        t.SetParent(targetSlot.anchor, false);
-        t.localPosition = targetSlot.localPosition;
-        t.localRotation = Quaternion.Euler(targetSlot.localEulerAngles);
-        t.localScale = targetSlot.localScale;
+
+        // 保留当前屏幕上的位置，换父物体后再 tween 到前排槽目标 pose
+        t.SetParent(targetSlot.anchor, worldPositionStays: true);
+
+        Vector3 startLocalPos = t.localPosition;
+        Quaternion startLocalRot = t.localRotation;
+        Vector3 startLocalScale = t.localScale;
+
+        Vector3 endLocalPos = targetSlot.localPosition;
+        Quaternion endLocalRot = Quaternion.Euler(targetSlot.localEulerAngles);
+        Vector3 endLocalScale = targetSlot.localScale;
+
+        float dur = Mathf.Max(0.05f, promoteMoveDuration);
+        float elapsed = 0f;
+
+        while (elapsed < dur)
+        {
+            elapsed += Time.deltaTime;
+            float u = Mathf.Clamp01(elapsed / dur);
+            float s = Mathf.SmoothStep(0f, 1f, u);
+
+            t.localPosition = Vector3.LerpUnclamped(startLocalPos, endLocalPos, s);
+            t.localRotation = Quaternion.SlerpUnclamped(startLocalRot, endLocalRot, s);
+            t.localScale = Vector3.LerpUnclamped(startLocalScale, endLocalScale, s);
+
+            yield return null;
+        }
+
+        t.localPosition = endLocalPos;
+        t.localRotation = endLocalRot;
+        t.localScale = endLocalScale;
     }
 
     private void ClearSlot(ref GameObject instance)

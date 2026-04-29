@@ -63,6 +63,7 @@ MonoBehaviour:
   hitFlashCount: 2
   hitVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
   hitSFX: {fileID: 8300000, guid: 03e5ff6ae14a7934b919e814f99ec3f9, type: 3}
+  healVFXPrefab: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}
   healSFX: {fileID: 8300000, guid: 385b8f7d1af1602418a35a9617089c38, type: 3}
   deathVFXPrefab: {fileID: 0}
   deathSFX: {fileID: 8300000, guid: 9b239199c0faf434097edfe9ce6f20f3, type: 3}

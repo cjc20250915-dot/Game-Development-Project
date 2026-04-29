@@ -24,7 +24,7 @@ MonoBehaviour:
   randomTarget: 0
   isAOE: 0
   appliesFreeze: 1
-  freezeSFX: {fileID: 0}
+  freezeSFX: {fileID: 8300000, guid: 36010ac9828495a4da742d7306a993d4, type: 3}
   freezeVFXPrefab: {fileID: 888444077320411739, guid: 0c2509361b13505428ce788b7f846686, type: 3}
   costs:
   - type: 4

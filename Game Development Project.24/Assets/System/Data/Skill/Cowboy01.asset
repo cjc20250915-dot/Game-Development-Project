@@ -25,13 +25,13 @@ MonoBehaviour:
   isAOE: 0
   appliesFreeze: 0
   freezeSFX: {fileID: 0}
-  freezeVFXPrefab: {fileID: 888444077320411739, guid: 0c2509361b13505428ce788b7f846686, type: 3}
+  freezeVFXPrefab: {fileID: 0}
   costs:
-  - type: 2
+  - type: 3
     amount: 2
   healSFX: {fileID: 0}
-  healVFXPrefab: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}
+  healVFXPrefab: {fileID: 0}
   selfHarmSFX: {fileID: 0}
   selfHarmVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
-  enemyDamageSFX: {fileID: 0}
-  enemyDamageVFXPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  enemyDamageSFX: {fileID: 8300000, guid: 16e979dea3ab694468d531061ee135f8, type: 3}
+  enemyDamageVFXPrefab: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}

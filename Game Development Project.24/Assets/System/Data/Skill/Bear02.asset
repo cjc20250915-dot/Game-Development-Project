@@ -30,7 +30,7 @@ MonoBehaviour:
   - type: 1
     amount: 3
   healSFX: {fileID: 0}
-  healVFXPrefab: {fileID: 0}
+  healVFXPrefab: {fileID: 7305185502956871417, guid: 85b062a5517cf8345bb6784ffbed4877, type: 3}
   selfHarmSFX: {fileID: 0}
   selfHarmVFXPrefab: {fileID: 0}
   enemyDamageSFX: {fileID: 0}
