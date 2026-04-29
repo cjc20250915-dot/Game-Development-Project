@@ -59,6 +59,7 @@ public class AllyUnit : MonoBehaviour
     public AudioClip deathSFX;
 
     [Header("Audio")]
+    [Tooltip("可为空：运行时自动在本物体或子物体上查找 AudioSource")]
     [SerializeField] private AudioSource audioSource;
 
     [Header("Death")]
@@ -75,6 +76,8 @@ public class AllyUnit : MonoBehaviour
 
     private void Awake()
     {
+        EnsureAudioSource();
+
         if (currentHP <= 0)
             currentHP = maxHP;
 
@@ -87,6 +90,16 @@ public class AllyUnit : MonoBehaviour
         cachedRenderers = modelRoot.GetComponentsInChildren<Renderer>(true);
 
         OnHPChanged?.Invoke(currentHP, maxHP);
+    }
+
+    private void EnsureAudioSource()
+    {
+        if (audioSource != null)
+            return;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = GetComponentInChildren<AudioSource>(true);
     }
 
     private void Start()

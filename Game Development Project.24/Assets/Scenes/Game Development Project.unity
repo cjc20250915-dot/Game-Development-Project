@@ -2213,9 +2213,9 @@ MonoBehaviour:
   origin: {x: 0, y: 0}
   moveDuration: 0.18
   clearDelay: 0.15
-  matchClearSFX_Match3: {fileID: 0}
-  matchClearSFX_Match4: {fileID: 0}
-  matchClearSFX_Match5Plus: {fileID: 0}
+  matchClearSFX_Match3: {fileID: 8300000, guid: 5e6fbabf38e39b14e980bfaf8c90cbd6, type: 3}
+  matchClearSFX_Match4: {fileID: 8300000, guid: 5e6fbabf38e39b14e980bfaf8c90cbd6, type: 3}
+  matchClearSFX_Match5Plus: {fileID: 8300000, guid: 6e4d43ef27db8f945b957c46a2f67121, type: 3}
   matchClearAudioSource: {fileID: 0}
   dragThreshold: 25
   previewDuration: 0.08

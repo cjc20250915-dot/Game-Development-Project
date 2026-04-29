@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Basic
+  characterPortrait: {fileID: 0}
   maxHP: 80
   currentHP: 80
   stepsPerTurn: 2

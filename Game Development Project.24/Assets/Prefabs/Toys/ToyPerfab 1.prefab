@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Basic
+  characterPortrait: {fileID: 0}
   maxHP: 60
   currentHP: 60
   stepsPerTurn: 2
@@ -79,8 +80,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracker: {fileID: 0}
   enemySlotBoard: {fileID: 0}
+  allySlotBoard: {fileID: 0}
   enemyTargetSelection: {fileID: 0}
   owner: {fileID: 0}
+  skillFeedbackAudioSource: {fileID: 0}
 --- !u!1001 &1340001533629852459
 PrefabInstance:
   m_ObjectHideFlags: 0
