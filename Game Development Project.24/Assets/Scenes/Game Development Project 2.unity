@@ -5446,7 +5446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e44a9f425073e4ba7aac04bd86e45b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSceneName: 01_MainMap
+  mapSceneName: Indoor
   transitionController: {fileID: 0}
 --- !u!4 &1028030947
 Transform:
