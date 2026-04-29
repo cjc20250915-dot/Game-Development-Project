@@ -26,6 +26,16 @@ public class BoardUIManager : MonoBehaviour
     public float moveDuration = 0.18f;
     public float clearDelay = 0.12f;
 
+    [Header("Match Clear SFX")]
+    [Tooltip("三连消播放")]
+    public AudioClip matchClearSFX_Match3;
+    [Tooltip("四连消播放")]
+    public AudioClip matchClearSFX_Match4;
+    [Tooltip("五连及以上播放")]
+    public AudioClip matchClearSFX_Match5Plus;
+    [Tooltip("为空则用 PlayClipAtPoint 在世界坐标播放")]
+    [SerializeField] private AudioSource matchClearAudioSource;
+
     [Header("Drag Preview")]
     public float dragThreshold = 25f;
     public float previewDuration = 0.08f;
@@ -625,6 +635,8 @@ foreach (var group in matchGroups)
     int type = model.GetTypeAt(group[0].x, group[0].y);
     int matchCount = group.Count;
 
+    PlayMatchClearSFX(matchCount);
+
     // 原有计数/资源逻辑
     if (clearedTracker != null)
     {
@@ -694,5 +706,24 @@ foreach (var group in matchGroups)
 
         isResolving = false;
         NotifyResolveFinished();   // ✅ 第四步：resolve全部结束 -> 如果之前排队了冷却，这里开始0.2s冷却
+    }
+
+    private void PlayMatchClearSFX(int matchCount)
+    {
+        AudioClip clip;
+        if (matchCount >= 5)
+            clip = matchClearSFX_Match5Plus;
+        else if (matchCount == 4)
+            clip = matchClearSFX_Match4;
+        else
+            clip = matchClearSFX_Match3;
+
+        if (clip == null)
+            return;
+
+        if (matchClearAudioSource != null)
+            matchClearAudioSource.PlayOneShot(clip);
+        else if (Camera.main != null)
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
     }
 }

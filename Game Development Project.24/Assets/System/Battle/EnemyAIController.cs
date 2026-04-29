@@ -21,6 +21,14 @@ public class EnemyAIController : MonoBehaviour
     public float thinkDelay = 0.25f;
     public float betweenEnemiesDelay = 0.15f;
 
+    [Header("Attack Lunge")]
+    [Tooltip("从待机位移向友方的冲锋时长")]
+    [SerializeField] private float attackLungeForwardDuration = 0.14f;
+    [Tooltip("退回原位时长")]
+    [SerializeField] private float attackLungeReturnDuration = 0.16f;
+    [Tooltip("冲到敌方与友方连线的几分之几处停下（1 为贴到友方坐标）")]
+    [Range(0.25f, 1f)] [SerializeField] private float attackLungeReach = 0.88f;
+
     private void Awake()
     {
         if (enemySlots == null) enemySlots = FindFirstObjectByType<EnemySlotBoard>();
@@ -67,6 +75,13 @@ if (enemySlots != null)
         foreach (var enemy in order)
         {
             if (enemy == null || enemy.IsDead) continue;
+
+            if (enemy.ConsumeFreezeSkipActionsIfScheduled())
+            {
+                Debug.Log($"[EnemyAI] {enemy.name} is frozen — skips all actions this enemy phase.");
+                yield return new WaitForSeconds(betweenEnemiesDelay);
+                continue;
+            }
 
             int times = Mathf.Max(1, enemy.actionsPerTurn);
 
@@ -131,7 +146,7 @@ private EnemyActionType RollAction(EnemyUnit enemy)
         switch (action)
         {
             case EnemyActionType.Attack:
-                DoAttack(enemy);
+                yield return AttackRoutine(enemy);
                 yield break;
 
             case EnemyActionType.Skill:
@@ -146,24 +161,69 @@ case EnemyActionType.Defend:
         }
     }
 
-private void DoAttack(EnemyUnit enemy)
-{
-    AllyUnit target = PickRandomAliveAlly();
-
-    if (target == null)
+    private IEnumerator AttackRoutine(EnemyUnit enemy)
     {
-        Debug.Log("[EnemyAI] 没有可攻击的目标");
-        return;
+        AllyUnit target = PickRandomAliveAlly();
+
+        if (target == null)
+        {
+            Debug.Log("[EnemyAI] 没有可攻击的目标");
+            yield break;
+        }
+
+        if (enemy == null || enemy.IsDead)
+            yield break;
+
+        Transform mover = enemy.transform;
+        Vector3 startPos = mover.position;
+        Vector3 allyPos = target.transform.position;
+        Vector3 rushPos = Vector3.Lerp(startPos, allyPos, attackLungeReach);
+
+        float fwd = Mathf.Max(0.02f, attackLungeForwardDuration);
+        float back = Mathf.Max(0.02f, attackLungeReturnDuration);
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            if (enemy == null || enemy.IsDead)
+            {
+                if (mover != null)
+                    mover.position = startPos;
+                yield break;
+            }
+
+            t += Time.deltaTime / fwd;
+            float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            mover.position = Vector3.Lerp(startPos, rushPos, k);
+            yield return null;
+        }
+
+        mover.position = rushPos;
+
+        int damage = Mathf.Max(0, enemy.attackPower);
+        Debug.Log($"{enemy.name} 攻击了 {target.name}，造成了 {damage} 点伤害");
+
+        if (target != null && !target.IsDead)
+            target.TakeDamage(damage);
+
+        t = 0f;
+        while (t < 1f)
+        {
+            if (enemy == null || enemy.IsDead)
+            {
+                if (mover != null)
+                    mover.position = startPos;
+                yield break;
+            }
+
+            t += Time.deltaTime / back;
+            float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            mover.position = Vector3.Lerp(rushPos, startPos, k);
+            yield return null;
+        }
+
+        mover.position = startPos;
     }
-
-    int damage = Mathf.Max(0, enemy.attackPower);
-
-    // 攻击播报
-    Debug.Log($"{enemy.name} 攻击了 {target.name}，造成了 {damage} 点伤害");
-
-    // 扣血
-    target.TakeDamage(damage);
-}
 
     // ===== Helpers =====
 

@@ -64,7 +64,7 @@ MonoBehaviour:
   deathVFXPrefab: {fileID: 0}
   deathSFX: {fileID: 0}
   audioSource: {fileID: 0}
-  deathDelay: 0.4
+  deathDelay: 1.5
 --- !u!114 &7201753682223682873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracker: {fileID: 0}
   enemySlotBoard: {fileID: 0}
+  enemyTargetSelection: {fileID: 0}
   owner: {fileID: 0}
 --- !u!1001 &1340001533629852459
 PrefabInstance:
