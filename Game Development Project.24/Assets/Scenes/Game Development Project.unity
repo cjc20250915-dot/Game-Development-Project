@@ -9968,6 +9968,9 @@ MonoBehaviour:
   button2: {fileID: 542737834}
   button3: {fileID: 319611960}
   button4: {fileID: 1781867573}
+  button5: {fileID: 0}
+  fixedSkillAsset: {fileID: 0}
+  fixedSkillCasterOverride: {fileID: 0}
 --- !u!114 &1915873651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10121,7 +10124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1933195644
 MonoBehaviour:
   m_ObjectHideFlags: 0
