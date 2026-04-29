@@ -226,30 +226,42 @@ public void ClearDefend()
             modelRootOriginalLocalPosition = modelRoot.localPosition;
     }
 
-public void TakeDamage(int damage)
-{
-    if (IsDead || deathStarted) return;
-
-    int finalDamage = damage;
-
-    if (isDefending)
-        finalDamage = Mathf.Max(1, Mathf.RoundToInt(damage * defendDamageMultiplier));
-
-    currentHP -= finalDamage;
-    currentHP = Mathf.Max(0, currentHP);
-
-    OnHPChanged?.Invoke(currentHP, maxHP);
-
-    PlayHitFeedback();
-
-    if (currentHP <= 0)
+    /// <summary>普通受击（三消、敌方普攻等）：使用预制体上的受击特效/音效。</summary>
+    public void TakeDamage(int damage)
     {
-        if (deathCoroutine != null)
-            StopCoroutine(deathCoroutine);
-
-        deathCoroutine = StartCoroutine(DieAfterDelay());
+        InternalApplyDamage(damage, false, null, null);
     }
-}
+
+    /// <summary>友方技能造成的伤害：优先使用 SkillData 内配置的敌人伤害特效/音效，不播默认受击 Prefab/SFX。</summary>
+    public void TakeDamageFromSkill(int damage, GameObject skillDamageVFXPrefab, AudioClip skillDamageSFX)
+    {
+        InternalApplyDamage(damage, true, skillDamageVFXPrefab, skillDamageSFX);
+    }
+
+    private void InternalApplyDamage(int damage, bool fromPlayerSkill, GameObject skillDamageVFXPrefab, AudioClip skillDamageSFX)
+    {
+        if (IsDead || deathStarted) return;
+
+        int finalDamage = damage;
+
+        if (isDefending)
+            finalDamage = Mathf.Max(1, Mathf.RoundToInt(damage * defendDamageMultiplier));
+
+        currentHP -= finalDamage;
+        currentHP = Mathf.Max(0, currentHP);
+
+        OnHPChanged?.Invoke(currentHP, maxHP);
+
+        PlayHitFeedback(fromPlayerSkill, skillDamageVFXPrefab, skillDamageSFX);
+
+        if (currentHP <= 0)
+        {
+            if (deathCoroutine != null)
+                StopCoroutine(deathCoroutine);
+
+            deathCoroutine = StartCoroutine(DieAfterDelay());
+        }
+    }
 
     public void Heal(int amount)
     {
@@ -261,15 +273,30 @@ public void TakeDamage(int damage)
         OnHPChanged?.Invoke(currentHP, maxHP);
     }
 
-    private void PlayHitFeedback()
+    private void PlayHitFeedback(bool fromPlayerSkill, GameObject skillDamageVFXPrefab, AudioClip skillDamageSFX)
     {
         if (deathStarted) return;
 
-        if (hitVFXPrefab != null)
-            Instantiate(hitVFXPrefab, modelRoot.position, Quaternion.identity);
+        EnsureAudioSource();
 
-        if (audioSource != null && hitSFX != null)
-            audioSource.PlayOneShot(hitSFX);
+        bool useSkillFx = fromPlayerSkill && (skillDamageVFXPrefab != null || skillDamageSFX != null);
+
+        if (useSkillFx)
+        {
+            if (skillDamageVFXPrefab != null)
+                Instantiate(skillDamageVFXPrefab, modelRoot.position, Quaternion.identity);
+
+            if (audioSource != null && skillDamageSFX != null)
+                audioSource.PlayOneShot(skillDamageSFX);
+        }
+        else
+        {
+            if (hitVFXPrefab != null)
+                Instantiate(hitVFXPrefab, modelRoot.position, Quaternion.identity);
+
+            if (audioSource != null && hitSFX != null)
+                audioSource.PlayOneShot(hitSFX);
+        }
 
         if (hitFeedbackCoroutine != null)
         {
