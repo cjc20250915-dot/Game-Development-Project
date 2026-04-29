@@ -184,6 +184,13 @@ public void ClearDefend()
         OnHPChanged?.Invoke(currentHP, maxHP);
     }
 
+    private void Start()
+    {
+        // 槽位系统会在 Instantiate 后再设置 local pose，这里二次采样避免受击重置到旧坐标。
+        if (modelRoot != null)
+            modelRootOriginalLocalPosition = modelRoot.localPosition;
+    }
+
 public void TakeDamage(int damage)
 {
     if (IsDead || deathStarted) return;
