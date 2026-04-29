@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1d58871696bfe43bd36cb5a8f0e316, type: 3}
   m_Name: Bear01
   m_EditorClassIdentifier: 
-  skillName: Bear Punch!
-  description: 2 Balloon 10 Random, Selfdamage 2
+  skillName: Bear Punch !
+  description: Consumes 2 balloons to deal 10 damage to a random enemy, but costs
+    5 health points
   dealsHeal: 0
   healAmount: 0
   healTargetMode: 0
   dealsDamage: 1
   damageAmount: 10
   dealsSelfDamage: 1
-  selfDamageAmount: 2
+  selfDamageAmount: 5
   randomTarget: 1
   isAOE: 0
   appliesFreeze: 0
