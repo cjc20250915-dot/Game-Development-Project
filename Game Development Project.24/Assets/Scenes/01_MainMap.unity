@@ -867,7 +867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgm: {fileID: 8300000, guid: 879117ad12dffaf44b7417f9be1f8f5b, type: 3}
   playWhenSceneLoads: 1
-  volume: 1
+  volume: 10
   loop: 1
   pitch: 1
   spatialBlend: 0
@@ -16223,6 +16223,12 @@ MonoBehaviour:
   transitionTime: 2
   minWaitTime: 1
   destroyDelayAfterLoad: 2
+  introVideoBeforeFirstMap: {fileID: 0}
+  introVideoTargetScene: 01_MainMap
+  playIntroOnlyOnce: 1
+  introBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  introVideoPrepareTimeout: 10
+  transitionCanvasSortingOrder: 32766
 --- !u!114 &654668416
 MonoBehaviour:
   m_ObjectHideFlags: 0

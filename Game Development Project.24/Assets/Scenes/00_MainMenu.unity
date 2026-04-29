@@ -2068,6 +2068,12 @@ MonoBehaviour:
   transitionTime: 2
   minWaitTime: 1
   destroyDelayAfterLoad: 2
+  introVideoBeforeFirstMap: {fileID: 32900000, guid: b47a474b1b1ffbe4ba0add0acd43cb5e, type: 3}
+  introVideoTargetScene: 01_MainMap
+  playIntroOnlyOnce: 1
+  introBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  introVideoPrepareTimeout: 10
+  transitionCanvasSortingOrder: 32766
 --- !u!223 &3280647203347324574
 Canvas:
   m_ObjectHideFlags: 0
