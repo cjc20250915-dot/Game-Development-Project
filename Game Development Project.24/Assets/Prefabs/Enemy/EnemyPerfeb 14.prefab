@@ -180,6 +180,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier_New
       objectReference: {fileID: 0}
+    - target: {fileID: 2684593697328404229, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684593697328404229, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a7b8c9d0e1f234561234567890abcdef, type: 2}
     - target: {fileID: 8355536224084096068, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
       propertyPath: m_LocalScale.x
       value: 1

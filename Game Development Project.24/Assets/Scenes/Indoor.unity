@@ -2048,11 +2048,16 @@ MonoBehaviour:
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   sphereSize: 0.3
   showColliderWire: 0
-  colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
+  colliderWireColor: {r: 1, g: 1, b: 1, a: 0.9}
   transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn:
   - {fileID: 1958469602}
   - {fileID: 1308719518}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &141912946
 Transform:
   m_ObjectHideFlags: 0
@@ -2344,6 +2349,11 @@ MonoBehaviour:
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
   transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn: []
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &210235998
 Transform:
   m_ObjectHideFlags: 0
@@ -10350,6 +10360,11 @@ MonoBehaviour:
   - {fileID: 441712081}
   - {fileID: 944471933}
   - {fileID: 2100342867}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &914753300
 Transform:
   m_ObjectHideFlags: 0
@@ -12034,6 +12049,11 @@ MonoBehaviour:
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
   transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn: []
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!65 &1047775605
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12726,6 +12746,11 @@ MonoBehaviour:
   - {fileID: 1951493293}
   - {fileID: 608518507}
   - {fileID: 1323309921}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &1087361121
 Transform:
   m_ObjectHideFlags: 0
@@ -13776,6 +13801,11 @@ MonoBehaviour:
   - {fileID: 175679017}
   - {fileID: 1991353240}
   - {fileID: 1851409170}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &1173360702
 Transform:
   m_ObjectHideFlags: 0
@@ -19405,6 +19435,11 @@ MonoBehaviour:
   hideChildrenAfterBattleReturn:
   - {fileID: 764939494}
   - {fileID: 225981363}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &1611187199
 Transform:
   m_ObjectHideFlags: 0

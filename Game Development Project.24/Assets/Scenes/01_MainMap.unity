@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 987a129b6b0ab494c92ada585372f505, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 2bd8959f5fbd3644aa33af1a155fc147, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -12823,6 +12823,11 @@ MonoBehaviour:
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
   transitionController: {fileID: 654668415}
   hideChildrenAfterBattleReturn: []
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &532548660
 Transform:
   m_ObjectHideFlags: 0
@@ -22280,7 +22285,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 25
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -22682,6 +22687,11 @@ MonoBehaviour:
   - {fileID: 1851302076}
   - {fileID: 968562830}
   - {fileID: 1517460358}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!33 &981761888
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -26668,6 +26678,11 @@ MonoBehaviour:
   - {fileID: 228323629}
   - {fileID: 2137593191}
   - {fileID: 1656407938}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!65 &1139331479
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -30673,6 +30688,11 @@ MonoBehaviour:
   hideChildrenAfterBattleReturn:
   - {fileID: 546041367}
   - {fileID: 1481880190}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!65 &1314344117
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -35199,6 +35219,11 @@ MonoBehaviour:
   - {fileID: 1194650444}
   - {fileID: 1464383814}
   - {fileID: 1221156366}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!65 &1519237387
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -40722,6 +40747,11 @@ MonoBehaviour:
   hideChildrenAfterBattleReturn:
   - {fileID: 1119366928}
   - {fileID: 1329600713}
+  logWhenLockedAndNotVisited: 1
+  lockedReplaceChildName: 2d ring target 0 Green
+  lockedReplaceNameUseContains: 0
+  lockedReplacePrefab: {fileID: 4494782088015638307, guid: 231f2dfbc8ad8a646bcc51d64389037b, type: 3}
+  delayedStateRefreshSeconds: 0.1
 --- !u!4 &1759350497
 Transform:
   m_ObjectHideFlags: 0

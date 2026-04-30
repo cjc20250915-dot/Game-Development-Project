@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,8 +37,36 @@ public class MapNode : MonoBehaviour
     [Tooltip("拖入节点下的子物体（可多个）；该节点在任意一次战斗结束并回到大地图后会被关闭显示；新周目 ResetRunProgress 后会重新显示。")]
     [SerializeField] private GameObject[] hideChildrenAfterBattleReturn;
 
+    [Header("Locked Ring Visual")]
+    [Tooltip("调试开关：当节点处于“未解锁且未完成”时在 Console 打印日志。")]
+    [SerializeField] private bool logWhenLockedAndNotVisited = true;
+    [Tooltip("要被替换的目标子物体名。")]
+    [SerializeField] private string lockedReplaceChildName = "2d ring target 0 Green";
+    [Tooltip("名称匹配方式：关闭=完全相等；开启=包含该字符串即可命中。")]
+    [SerializeField] private bool lockedReplaceNameUseContains = false;
+    [Tooltip("仅在“未解锁且未完成”时，用该 Prefab 替换目标子物体。")]
+    [SerializeField] private GameObject lockedReplacePrefab;
+    [SerializeField] private float delayedStateRefreshSeconds = 0.1f;
+
+    private GameObject lockedReplaceOriginalObject;
+    private GameObject lockedReplaceInstance;
+
+    private void Awake()
+    {
+    }
+
     private void Start()
     {
+        StartCoroutine(DelayedInitialRefresh());
+    }
+
+    private IEnumerator DelayedInitialRefresh()
+    {
+        if (delayedStateRefreshSeconds > 0f)
+            yield return new WaitForSecondsRealtime(delayedStateRefreshSeconds);
+        else
+            yield return null; // 至少等一帧，规避初始化顺序问题
+
         RefreshState();
     }
 
@@ -60,6 +89,7 @@ public class MapNode : MonoBehaviour
         isUnlocked = GameRunManager.Instance.IsNodeUnlocked(nodeId);
 
         ApplyHideChildrenAfterBattleReturn();
+        RefreshBlockedRingMaterial();
     }
 
     /// <summary>该节点已通过战斗结算（胜负皆可）回到大地图时，隐藏配置的子物体。</summary>
@@ -84,12 +114,14 @@ public class MapNode : MonoBehaviour
 
         if (!isUnlocked)
         {
+            RefreshBlockedRingMaterial();
             Debug.Log($"{name} 未解锁，不能进入");
             return;
         }
 
         if (visited)
         {
+            RefreshBlockedRingMaterial();
             Debug.Log($"{name} 已完成，不能再次进入");
             return;
         }
@@ -123,6 +155,91 @@ public class MapNode : MonoBehaviour
         {
             SceneManager.LoadScene(nodeData.sceneName);
         }
+    }
+
+    private void RefreshBlockedRingMaterial()
+    {
+        // 仅在“未解锁且未完成（已完成不算）”时显示标记。
+        bool shouldShowLockedMarker = !isUnlocked && !visited;
+        if (shouldShowLockedMarker && logWhenLockedAndNotVisited)
+        {
+            string id = nodeData != null ? nodeData.nodeName : "(null)";
+            Debug.Log($"[MapNode] Locked&NotVisited: {name}, nodeId={id}");
+        }
+
+        if (shouldShowLockedMarker)
+            ShowLockedReplacement();
+        else
+            HideLockedReplacement();
+    }
+
+    private void ShowLockedReplacement()
+    {
+        CacheLockedReplaceOriginalObject();
+        if (lockedReplaceOriginalObject == null || lockedReplacePrefab == null)
+            return;
+
+        lockedReplaceOriginalObject.SetActive(false);
+
+        if (lockedReplaceInstance == null)
+        {
+            Transform original = lockedReplaceOriginalObject.transform;
+            Transform parent = original.parent;
+            lockedReplaceInstance = Instantiate(lockedReplacePrefab, parent);
+
+            Transform t = lockedReplaceInstance.transform;
+            t.localPosition = original.localPosition;
+            t.localRotation = original.localRotation;
+            t.localScale = original.localScale;
+        }
+        else
+        {
+            lockedReplaceInstance.SetActive(true);
+        }
+    }
+
+    private void HideLockedReplacement()
+    {
+        if (lockedReplaceOriginalObject != null)
+            lockedReplaceOriginalObject.SetActive(true);
+
+        if (lockedReplaceInstance != null)
+            lockedReplaceInstance.SetActive(false);
+    }
+
+    private void CacheLockedReplaceOriginalObject()
+    {
+        if (lockedReplaceOriginalObject != null)
+            return;
+
+        lockedReplaceOriginalObject = FindChildByConfiguredName()?.gameObject;
+    }
+
+    private Transform FindChildByConfiguredName()
+    {
+        if (string.IsNullOrWhiteSpace(lockedReplaceChildName))
+            return null;
+
+        Transform[] all = GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < all.Length; i++)
+        {
+            Transform t = all[i];
+            if (t == null || t == transform)
+                continue;
+
+            if (lockedReplaceNameUseContains)
+            {
+                if (t.name.Contains(lockedReplaceChildName))
+                    return t;
+            }
+            else
+            {
+                if (t.name == lockedReplaceChildName)
+                    return t;
+            }
+        }
+
+        return null;
     }
 
     private void OnDrawGizmos()
