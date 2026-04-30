@@ -2049,7 +2049,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn:
   - {fileID: 1958469602}
   - {fileID: 1308719518}
@@ -2342,7 +2342,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn: []
 --- !u!4 &210235998
 Transform:
@@ -10345,7 +10345,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn:
   - {fileID: 441712081}
   - {fileID: 944471933}
@@ -12032,7 +12032,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn: []
 --- !u!65 &1047775605
 BoxCollider:
@@ -12717,7 +12717,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn:
   - {fileID: 671180571}
   - {fileID: 894881187}
@@ -13771,7 +13771,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn:
   - {fileID: 175679017}
   - {fileID: 1991353240}
@@ -19401,7 +19401,7 @@ MonoBehaviour:
   sphereSize: 0.3
   showColliderWire: 0
   colliderWireColor: {r: 0, g: 1, b: 1, a: 0.9}
-  transitionController: {fileID: 0}
+  transitionController: {fileID: 1951594486}
   hideChildrenAfterBattleReturn:
   - {fileID: 764939494}
   - {fileID: 225981363}
