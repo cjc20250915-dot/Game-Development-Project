@@ -1,19 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 /// <summary>
-/// 在同一 TMP_Text 位置分页显示多条文案；左右箭头切换上一页/下一页。
-/// 在第一页时左箭头不可点（需在 Button 上用 Color Tint，并把 Disabled Color 调成灰色），最后一页同理禁用右箭头。
+/// 分页切换：每一页对应一个 UI 根物体（下面可任意嵌套复杂布局）。
+/// 同一时间只激活当前页，其余页 SetActive(false)。
+/// 第一页禁用左箭头，最后一页禁用右箭头（Button 建议用 Color Tint + 灰色 Disabled Color）。
 /// </summary>
 public class PagedTextArrowNavigator : MonoBehaviour
 {
-    [Header("Display")]
-    [SerializeField] private TMP_Text displayText;
-
+    [Header("Pages")]
     [SerializeField]
-    [Tooltip("按顺序：第 0 条为初始显示的「a」，依次为 b、c…")]
-    private string[] pages = new string[3];
+    [Tooltip("按顺序：第 0 页默认显示；每页拖一个面板根物体（同级叠放、坐标对齐更方便）")]
+    private GameObject[] pageRoots;
 
     [Header("Navigation")]
     [SerializeField] private Button prevButton;
@@ -36,6 +34,8 @@ public class PagedTextArrowNavigator : MonoBehaviour
 
         if (nextButton != null)
             nextButton.onClick.AddListener(GoNext);
+
+        ApplyPageVisibilityImmediate();
     }
 
     private void OnDestroy()
@@ -56,10 +56,10 @@ public class PagedTextArrowNavigator : MonoBehaviour
     /// <summary>右箭头：下一页。</summary>
     public void GoNext()
     {
-        if (pages == null || pages.Length == 0)
+        if (!HasAnyPage())
             return;
 
-        if (index >= pages.Length - 1)
+        if (index >= pageRoots.Length - 1)
             return;
 
         index++;
@@ -70,7 +70,7 @@ public class PagedTextArrowNavigator : MonoBehaviour
     /// <summary>左箭头：上一页。</summary>
     public void GoPrev()
     {
-        if (pages == null || pages.Length == 0)
+        if (!HasAnyPage())
             return;
 
         if (index <= 0)
@@ -84,26 +84,51 @@ public class PagedTextArrowNavigator : MonoBehaviour
     /// <summary>运行时跳到某一页（0 为第一页）。</summary>
     public void SetPage(int pageIndex)
     {
-        if (pages == null || pages.Length == 0)
+        if (!HasAnyPage())
             return;
 
-        index = Mathf.Clamp(pageIndex, 0, pages.Length - 1);
+        index = Mathf.Clamp(pageIndex, 0, pageRoots.Length - 1);
         RefreshView();
+    }
+
+    /// <summary>当前页索引（只读）。</summary>
+    public int CurrentPageIndex => index;
+
+    private bool HasAnyPage()
+    {
+        return pageRoots != null && pageRoots.Length > 0;
     }
 
     private void RefreshView()
     {
-        if (displayText != null && pages != null && index >= 0 && index < pages.Length)
-            displayText.text = pages[index];
+        ApplyPageVisibilityImmediate();
 
-        bool hasPrev = pages != null && pages.Length > 0 && index > 0;
-        bool hasNext = pages != null && pages.Length > 0 && index < pages.Length - 1;
+        bool hasPrev = HasAnyPage() && index > 0;
+        bool hasNext = HasAnyPage() && index < pageRoots.Length - 1;
 
         if (prevButton != null)
             prevButton.interactable = hasPrev;
 
         if (nextButton != null)
             nextButton.interactable = hasNext;
+    }
+
+    /// <summary>
+    /// 根据 index 只激活一页；null 槽位会被跳过显示（始终保持 inactive）。
+    /// </summary>
+    private void ApplyPageVisibilityImmediate()
+    {
+        if (pageRoots == null)
+            return;
+
+        for (int i = 0; i < pageRoots.Length; i++)
+        {
+            GameObject root = pageRoots[i];
+            if (root == null)
+                continue;
+
+            root.SetActive(i == index);
+        }
     }
 
     private void EnsureAudioSource()
