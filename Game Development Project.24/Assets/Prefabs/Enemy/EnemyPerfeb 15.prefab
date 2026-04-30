@@ -49,12 +49,12 @@ MonoBehaviour:
   maxHP: 80
   currentHP: 80
   deathDelay: 1.5
-  attackPower: 5
+  attackPower: 30
   speed: 1
   actionsPerTurn: 1
-  probAttack: 0.7
+  probAttack: 0.6
   probSkill: 0
-  probDefend: 0.1
+  probDefend: 0.4
   skills: []
   modelRoot: {fileID: 0}
   hitShakeDuration: 0.2
