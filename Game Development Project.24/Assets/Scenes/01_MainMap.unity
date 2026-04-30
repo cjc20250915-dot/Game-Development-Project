@@ -37707,7 +37707,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1350218381080847570, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_text
-      value: Do you want to leave battle?
+      value: Do you want to return to Mainmenu?
       objectReference: {fileID: 0}
     - target: {fileID: 2407856164548711847, guid: c7db8d3b330b5ed46b22cd6b1631a290, type: 3}
       propertyPath: m_IsActive
