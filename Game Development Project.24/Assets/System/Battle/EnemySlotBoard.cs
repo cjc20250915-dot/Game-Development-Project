@@ -28,6 +28,11 @@ public class EnemySlotBoard : MonoBehaviour
     public SlotSpawnInfo slot3 = new SlotSpawnInfo(); // 左后
     public SlotSpawnInfo slot4 = new SlotSpawnInfo(); // 右后
 
+    [Header("Single Enemy Override")]
+    [Tooltip("当当前节点仅生成 1 个敌人时，若启用则改用该锚点与姿态生成（仍归属前排目标逻辑）。")]
+    [SerializeField] private bool useSingleEnemyOverride = true;
+    [SerializeField] private SlotSpawnInfo singleEnemySlot = new SlotSpawnInfo();
+
     [Header("Promotion (back → front)")]
     [Tooltip("前排阵亡后后排顶上前所用移动时间（秒）")]
     [SerializeField] private float promoteMoveDuration = 0.45f;
@@ -103,12 +108,70 @@ public class EnemySlotBoard : MonoBehaviour
         battleWinTriggered = false;
         spawnedEnemies.Clear();
 
+        if (TrySpawnSingleEnemyOverride())
+        {
+            OnEnemiesChanged?.Invoke();
+            return;
+        }
+
         SpawnIntoSlot(1, slot1, ref inst1);
         SpawnIntoSlot(2, slot2, ref inst2);
         SpawnIntoSlot(3, slot3, ref inst3);
         SpawnIntoSlot(4, slot4, ref inst4);
 
         OnEnemiesChanged?.Invoke();
+    }
+
+    private bool TrySpawnSingleEnemyOverride()
+    {
+        if (!useSingleEnemyOverride)
+            return false;
+
+        if (singleEnemySlot == null || singleEnemySlot.anchor == null)
+            return false;
+
+        SlotSpawnInfo onlyInfo = null;
+        int configuredCount = 0;
+
+        if (slot1 != null && slot1.spawnOnBattleStart && slot1.enemyPrefab != null)
+        {
+            configuredCount++;
+            onlyInfo = slot1;
+        }
+
+        if (slot2 != null && slot2.spawnOnBattleStart && slot2.enemyPrefab != null)
+        {
+            configuredCount++;
+            onlyInfo = slot2;
+        }
+
+        if (slot3 != null && slot3.spawnOnBattleStart && slot3.enemyPrefab != null)
+        {
+            configuredCount++;
+            onlyInfo = slot3;
+        }
+
+        if (slot4 != null && slot4.spawnOnBattleStart && slot4.enemyPrefab != null)
+        {
+            configuredCount++;
+            onlyInfo = slot4;
+        }
+
+        if (configuredCount != 1 || onlyInfo == null)
+            return false;
+
+        SlotSpawnInfo runtimeSingle = new SlotSpawnInfo
+        {
+            enemyPrefab = onlyInfo.enemyPrefab,
+            spawnOnBattleStart = true,
+            anchor = singleEnemySlot.anchor,
+            localPosition = singleEnemySlot.localPosition,
+            localEulerAngles = singleEnemySlot.localEulerAngles,
+            localScale = singleEnemySlot.localScale
+        };
+
+        SpawnIntoSlot(1, runtimeSingle, ref inst1);
+        return true;
     }
 
     public void ClearAll()
