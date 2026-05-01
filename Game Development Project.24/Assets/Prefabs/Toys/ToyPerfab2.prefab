@@ -51,7 +51,7 @@ MonoBehaviour:
   characterPortrait: {fileID: 21300000, guid: 0af3d006572e2ec4db85de9a88dcc370, type: 3}
   maxHP: 80
   currentHP: 80
-  stepsPerTurn: 2
+  stepsPerTurn: 3
   skills:
   - {fileID: 11400000, guid: 190732cd8e3862e4a8a1a2f51fb25db4, type: 2}
   - {fileID: 11400000, guid: 5dce75b18092fc0478673e89588e7cea, type: 2}

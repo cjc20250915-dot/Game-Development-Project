@@ -49,9 +49,9 @@ MonoBehaviour:
   maxHP: 30
   currentHP: 30
   deathDelay: 1.5
-  attackPower: 30
+  attackPower: 15
   speed: 2
-  actionsPerTurn: 1
+  actionsPerTurn: 2
   probAttack: 1
   probSkill: 0
   probDefend: 0

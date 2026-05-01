@@ -49,7 +49,7 @@ MonoBehaviour:
   maxHP: 40
   currentHP: 40
   deathDelay: 1.5
-  attackPower: 10
+  attackPower: 5
   speed: 2
   actionsPerTurn: 3
   probAttack: 0.8
