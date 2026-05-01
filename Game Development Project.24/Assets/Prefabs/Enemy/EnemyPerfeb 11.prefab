@@ -51,7 +51,7 @@ MonoBehaviour:
   deathDelay: 1.5
   attackPower: 5
   speed: 3
-  actionsPerTurn: 5
+  actionsPerTurn: 4
   probAttack: 1
   probSkill: 0
   probDefend: 0
