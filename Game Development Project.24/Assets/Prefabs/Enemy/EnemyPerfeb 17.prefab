@@ -70,7 +70,7 @@ MonoBehaviour:
   isDefending: 0
   defendDamageMultiplier: 0.5
   freezeSkipNextEnemyPhase: 0
-  freezeOverlayMaterial: {fileID: 2100000, guid: 492ff14b36fc59644b5141e5fd417eb2, type: 2}
+  freezeOverlayMaterial: {fileID: 2100000, guid: 10166a0285a5d22498e24d06b12c401e, type: 2}
 --- !u!82 &-755248465128223298
 AudioSource:
   m_ObjectHideFlags: 0
