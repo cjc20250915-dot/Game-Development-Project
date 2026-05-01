@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Cotton filling
   description: Consumes 3 biscuits to restore 1 heart
-  dealsHeal: 0
+  dealsHeal: 1
   healAmount: 20
   healTargetMode: 0
   dealsDamage: 0
