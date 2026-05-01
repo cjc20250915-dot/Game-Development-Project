@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Cowboy02
   m_EditorClassIdentifier: 
   skillName: Emergency rations
-  description: Consumes 3 hearts to deal 5 damage to all enemies, and also restores
+  description: Consumes 3 hearts to deal 10 damage to all enemies, and also restores
     5 health to the toy with the lowest health
   dealsHeal: 1
   healAmount: 5
   healTargetMode: 1
   dealsDamage: 1
-  damageAmount: 5
+  damageAmount: 10
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 0

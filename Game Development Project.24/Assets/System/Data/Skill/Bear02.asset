@@ -18,7 +18,7 @@ MonoBehaviour:
   healAmount: 20
   healTargetMode: 0
   dealsDamage: 0
-  damageAmount: 5
+  damageAmount: 15
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 0
