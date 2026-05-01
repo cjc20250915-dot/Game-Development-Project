@@ -41,12 +41,31 @@ public class EnemyTargetSelectionHighlight : MonoBehaviour
         mpb = new MaterialPropertyBlock();
     }
 
+    private void OnEnable()
+    {
+        cacheBuilt = false;
+    }
+
+    /// <summary>
+    /// 始终以 EnemyUnit 根物体为范围扫描所有子 Renderer；避免脚本挂在子物体时漏掉兄弟分支。
+    /// </summary>
+    private Transform ResolveTintRoot()
+    {
+        if (enemyUnit == null)
+            enemyUnit = GetComponentInParent<EnemyUnit>();
+
+        if (enemyUnit != null)
+            return enemyUnit.transform;
+
+        return transform.root;
+    }
+
     private void BuildCache()
     {
         if (cacheBuilt) return;
         cacheBuilt = true;
 
-        Transform tintRoot = enemyUnit != null ? enemyUnit.transform : transform;
+        Transform tintRoot = ResolveTintRoot();
         Renderer[] renderers = tintRoot.GetComponentsInChildren<Renderer>(true);
 
         var list = new List<OutlineSlot>();

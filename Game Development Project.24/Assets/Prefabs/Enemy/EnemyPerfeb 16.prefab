@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47a17962be9fab4d8780111a044b2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 30
-  currentHP: 30
+  maxHP: 35
+  currentHP: 35
   deathDelay: 1.5
   attackPower: 15
   speed: 2

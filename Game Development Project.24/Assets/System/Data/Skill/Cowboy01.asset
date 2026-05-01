@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Cowboy01
   m_EditorClassIdentifier: 
   skillName: Shot !
-  description: Consumes 2 pencils to deal 10 damage to an enemy
+  description: Consumes 2 pencils to deal 20 damage to an enemy
   dealsHeal: 0
   healAmount: 0
   healTargetMode: 0
   dealsDamage: 1
-  damageAmount: 10
+  damageAmount: 20
   dealsSelfDamage: 0
   selfDamageAmount: 0
   randomTarget: 0

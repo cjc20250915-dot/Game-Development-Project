@@ -95,10 +95,10 @@ public void ClearDefend()
     [SerializeField] private bool freezeSkipNextEnemyPhase;
 
     [Header("Freeze Visual")]
-    [Tooltip("冰冻观感：追加到 modelRoot 下所有 Renderer 的材质槽末尾。建议使用 Assets/Shader 下的冰冻材质（如 IceEffectMat）。")]
+    [Tooltip("冰冻观感：追加到本敌人根物体下所有子 Renderer 的材质槽末尾（不限定于 modelRoot）。建议使用 Assets/Shader 下的冰冻材质（如 IceEffectMat）。")]
     public Material freezeOverlayMaterial;
 
-    private Material[][] freezeMaterialBackup;
+    private Dictionary<Renderer, Material[]> freezeMaterialBackup;
     private bool freezeOverlayApplied;
     private GameObject freezeVFXInstance;
 
@@ -128,16 +128,21 @@ public void ClearDefend()
         return true;
     }
 
+    private Transform FreezeVisualScanRoot()
+    {
+        return transform;
+    }
+
     private void ApplyFreezeVisualOverlay()
     {
-        if (freezeOverlayMaterial == null || freezeOverlayApplied || modelRoot == null)
+        if (freezeOverlayMaterial == null || freezeOverlayApplied)
             return;
 
-        Renderer[] rends = modelRoot.GetComponentsInChildren<Renderer>(true);
+        Renderer[] rends = FreezeVisualScanRoot().GetComponentsInChildren<Renderer>(true);
         if (rends == null || rends.Length == 0)
             return;
 
-        freezeMaterialBackup = new Material[rends.Length][];
+        freezeMaterialBackup = new Dictionary<Renderer, Material[]>(rends.Length);
 
         for (int i = 0; i < rends.Length; i++)
         {
@@ -145,10 +150,14 @@ public void ClearDefend()
             if (r == null)
                 continue;
 
-            freezeMaterialBackup[i] = r.sharedMaterials;
+            Material[] shared = r.sharedMaterials;
+            if (shared == null)
+                continue;
 
-            var mats = new Material[r.sharedMaterials.Length + 1];
-            r.sharedMaterials.CopyTo(mats, 0);
+            freezeMaterialBackup[r] = (Material[])shared.Clone();
+
+            var mats = new Material[shared.Length + 1];
+            shared.CopyTo(mats, 0);
             mats[mats.Length - 1] = freezeOverlayMaterial;
             r.materials = mats;
         }
@@ -158,17 +167,15 @@ public void ClearDefend()
 
     private void RemoveFreezeVisualOverlay()
     {
-        if (!freezeOverlayApplied || freezeMaterialBackup == null || modelRoot == null)
+        if (!freezeOverlayApplied || freezeMaterialBackup == null)
             return;
 
-        Renderer[] rends = modelRoot.GetComponentsInChildren<Renderer>(true);
-        int n = Mathf.Min(rends.Length, freezeMaterialBackup.Length);
-
-        for (int i = 0; i < n; i++)
+        foreach (var kv in freezeMaterialBackup)
         {
-            Renderer r = rends[i];
-            if (r != null && freezeMaterialBackup[i] != null)
-                r.materials = freezeMaterialBackup[i];
+            Renderer r = kv.Key;
+            Material[] bak = kv.Value;
+            if (r != null && bak != null)
+                r.materials = bak;
         }
 
         freezeMaterialBackup = null;

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Bear01
   m_EditorClassIdentifier: 
   skillName: Bear Punch !
-  description: Consumes 2 balloons to deal 10 damage to a random enemy, but costs
+  description: Consumes 2 balloons to deal 15 damage to a random enemy, but costs
     5 health points
   dealsHeal: 0
   healAmount: 0
   healTargetMode: 0
   dealsDamage: 1
-  damageAmount: 10
+  damageAmount: 15
   dealsSelfDamage: 1
   selfDamageAmount: 5
   randomTarget: 1
