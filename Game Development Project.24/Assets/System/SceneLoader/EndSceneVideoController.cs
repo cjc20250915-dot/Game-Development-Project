@@ -75,6 +75,11 @@ public class EndSceneVideoController : MonoBehaviour
     IEnumerator PlayAndThenThankYou(VideoClip clip)
     {
         var audio = GetComponent<AudioSource>();
+        bool pausedBgm = false;
+
+        // 结算视频播放期间暂停 BGM，避免和视频音轨重叠。
+        if (bgmManager.Instance != null)
+            pausedBgm = bgmManager.Instance.PauseBGM();
 
         ApplyStableVideoSettings();
         _thankYouUi?.ConfigureVideoOutput(videoPlayer);
@@ -139,6 +144,9 @@ public class EndSceneVideoController : MonoBehaviour
             if (videoPlayer.isPlaying)
                 videoPlayer.Stop();
         }
+
+        if (pausedBgm && bgmManager.Instance != null)
+            bgmManager.Instance.ResumeBGM();
 
         _thankYouUi?.ShowThankYou();
     }

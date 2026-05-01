@@ -46,15 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47a17962be9fab4d8780111a044b2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 30
-  currentHP: 30
+  maxHP: 40
+  currentHP: 40
   deathDelay: 1.5
-  attackPower: 5
-  speed: 1
-  actionsPerTurn: 1
-  probAttack: 0.7
+  attackPower: 10
+  speed: 2
+  actionsPerTurn: 3
+  probAttack: 0.8
   probSkill: 0
-  probDefend: 0.1
+  probDefend: 0.2
   skills: []
   modelRoot: {fileID: 0}
   hitShakeDuration: 0.2
@@ -70,7 +70,7 @@ MonoBehaviour:
   isDefending: 0
   defendDamageMultiplier: 0.5
   freezeSkipNextEnemyPhase: 0
-  freezeOverlayMaterial: {fileID: 2100000, guid: 492ff14b36fc59644b5141e5fd417eb2, type: 2}
+  freezeOverlayMaterial: {fileID: 2100000, guid: 10166a0285a5d22498e24d06b12c401e, type: 2}
 --- !u!82 &548940178427987920
 AudioSource:
   m_ObjectHideFlags: 0
@@ -180,6 +180,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier_New
       objectReference: {fileID: 0}
+    - target: {fileID: 2684593697328404229, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684593697328404229, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a7b8c9d0e1f234561234567890abcdef, type: 2}
     - target: {fileID: 8355536224084096068, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -243,6 +251,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4485985237572826832, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2658759702222900582}
+    - targetCorrespondingSourceObject: {fileID: 4485985237572826832, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7349852770029717807}
   m_SourcePrefab: {fileID: 100100000, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}
 --- !u!1 &2841580711355001087 stripped
 GameObject:
@@ -271,6 +282,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5872077933228866730, guid: 69b2293bf0763ee4cac9ede251619e6e, type: 3}
+--- !u!114 &7349852770029717807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2841580711355001087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad634ee1525bac4bb6713a35fee3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyUnit: {fileID: 0}
+  highlight: {fileID: 0}
 --- !u!4 &7699724595073837675 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8355536224084096068, guid: f395f3c60184e0d478a3a68cd41a56bb, type: 3}

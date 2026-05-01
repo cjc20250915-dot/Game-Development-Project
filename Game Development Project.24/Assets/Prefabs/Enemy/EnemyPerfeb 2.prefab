@@ -46,15 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47a17962be9fab4d8780111a044b2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 30
-  currentHP: 30
+  maxHP: 20
+  currentHP: 20
   deathDelay: 1.5
   attackPower: 5
-  speed: 1
-  actionsPerTurn: 1
-  probAttack: 0.7
+  speed: 3
+  actionsPerTurn: 2
+  probAttack: 1
   probSkill: 0
-  probDefend: 0.1
+  probDefend: 0
   skills: []
   modelRoot: {fileID: 1319261510520610778}
   hitShakeDuration: 0.2

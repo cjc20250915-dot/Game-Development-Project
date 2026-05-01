@@ -49,12 +49,12 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   deathDelay: 1.5
-  attackPower: 5
-  speed: 1
-  actionsPerTurn: 1
-  probAttack: 0.7
+  attackPower: 15
+  speed: 2
+  actionsPerTurn: 3
+  probAttack: 0.8
   probSkill: 0
-  probDefend: 0.1
+  probDefend: 0.2
   skills: []
   modelRoot: {fileID: 0}
   hitShakeDuration: 0.2
@@ -70,7 +70,7 @@ MonoBehaviour:
   isDefending: 0
   defendDamageMultiplier: 0.5
   freezeSkipNextEnemyPhase: 0
-  freezeOverlayMaterial: {fileID: 2100000, guid: 492ff14b36fc59644b5141e5fd417eb2, type: 2}
+  freezeOverlayMaterial: {fileID: 2100000, guid: 10166a0285a5d22498e24d06b12c401e, type: 2}
 --- !u!82 &-755248465128223298
 AudioSource:
   m_ObjectHideFlags: 0
@@ -176,6 +176,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1002168624993835083}
     m_Modifications:
+    - target: {fileID: 2757775356169274262, guid: 3f624ccebe5ae3e429168e452ef2eea2, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757775356169274262, guid: 3f624ccebe5ae3e429168e452ef2eea2, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a7b8c9d0e1f234561234567890abcdef, type: 2}
     - target: {fileID: 4571813406468963182, guid: 3f624ccebe5ae3e429168e452ef2eea2, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -243,6 +251,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4415051983348851267, guid: 3f624ccebe5ae3e429168e452ef2eea2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2019219180352513730}
+    - targetCorrespondingSourceObject: {fileID: 4415051983348851267, guid: 3f624ccebe5ae3e429168e452ef2eea2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7739823905110847594}
   m_SourcePrefab: {fileID: 100100000, guid: 3f624ccebe5ae3e429168e452ef2eea2, type: 3}
 --- !u!4 &9044899114231065017 stripped
 Transform:
@@ -276,3 +287,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5461320835613783329, guid: 810131a25a588944d9a307b155805e20, type: 3}
+--- !u!114 &7739823905110847594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201660683361185940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad634ee1525bac4bb6713a35fee3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyUnit: {fileID: 0}
+  highlight: {fileID: 0}

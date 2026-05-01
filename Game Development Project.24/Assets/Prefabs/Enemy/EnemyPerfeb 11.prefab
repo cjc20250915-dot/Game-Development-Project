@@ -46,15 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47a17962be9fab4d8780111a044b2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 80
-  currentHP: 80
+  maxHP: 75
+  currentHP: 75
   deathDelay: 1.5
   attackPower: 5
-  speed: 1
-  actionsPerTurn: 1
-  probAttack: 0.7
+  speed: 3
+  actionsPerTurn: 5
+  probAttack: 1
   probSkill: 0
-  probDefend: 0.1
+  probDefend: 0
   skills: []
   modelRoot: {fileID: 0}
   hitShakeDuration: 0.2
@@ -70,7 +70,7 @@ MonoBehaviour:
   isDefending: 0
   defendDamageMultiplier: 0.5
   freezeSkipNextEnemyPhase: 0
-  freezeOverlayMaterial: {fileID: 2100000, guid: 492ff14b36fc59644b5141e5fd417eb2, type: 2}
+  freezeOverlayMaterial: {fileID: 2100000, guid: 10166a0285a5d22498e24d06b12c401e, type: 2}
 --- !u!82 &-4424484589726761756
 AudioSource:
   m_ObjectHideFlags: 0
@@ -220,6 +220,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8420831254441967020, guid: 31801d7598f9ed44abc87c8ba3ac30a3, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8420831254441967020, guid: 31801d7598f9ed44abc87c8ba3ac30a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a7b8c9d0e1f234561234567890abcdef, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -227,6 +235,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8060371417137060985, guid: 31801d7598f9ed44abc87c8ba3ac30a3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75473344350801392}
+    - targetCorrespondingSourceObject: {fileID: 8060371417137060985, guid: 31801d7598f9ed44abc87c8ba3ac30a3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5370607656896537032}
   m_SourcePrefab: {fileID: 100100000, guid: 31801d7598f9ed44abc87c8ba3ac30a3, type: 3}
 --- !u!4 &324188932902715622 stripped
 Transform:
@@ -260,3 +271,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4110062726467426967, guid: 3f28cdab044c169418fa30f0e099f1b1, type: 3}
+--- !u!114 &5370607656896537032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937516099750020198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad634ee1525bac4bb6713a35fee3d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyUnit: {fileID: 0}
+  highlight: {fileID: 0}
